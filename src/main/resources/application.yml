@@ -1,14 +1,7 @@
-spring:
-  application:
-    name: dbdr
-  jpa:
-    properties:
-      hibernate:
-        format_sql: true
-      show_sql: true
+spring :
+  config :
+    import:
+      - database.yml
+      - logging.yml
+      - application-secret.yml
 
-logging:
-  level:
-    org:
-      springframework:
-        web: DEBUG
