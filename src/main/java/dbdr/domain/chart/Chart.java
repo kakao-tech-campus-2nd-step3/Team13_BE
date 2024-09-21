@@ -1,6 +1,8 @@
-package dbdr.domain;
+package dbdr.domain.chart;
 
 
+import dbdr.domain.BaseEntity;
+import dbdr.domain.Recipient;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
