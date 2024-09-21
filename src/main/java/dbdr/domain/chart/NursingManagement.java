@@ -1,5 +1,6 @@
 package dbdr.domain.chart;
 
+import dbdr.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -9,7 +10,7 @@ import org.hibernate.annotations.SQLDelete;
 @Entity
 @Table(name = "nursing_management")
 @SQLDelete(sql = "UPDATE nursing_management SET is_deleted = false WHERE id = ?")
-public class NursingManagement {
+public class NursingManagement extends BaseEntity {
     @Embedded
     private HealthBloodPressure healthBloodPressure; // 혈압 임베디드 타입
 
