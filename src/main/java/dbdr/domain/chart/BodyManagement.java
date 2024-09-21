@@ -8,9 +8,9 @@ import jakarta.persistence.Table;
 import org.hibernate.annotations.SQLDelete;
 
 @Entity
-@Table(name = "body_note")
-@SQLDelete(sql = "UPDATE body_note SET is_deleted = false WHERE id = ?")
-public class BodyNote extends BaseEntity {
+@Table(name = "body_management")
+@SQLDelete(sql = "UPDATE body_management SET is_deleted = false WHERE id = ?")
+public class BodyManagement extends BaseEntity {
     @Embedded
     private PhysicalClear physicalClear; // 세면 및 목욕 체크박스
 

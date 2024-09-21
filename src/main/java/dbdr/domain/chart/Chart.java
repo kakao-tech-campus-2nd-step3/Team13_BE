@@ -23,5 +23,5 @@ public class Chart extends BaseEntity {
 
     @OneToOne
     @JoinColumn(name = "body_id", nullable = false)
-    private BodyNote bodyNote;
+    private BodyManagement bodyManagement;
 }
