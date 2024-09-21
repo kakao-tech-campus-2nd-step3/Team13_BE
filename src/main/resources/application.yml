@@ -1,7 +1,7 @@
 spring :
   config :
     import:
-      - database.yml
-      - logging.yml
-      - application-secret.yml
+      - optional:database.yml
+      - optional:logging.yml
+      - optional:application-secret.yml
 
