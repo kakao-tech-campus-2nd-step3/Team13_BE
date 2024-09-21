@@ -22,10 +22,14 @@ public class Chart extends BaseEntity {
     private Recipient recipient;
 
     @OneToOne
-    @JoinColumn(name = "body_management_id", nullable = false)
+    @JoinColumn(name = "body_management_id")
     private BodyManagement bodyManagement;
 
     @OneToOne
     @JoinColumn(name = "nursing_management_id")
     private NursingManagement nursingManagement;
+
+    @OneToOne
+    @JoinColumn(name = "recovery_training_id")
+    private RecoveryTraining recoveryTraining;
 }
