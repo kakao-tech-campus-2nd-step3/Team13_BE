@@ -2,6 +2,7 @@ package dbdr.domain.guardians;
 
 import jakarta.validation.Valid;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,15 +14,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/v1/auth/guardians")
+@RequestMapping("/v1/admin/guardians")
+@RequiredArgsConstructor
 @Comment("관리자 페이지의 보호자 관리")
-public class AuthGuardiansController {
+public class AdminGuardiansController {
 
     private final GuardiansService guardiansService;
-
-    public AuthGuardiansController(GuardiansService guardiansService) {
-        this.guardiansService = guardiansService;
-    }
 
     @Comment("보호자 전부 조회")
     @GetMapping

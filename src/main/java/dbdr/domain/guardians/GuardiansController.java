@@ -1,6 +1,7 @@
 package dbdr.domain.guardians;
 
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,14 +13,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/guardians")
+@RequiredArgsConstructor
 @Comment("보호자 관련 API")
 public class GuardiansController {
 
     private final GuardiansService guardiansService;
-
-    public GuardiansController(GuardiansService guardiansService) {
-        this.guardiansService = guardiansService;
-    }
 
     @Comment("보호자 자신 정보 조회")
     @GetMapping("/{guardianId}")
