@@ -34,3 +34,4 @@ public abstract class BaseEntity {
     @ColumnDefault("true")
     private boolean isDeleted;
 }
+g
