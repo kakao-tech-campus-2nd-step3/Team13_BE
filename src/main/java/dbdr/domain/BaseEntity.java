@@ -32,9 +32,9 @@ public abstract class BaseEntity {
 
     @Column(nullable = false)
     @ColumnDefault("true")
-    private boolean isDeleted;
+    private boolean isActive;
 
     public void deactivate() {
-        this.isDeleted = false;
+        this.isActive = false;
     }
 }
