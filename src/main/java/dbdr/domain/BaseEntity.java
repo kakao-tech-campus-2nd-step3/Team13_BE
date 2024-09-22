@@ -33,4 +33,8 @@ public abstract class BaseEntity {
     @Column(nullable = false)
     @ColumnDefault("true")
     private boolean isDeleted;
+
+    public void deactivate() {
+        this.isDeleted = false;
+    }
 }
