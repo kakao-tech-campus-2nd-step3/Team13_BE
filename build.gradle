@@ -31,6 +31,7 @@ dependencies {
     // 데이터베이스
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     testRuntimeOnly 'com.h2database:h2' // H2는 테스트 환경에서 주로 사용
+    implementation 'com.h2database:h2'
 
     // 보안
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
