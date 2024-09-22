@@ -44,6 +44,7 @@ public class RecipientDTO {
     @NotNull(message = "요양기관번호는 필수 항목입니다.")
     private Long institutionNumber;
 
+    @NotNull(message = "요양보호사 ID는 필수 항목입니다.")
     private Long careworkerId;
 
     private LocalDateTime createdAt;
