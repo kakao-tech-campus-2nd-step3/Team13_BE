@@ -4,12 +4,14 @@ import dbdr.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import lombok.Getter;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "recovery_training")
+@Getter
 @SQLDelete(sql = "UPDATE recovery_training SET is_active = false WHERE id = ?")
 @SQLRestriction("is_active = true")
 public class RecoveryTraining extends BaseEntity {

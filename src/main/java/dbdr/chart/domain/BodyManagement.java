@@ -5,12 +5,14 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import lombok.Getter;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "body_management")
+@Getter
 @SQLDelete(sql = "UPDATE body_management SET is_active = false WHERE id = ?")
 @SQLRestriction("is_active = true")
 public class BodyManagement extends BaseEntity {
