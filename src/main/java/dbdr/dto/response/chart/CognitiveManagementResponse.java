@@ -1,6 +1,5 @@
 package dbdr.dto.response.chart;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -12,4 +11,5 @@ public class CognitiveManagementResponse {
     private boolean cognitiveHelp; // 의사소통 도움 여부
 
     private String cognitiveNote; // 인지 관리 특이사항
+
 }
