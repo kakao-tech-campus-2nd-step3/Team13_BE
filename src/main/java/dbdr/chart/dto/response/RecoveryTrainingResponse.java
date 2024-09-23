@@ -1,10 +1,12 @@
 package dbdr.chart.dto.response;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
+@Builder
 public class RecoveryTrainingResponse {
     private Long id;
     private String recoveryProgram; // 회복 프로그램 이름
