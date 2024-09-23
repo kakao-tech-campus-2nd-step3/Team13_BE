@@ -30,7 +30,7 @@ public class SecurityConfig {
 
 
     enum Role {
-        GUARDIAN, CAREWORKER;
+        GUARDIAN, CAREWORKER
     }
 
     @Bean
