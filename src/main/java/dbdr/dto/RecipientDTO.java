@@ -32,7 +32,7 @@ public class RecipientDTO {
     private String careLevel;
 
     @NotBlank(message = "장기요양번호는 필수 항목입니다.")
-    @Pattern(regexp = "^[A-Z0-9-]+$", message = "Care number format is invalid")
+    @Pattern(regexp = "^[A-Z0-9-]+$", message = "올바르지 않은 형식입니다.")
     private String careNumber;
 
     @NotNull(message = "입소일은 필수 항목입니다.")

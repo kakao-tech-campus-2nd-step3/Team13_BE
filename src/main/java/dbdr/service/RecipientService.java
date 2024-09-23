@@ -32,7 +32,7 @@ public class RecipientService {
     @Transactional(readOnly = true)
     public RecipientDTO getRecipientById(Long id) {
         Recipient recipient = recipientRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Recipient not found"));
+                .orElseThrow(() -> new IllegalArgumentException("돌봄대상자를 찾을 수 없습니다."));
         return toDTO(recipient);
     }
 
@@ -48,7 +48,7 @@ public class RecipientService {
                 recipientDTO.getInstitution(),
                 recipientDTO.getInstitutionNumber(),
                 careworkerRepository.findById(recipientDTO.getCareworkerId())
-                        .orElseThrow(() -> new IllegalArgumentException("Careworker not found"))
+                        .orElseThrow(() -> new IllegalArgumentException("돌봄대상자를 찾을 수 없습니다."))
         );
         recipientRepository.save(recipient);
         return toDTO(recipient);
@@ -57,7 +57,7 @@ public class RecipientService {
     @Transactional
     public RecipientDTO updateRecipient(Long id, RecipientDTO recipientDTO) {
         Recipient recipient = recipientRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Recipient not found"));
+                .orElseThrow(() -> new IllegalArgumentException("돌봄대상자를 찾을 수 없습니다."));
 
         recipient.updateRecipient(recipientDTO);
 
@@ -69,7 +69,7 @@ public class RecipientService {
     @Transactional
     public void deleteRecipient(Long id) {
         Recipient recipient = recipientRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Recipient not found"));
+                .orElseThrow(() -> new IllegalArgumentException("돌봄대상자를 찾을 수 없습니다."));
         recipient.deactivate();
         recipientRepository.delete(recipient);
     }
