@@ -12,8 +12,8 @@ import org.hibernate.annotations.Comment;
 @NoArgsConstructor
 public class PhysicalWalk {
     @Comment("산책 여부")
-    private boolean has_walked;
+    private boolean hasWalked;
 
     @Comment("외출 동행")
-    private boolean has_companion;
+    private boolean hasCompanion;
 }
