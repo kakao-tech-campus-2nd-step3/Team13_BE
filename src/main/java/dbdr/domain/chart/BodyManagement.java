@@ -6,10 +6,12 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "body_management")
-@SQLDelete(sql = "UPDATE body_management SET is_deleted = false WHERE id = ?")
+@SQLDelete(sql = "UPDATE body_management SET is_active = false WHERE id = ?")
+@SQLRestriction("is_active = true")
 public class BodyManagement extends BaseEntity {
     @Embedded
     private PhysicalClear physicalClear; // 세면 및 목욕 체크박스

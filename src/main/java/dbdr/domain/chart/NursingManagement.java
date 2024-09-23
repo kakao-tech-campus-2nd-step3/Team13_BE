@@ -6,10 +6,12 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "nursing_management")
-@SQLDelete(sql = "UPDATE nursing_management SET is_deleted = false WHERE id = ?")
+@SQLDelete(sql = "UPDATE nursing_management SET is_active = false WHERE id = ?")
+@SQLRestriction("is_active = true")
 public class NursingManagement extends BaseEntity {
     @Embedded
     private HealthBloodPressure healthBloodPressure; // 혈압 임베디드 타입
