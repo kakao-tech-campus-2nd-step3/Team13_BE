@@ -9,8 +9,8 @@ import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "recovery_training")
-@SQLDelete(sql = "UPDATE recovery_training SET is_deleted = false WHERE id = ?")
-@SQLRestriction("isDeleted = true")
+@SQLDelete(sql = "UPDATE recovery_training SET is_active = false WHERE id = ?")
+@SQLRestriction("is_active = true")
 public class RecoveryTraining extends BaseEntity {
     @Column(length = 255)
     private String recoveryProgram; // 회복 프로그램 이름

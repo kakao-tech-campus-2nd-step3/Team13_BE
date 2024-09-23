@@ -9,7 +9,7 @@ import org.hibernate.annotations.SQLDelete;
 
 @Entity
 @Table(name = "body_management")
-@SQLDelete(sql = "UPDATE body_management SET is_deleted = false WHERE id = ?")
+@SQLDelete(sql = "UPDATE body_management SET is_active = false WHERE id = ?")
 public class BodyManagement extends BaseEntity {
     @Embedded
     private PhysicalClear physicalClear; // 세면 및 목욕 체크박스
