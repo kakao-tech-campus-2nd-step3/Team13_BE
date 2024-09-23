@@ -1,6 +1,7 @@
 package dbdr.controller;
 
-import dbdr.dto.CareworkerDTO;
+import dbdr.dto.request.CareworkerRequestDTO;
+import dbdr.dto.response.CareworkerResponseDTO;
 import dbdr.service.CareworkerService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -20,9 +21,9 @@ public class CareworkerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CareworkerDTO>> getAllCareworkers(
+    public ResponseEntity<List<CareworkerResponseDTO>> getAllCareworkers(
             @RequestParam(value = "institutionId", required = false) Long institutionId) {
-        List<CareworkerDTO> careworkers;
+        List<CareworkerResponseDTO> careworkers;
         if (institutionId != null) {
             careworkers = careworkerService.getCareworkersByInstitution(institutionId);
         } else {
@@ -31,23 +32,22 @@ public class CareworkerController {
         return ResponseEntity.ok(careworkers);
     }
 
-
     @GetMapping("/{id}")
-    public ResponseEntity<CareworkerDTO> getCareworkerById(@PathVariable Long id) {
-        CareworkerDTO careworker = careworkerService.getCareworkerById(id);
+    public ResponseEntity<CareworkerResponseDTO> getCareworkerById(@PathVariable Long id) {
+        CareworkerResponseDTO careworker = careworkerService.getCareworkerById(id);
         return ResponseEntity.ok(careworker);
     }
 
     @PostMapping
-    public ResponseEntity<CareworkerDTO> createCareworker(@Valid @RequestBody CareworkerDTO careworkerDTO) {
-        CareworkerDTO newCareworker = careworkerService.createCareworker(careworkerDTO);
+    public ResponseEntity<CareworkerResponseDTO> createCareworker(@Valid @RequestBody CareworkerRequestDTO careworkerDTO) {
+        CareworkerResponseDTO newCareworker = careworkerService.createCareworker(careworkerDTO);
         return ResponseEntity.created(URI.create("/v1/careworkers/" + newCareworker.getId()))
                 .body(newCareworker);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CareworkerDTO> updateCareworker(@PathVariable Long id, @Valid @RequestBody CareworkerDTO careworkerDTO) {
-        CareworkerDTO updatedCareworker = careworkerService.updateCareworker(id, careworkerDTO);
+    public ResponseEntity<CareworkerResponseDTO> updateCareworker(@PathVariable Long id, @Valid @RequestBody CareworkerRequestDTO careworkerDTO) {
+        CareworkerResponseDTO updatedCareworker = careworkerService.updateCareworker(id, careworkerDTO);
         return ResponseEntity.ok(updatedCareworker);
     }
 

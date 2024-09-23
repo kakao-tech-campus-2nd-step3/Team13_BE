@@ -1,7 +1,8 @@
 package dbdr.service;
 
 import dbdr.domain.Recipient;
-import dbdr.dto.RecipientDTO;
+import dbdr.dto.request.RecipientRequestDTO;
+import dbdr.dto.response.RecipientResponseDTO;
 import dbdr.repository.RecipientRepository;
 import dbdr.repository.CareworkerRepository;
 import org.springframework.stereotype.Service;
@@ -22,49 +23,47 @@ public class RecipientService {
     }
 
     @Transactional(readOnly = true)
-    public List<RecipientDTO> getAllRecipients() {
+    public List<RecipientResponseDTO> getAllRecipients() {
         return recipientRepository.findAll().stream()
-                .map(this::toDTO)
+                .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
-
     @Transactional(readOnly = true)
-    public RecipientDTO getRecipientById(Long id) {
+    public RecipientResponseDTO getRecipientById(Long id) {
         Recipient recipient = recipientRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("돌봄대상자를 찾을 수 없습니다."));
-        return toDTO(recipient);
+        return toResponseDTO(recipient);
     }
 
     @Transactional
-    public RecipientDTO createRecipient(RecipientDTO recipientDTO) {
+    public RecipientResponseDTO createRecipient(RecipientRequestDTO recipientRequestDTO) {
         Recipient recipient = new Recipient(
-                recipientDTO.getName(),
-                recipientDTO.getBirth(),
-                recipientDTO.getGender(),
-                recipientDTO.getCareLevel(),
-                recipientDTO.getCareNumber(),
-                recipientDTO.getStartDate(),
-                recipientDTO.getInstitution(),
-                recipientDTO.getInstitutionNumber(),
-                careworkerRepository.findById(recipientDTO.getCareworkerId())
-                        .orElseThrow(() -> new IllegalArgumentException("돌봄대상자를 찾을 수 없습니다."))
+                recipientRequestDTO.getName(),
+                recipientRequestDTO.getBirth(),
+                recipientRequestDTO.getGender(),
+                recipientRequestDTO.getCareLevel(),
+                recipientRequestDTO.getCareNumber(),
+                recipientRequestDTO.getStartDate(),
+                recipientRequestDTO.getInstitution(),
+                recipientRequestDTO.getInstitutionNumber(),
+                careworkerRepository.findById(recipientRequestDTO.getCareworkerId())
+                        .orElseThrow(() -> new IllegalArgumentException("요양보호사를 찾을 수 없습니다."))
         );
         recipientRepository.save(recipient);
-        return toDTO(recipient);
+        return toResponseDTO(recipient);
     }
 
     @Transactional
-    public RecipientDTO updateRecipient(Long id, RecipientDTO recipientDTO) {
+    public RecipientResponseDTO updateRecipient(Long id, RecipientRequestDTO recipientRequestDTO) {
         Recipient recipient = recipientRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("돌봄대상자를 찾을 수 없습니다."));
 
-        recipient.updateRecipient(recipientDTO);
-
+        recipient.updateRecipient(recipientRequestDTO);
         recipientRepository.save(recipient);
-        return toDTO(recipient);
-    }
 
+        return toResponseDTO(recipient);
+    }
 
     @Transactional
     public void deleteRecipient(Long id) {
@@ -74,8 +73,8 @@ public class RecipientService {
         recipientRepository.delete(recipient);
     }
 
-    private RecipientDTO toDTO(Recipient recipient) {
-        return new RecipientDTO(
+    private RecipientResponseDTO toResponseDTO(Recipient recipient) {
+        return new RecipientResponseDTO(
                 recipient.getId(),
                 recipient.getName(),
                 recipient.getBirth(),
@@ -86,7 +85,7 @@ public class RecipientService {
                 recipient.getInstitution(),
                 recipient.getInstitutionNumber(),
                 recipient.getCareworker() != null ? recipient.getCareworker().getId() : null
-
         );
     }
 }
+

@@ -1,7 +1,8 @@
 package dbdr.service;
 
 import dbdr.domain.Careworker;
-import dbdr.dto.CareworkerDTO;
+import dbdr.dto.request.CareworkerRequestDTO;
+import dbdr.dto.response.CareworkerResponseDTO;
 import dbdr.repository.CareworkerRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,50 +20,47 @@ public class CareworkerService {
     }
 
     @Transactional(readOnly = true)
-    public List<CareworkerDTO> getAllCareworkers() {
+    public List<CareworkerResponseDTO> getAllCareworkers() {
         return careworkerRepository.findAll().stream()
-                .map(this::toDTO)
+                .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public List<CareworkerDTO> getCareworkersByInstitution(Long institutionId) {
+    public List<CareworkerResponseDTO> getCareworkersByInstitution(Long institutionId) {
         return careworkerRepository.findByInstitutionId(institutionId).stream()
-                .map(this::toDTO)
+                .map(this::toResponseDTO)
                 .collect(Collectors.toList());
     }
 
-
-
     @Transactional(readOnly = true)
-    public CareworkerDTO getCareworkerById(Long id) {
+    public CareworkerResponseDTO getCareworkerById(Long id) {
         Careworker careworker = careworkerRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("요양보호사를 찾을 수 없습니다."));
-        return toDTO(careworker);
+        return toResponseDTO(careworker);
     }
 
     @Transactional
-    public CareworkerDTO createCareworker(CareworkerDTO careworkerDTO) {
+    public CareworkerResponseDTO createCareworker(CareworkerRequestDTO careworkerRequestDTO) {
         Careworker careworker = new Careworker(
-                careworkerDTO.getInstitutionId(),
-                careworkerDTO.getName(),
-                careworkerDTO.getEmail(),
-                careworkerDTO.getPhone()
+                careworkerRequestDTO.getInstitutionId(),
+                careworkerRequestDTO.getName(),
+                careworkerRequestDTO.getEmail(),
+                careworkerRequestDTO.getPhone()
         );
         careworkerRepository.save(careworker);
-        return toDTO(careworker);
+        return toResponseDTO(careworker);
     }
 
-
     @Transactional
-    public CareworkerDTO updateCareworker(Long id, CareworkerDTO careworkerDTO) {
+    public CareworkerResponseDTO updateCareworker(Long id, CareworkerRequestDTO careworkerRequestDTO) {
         Careworker careworker = careworkerRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("요양보호사를 찾을 수 없습니다."));
 
-        careworker.updateCareworker(careworkerDTO);
-
+        careworker.updateCareworker(careworkerRequestDTO);
         careworkerRepository.save(careworker);
-        return toDTO(careworker);
+
+        return toResponseDTO(careworker);
     }
 
     @Transactional
@@ -73,8 +71,8 @@ public class CareworkerService {
         careworkerRepository.delete(careworker);
     }
 
-    private CareworkerDTO toDTO(Careworker careworker) {
-        return new CareworkerDTO(
+    private CareworkerResponseDTO toResponseDTO(Careworker careworker) {
+        return new CareworkerResponseDTO(
                 careworker.getId(),
                 careworker.getInstitutionId(),
                 careworker.getName(),

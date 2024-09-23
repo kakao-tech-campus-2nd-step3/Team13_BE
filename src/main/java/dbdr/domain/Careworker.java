@@ -1,14 +1,11 @@
 package dbdr.domain;
 
-import dbdr.dto.CareworkerDTO;
+import dbdr.dto.request.CareworkerRequestDTO;
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
-
-import java.util.List;
 
 @Entity
 @Getter
@@ -38,7 +35,7 @@ public class Careworker extends BaseEntity {
         this.phone = phone;
     }
 
-    public void updateCareworker(CareworkerDTO careworkerDTO) {
+    public void updateCareworker(CareworkerRequestDTO careworkerDTO) {
         //this.institutionId = careworkerDTO.getInstitutionId();
         this.name = careworkerDTO.getName();
         this.email = careworkerDTO.getEmail();

@@ -1,22 +1,18 @@
-package dbdr.dto;
+package dbdr.dto.request;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecipientDTO {
-
-    private Long id;
+public class RecipientRequestDTO {
 
     @NotBlank(message = "이름은 필수 항목입니다.")
     private String name;
@@ -46,6 +42,4 @@ public class RecipientDTO {
 
     @NotNull(message = "요양보호사 ID는 필수 항목입니다.")
     private Long careworkerId;
-
-
 }

@@ -1,6 +1,7 @@
 package dbdr.controller;
 
-import dbdr.dto.RecipientDTO;
+import dbdr.dto.request.RecipientRequestDTO;
+import dbdr.dto.response.RecipientResponseDTO;
 import dbdr.service.RecipientService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,27 +21,27 @@ public class RecipientController {
     }
 
     @GetMapping
-    public ResponseEntity<List<RecipientDTO>> getAllRecipients() {
-        List<RecipientDTO> recipients = recipientService.getAllRecipients();
+    public ResponseEntity<List<RecipientResponseDTO>> getAllRecipients() {
+        List<RecipientResponseDTO> recipients = recipientService.getAllRecipients();
         return ResponseEntity.ok(recipients);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RecipientDTO> getRecipientById(@PathVariable Long id) {
-        RecipientDTO recipient = recipientService.getRecipientById(id);
+    public ResponseEntity<RecipientResponseDTO> getRecipientById(@PathVariable Long id) {
+        RecipientResponseDTO recipient = recipientService.getRecipientById(id);
         return ResponseEntity.ok(recipient);
     }
 
     @PostMapping
-    public ResponseEntity<RecipientDTO> createRecipient(@Valid @RequestBody RecipientDTO recipientDTO) {
-        RecipientDTO newRecipient = recipientService.createRecipient(recipientDTO);
+    public ResponseEntity<RecipientResponseDTO> createRecipient(@Valid @RequestBody RecipientRequestDTO recipientDTO) {
+        RecipientResponseDTO newRecipient = recipientService.createRecipient(recipientDTO);
         return ResponseEntity.created(URI.create("/v1/recipients/" + newRecipient.getId()))
                 .body(newRecipient);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RecipientDTO> updateRecipient(@PathVariable Long id, @RequestBody RecipientDTO recipientDTO) {
-        RecipientDTO updatedRecipient = recipientService.updateRecipient(id, recipientDTO);
+    public ResponseEntity<RecipientResponseDTO> updateRecipient(@PathVariable Long id, @RequestBody RecipientRequestDTO recipientDTO) {
+        RecipientResponseDTO updatedRecipient = recipientService.updateRecipient(id, recipientDTO);
         return ResponseEntity.ok(updatedRecipient);
     }
 

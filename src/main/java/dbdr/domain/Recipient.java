@@ -1,6 +1,6 @@
 package dbdr.domain;
 
-import dbdr.dto.RecipientDTO;
+import dbdr.dto.request.RecipientRequestDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -47,7 +47,7 @@ public class Recipient extends BaseEntity {
     @JoinColumn(name = "careworker_id")
     private Careworker careworker;
 
-    public void updateRecipient(RecipientDTO recipientDTO) {
+    public void updateRecipient(RecipientRequestDTO recipientDTO) {
         this.name = recipientDTO.getName();
         this.birth = recipientDTO.getBirth();
         this.gender = recipientDTO.getGender();
