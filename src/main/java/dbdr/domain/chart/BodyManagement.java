@@ -22,8 +22,8 @@ public class BodyManagement extends BaseEntity {
     @Column(length = 50)
     private int physicalRestroom; // 화장실 횟수
 
-    @Column(length = 255)
-    private String physicalWalk; // 산책 or 외출 동행
+    @Embedded
+    private PhysicalWalk physicalWalk; // 산책 or 외출 동행
 
     @Column(length = 1000)
     private String physicalNote; // 특이사항 입력
