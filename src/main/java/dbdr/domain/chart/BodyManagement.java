@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -19,12 +20,14 @@ public class BodyManagement extends BaseEntity {
     @Embedded
     private PhysicalMeal physicalMeal; // 식사 종류와 섭취량
 
+    @Comment("화장실 횟수")
     @Column(length = 50)
     private int physicalRestroom; // 화장실 횟수
 
     @Embedded
     private PhysicalWalk physicalWalk; // 산책 or 외출 동행
 
+    @Comment("특이사항")
     @Column(length = 1000)
     private String physicalNote; // 특이사항 입력
 }

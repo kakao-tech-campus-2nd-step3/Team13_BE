@@ -4,6 +4,7 @@ import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Comment;
 
 @Embeddable
 @Getter
@@ -11,6 +12,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class HealthBloodPressure {
 
-    private int systolic;  // 혈압 최고
-    private int diastolic; // 혈압 최저
+    @Comment("혈압 최고")
+    private int systolic;
+
+    @Comment("혈압 최저")
+    private int diastolic;
 }
