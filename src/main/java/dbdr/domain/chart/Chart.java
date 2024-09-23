@@ -36,4 +36,8 @@ public class Chart extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "recovery_training_id")
     private RecoveryTraining recoveryTraining;
+
+    @OneToOne
+    @JoinColumn(name = "cognitive_management_id")
+    private CognitiveManagement cognitiveManagement;
 }
