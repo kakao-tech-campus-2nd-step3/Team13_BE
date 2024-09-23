@@ -15,7 +15,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Entity
 @Table(name = "chart")
 @SQLDelete(sql = "UPDATE chart SET is_active = false WHERE id = ?")
-@SQLRestriction("isDeleted = true")
+@SQLRestriction("is_active = true")
 public class Chart extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipient_id", nullable = false)
