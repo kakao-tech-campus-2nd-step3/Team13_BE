@@ -3,6 +3,7 @@ package dbdr.domain.chart;
 
 import dbdr.domain.BaseEntity;
 import dbdr.domain.Recipient;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -20,6 +21,9 @@ public class Chart extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipient_id", nullable = false)
     private Recipient recipient;
+
+    @Column(nullable = false, length = 500)
+    private String conditionDisease;
 
     @OneToOne
     @JoinColumn(name = "body_management_id")
