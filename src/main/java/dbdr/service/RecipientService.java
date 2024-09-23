@@ -24,7 +24,6 @@ public class RecipientService {
     @Transactional(readOnly = true)
     public List<RecipientDTO> getAllRecipients() {
         return recipientRepository.findAll().stream()
-                .filter(Recipient::isActive)  // 활성 상태만 필터링
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
@@ -60,15 +59,12 @@ public class RecipientService {
         Recipient recipient = recipientRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("Recipient not found"));
 
-        recipient.updateRecipient(recipientDTO.getName(), recipientDTO.getBirth(), recipientDTO.getGender(),
-                recipientDTO.getCareLevel(), recipientDTO.getCareNumber(), recipientDTO.getStartDate(),
-                recipientDTO.getInstitution(), recipientDTO.getInstitutionNumber(),
-                careworkerRepository.findById(recipientDTO.getCareworkerId())
-                        .orElseThrow(() -> new IllegalArgumentException("Careworker not found")));
+        recipient.updateRecipient(recipientDTO);
 
         recipientRepository.save(recipient);
         return toDTO(recipient);
     }
+
 
     @Transactional
     public void deleteRecipient(Long id) {
@@ -89,10 +85,8 @@ public class RecipientService {
                 recipient.getStartDate(),
                 recipient.getInstitution(),
                 recipient.getInstitutionNumber(),
-                recipient.getCareworker() != null ? recipient.getCareworker().getId() : null,
-                recipient.getCreatedAt(),
-                recipient.getUpdateAt(),
-                recipient.isActive()
+                recipient.getCareworker() != null ? recipient.getCareworker().getId() : null
+
         );
     }
 }

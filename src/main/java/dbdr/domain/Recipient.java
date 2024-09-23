@@ -1,5 +1,6 @@
 package dbdr.domain;
 
+import dbdr.dto.RecipientDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,35 +28,35 @@ public class Recipient extends BaseEntity {
     @Column(nullable = false)
     private String gender;
 
-    @Column(name = "care_level", nullable = false)
+    @Column(nullable = false)
     private String careLevel;
 
-    @Column(name = "care_number", nullable = false, unique = true)
+    @Column(nullable = false, unique = true)
     private String careNumber;
 
-    @Column(name = "start_date", nullable = false)
+    @Column(nullable = false)
     private LocalDate startDate;
 
     @Column(nullable = false)
     private String institution;
 
-    @Column(name = "institution_number", nullable = false)
+    @Column(nullable = false)
     private Long institutionNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "careworker_id")
     private Careworker careworker;
 
-    public void updateRecipient(String name, LocalDate birth, String gender, String careLevel, String careNumber,
-                                LocalDate startDate, String institution, Long institutionNumber, Careworker careworker) {
-        this.name = name;
-        this.birth = birth;
-        this.gender = gender;
-        this.careLevel = careLevel;
-        this.careNumber = careNumber;
-        this.startDate = startDate;
-        this.institution = institution;
-        this.institutionNumber = institutionNumber;
-        this.careworker = careworker;
+    public void updateRecipient(RecipientDTO recipientDTO) {
+        this.name = recipientDTO.getName();
+        this.birth = recipientDTO.getBirth();
+        this.gender = recipientDTO.getGender();
+        this.careLevel = recipientDTO.getCareLevel();
+        this.careNumber = recipientDTO.getCareNumber();
+        this.startDate = recipientDTO.getStartDate();
+        this.institution = recipientDTO.getInstitution();
+        this.institutionNumber = recipientDTO.getInstitutionNumber();
+        //this.careworker = careworker;
     }
+
 }

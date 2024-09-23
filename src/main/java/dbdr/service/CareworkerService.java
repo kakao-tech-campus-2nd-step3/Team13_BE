@@ -21,10 +21,17 @@ public class CareworkerService {
     @Transactional(readOnly = true)
     public List<CareworkerDTO> getAllCareworkers() {
         return careworkerRepository.findAll().stream()
-                .filter(Careworker::isActive)  // 활성 상태만 필터링
                 .map(this::toDTO)
                 .collect(Collectors.toList());
     }
+
+    @Transactional(readOnly = true)
+    public List<CareworkerDTO> getCareworkersByInstitution(Long institutionId) {
+        return careworkerRepository.findByInstitutionId(institutionId).stream()
+                .map(this::toDTO)
+                .collect(Collectors.toList());
+    }
+
 
 
     @Transactional(readOnly = true)
@@ -52,8 +59,7 @@ public class CareworkerService {
         Careworker careworker = careworkerRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("요양보호사를 찾을 수 없습니다."));
 
-        careworker.updateCareworker(careworkerDTO.getInstitutionId(), careworkerDTO.getName(),
-                careworkerDTO.getEmail(), careworkerDTO.getPhone());
+        careworker.updateCareworker(careworkerDTO);
 
         careworkerRepository.save(careworker);
         return toDTO(careworker);
@@ -73,10 +79,7 @@ public class CareworkerService {
                 careworker.getInstitutionId(),
                 careworker.getName(),
                 careworker.getEmail(),
-                careworker.getPhone(),
-                careworker.getCreatedAt(),
-                careworker.getUpdateAt(),
-                careworker.isActive()
+                careworker.getPhone()
         );
     }
 }

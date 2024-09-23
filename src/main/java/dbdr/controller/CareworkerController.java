@@ -6,6 +6,7 @@ import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -19,10 +20,17 @@ public class CareworkerController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CareworkerDTO>> getAllCareworkers() {
-        List<CareworkerDTO> careworkers = careworkerService.getAllCareworkers();
+    public ResponseEntity<List<CareworkerDTO>> getAllCareworkers(
+            @RequestParam(value = "institutionId", required = false) Long institutionId) {
+        List<CareworkerDTO> careworkers;
+        if (institutionId != null) {
+            careworkers = careworkerService.getCareworkersByInstitution(institutionId);
+        } else {
+            careworkers = careworkerService.getAllCareworkers();
+        }
         return ResponseEntity.ok(careworkers);
     }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<CareworkerDTO> getCareworkerById(@PathVariable Long id) {
@@ -33,7 +41,8 @@ public class CareworkerController {
     @PostMapping
     public ResponseEntity<CareworkerDTO> createCareworker(@Valid @RequestBody CareworkerDTO careworkerDTO) {
         CareworkerDTO newCareworker = careworkerService.createCareworker(careworkerDTO);
-        return ResponseEntity.ok(newCareworker);
+        return ResponseEntity.created(URI.create("/v1/careworkers/" + newCareworker.getId()))
+                .body(newCareworker);
     }
 
     @PutMapping("/{id}")

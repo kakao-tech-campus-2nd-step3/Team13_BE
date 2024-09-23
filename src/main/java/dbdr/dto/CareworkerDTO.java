@@ -28,9 +28,8 @@ public class CareworkerDTO {
     private String email;
 
     @NotBlank(message = "휴대폰 번호는 필수 항목입니다.")
+    @Pattern(regexp = "010\\d{8}", message = "010XXXXXXXX형식으로 입력해주세요.")
     private String phone;
 
-    private LocalDateTime createdAt;
-    private LocalDateTime updateAt;
-    private boolean isActive;
+
 }

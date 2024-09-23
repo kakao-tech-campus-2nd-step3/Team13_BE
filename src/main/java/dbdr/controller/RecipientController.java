@@ -4,7 +4,9 @@ import dbdr.dto.RecipientDTO;
 import dbdr.service.RecipientService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -30,9 +32,10 @@ public class RecipientController {
     }
 
     @PostMapping
-    public ResponseEntity<RecipientDTO> createRecipient(@RequestBody RecipientDTO recipientDTO) {
+    public ResponseEntity<RecipientDTO> createRecipient(@Valid @RequestBody RecipientDTO recipientDTO) {
         RecipientDTO newRecipient = recipientService.createRecipient(recipientDTO);
-        return ResponseEntity.ok(newRecipient);
+        return ResponseEntity.created(URI.create("/v1/recipients/" + newRecipient.getId()))
+                .body(newRecipient);
     }
 
     @PutMapping("/{id}")

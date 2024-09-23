@@ -1,5 +1,6 @@
 package dbdr.domain;
 
+import dbdr.dto.CareworkerDTO;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +18,7 @@ import java.util.List;
 @SQLRestriction("is_active= true")
 public class Careworker extends BaseEntity {
 
-    @Column(name = "institution_id", nullable = false)
+    @Column(nullable = false)
     private Long institutionId;
 
     @Column(nullable = false)
@@ -29,9 +30,6 @@ public class Careworker extends BaseEntity {
     @Column(nullable = false)
     private String phone;
 
-    @OneToMany(mappedBy = "careworker", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Recipient> recipients;
-
 
     public Careworker(Long institutionId, String name, String email, String phone) {
         this.institutionId = institutionId;
@@ -40,10 +38,10 @@ public class Careworker extends BaseEntity {
         this.phone = phone;
     }
 
-    public void updateCareworker(Long institutionId, String name, String email, String phone) {
-        this.institutionId = institutionId;
-        this.name = name;
-        this.email = email;
-        this.phone = phone;
+    public void updateCareworker(CareworkerDTO careworkerDTO) {
+        //this.institutionId = careworkerDTO.getInstitutionId();
+        this.name = careworkerDTO.getName();
+        this.email = careworkerDTO.getEmail();
+        this.phone = careworkerDTO.getPhone();
     }
 }
