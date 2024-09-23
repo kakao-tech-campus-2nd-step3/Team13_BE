@@ -1,4 +1,4 @@
-package dbdr.domain.chart;
+package dbdr.chart.domain;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
@@ -10,10 +10,10 @@ import org.hibernate.annotations.Comment;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PhysicalClear {
-    @Comment("세면 유무")
-    private boolean wash;
+public class PhysicalMeal {
+    @Comment("식사 종류")
+    private String mealType;
 
-    @Comment("목욕 유무")
-    private boolean bath;
+    @Comment("섭취량")
+    private String intakeAmount;
 }

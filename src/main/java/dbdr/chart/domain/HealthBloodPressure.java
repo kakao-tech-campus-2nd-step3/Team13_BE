@@ -1,4 +1,4 @@
-package dbdr.domain.chart;
+package dbdr.chart.domain;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
@@ -10,10 +10,11 @@ import org.hibernate.annotations.Comment;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class PhysicalWalk {
-    @Comment("산책 여부")
-    private boolean has_walked;
+public class HealthBloodPressure {
 
-    @Comment("외출 동행")
-    private boolean has_companion;
+    @Comment("혈압 최고")
+    private int systolic;
+
+    @Comment("혈압 최저")
+    private int diastolic;
 }

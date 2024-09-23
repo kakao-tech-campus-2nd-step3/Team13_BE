@@ -1,4 +1,4 @@
-package dbdr.domain.chart;
+package dbdr.chart.domain;
 
 import dbdr.domain.BaseEntity;
 import jakarta.persistence.Column;

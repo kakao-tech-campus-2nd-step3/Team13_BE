@@ -1,11 +1,8 @@
-package dbdr.domain.chart;
+package dbdr.chart.domain;
 
 import dbdr.domain.BaseEntity;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
