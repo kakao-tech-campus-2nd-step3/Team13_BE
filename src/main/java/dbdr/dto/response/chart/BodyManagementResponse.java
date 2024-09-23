@@ -1,4 +1,4 @@
-package dbdr.dto.response;
+package dbdr.dto.response.chart;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
