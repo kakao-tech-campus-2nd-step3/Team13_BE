@@ -15,8 +15,13 @@ public class ChartService {
         this.chartRepository = chartRepository;
     }
 
-    public Page<ChartDetailResponse> getRecipients(Long recipientId, Pageable pageable) {
+    public Page<ChartDetailResponse> getAllChartByRecipientId(Long recipientId, Pageable pageable) {
         Page<Chart> results = chartRepository.findAllByRecipientId(recipientId, pageable);
         return results.map(ChartDetailResponse::fromEntity);
+    }
+
+    public ChartDetailResponse getChartById(Long chartId) {
+        Chart chart = chartRepository.findById(chartId).orElseThrow(); // 에러 처리 필요
+        return ChartDetailResponse.fromEntity(chart);
     }
 }

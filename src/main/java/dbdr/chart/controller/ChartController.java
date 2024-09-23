@@ -10,6 +10,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,11 +25,19 @@ public class ChartController {
     }
 
     @GetMapping("/recipients")
-    public ResponseEntity<Page<ChartDetailResponse>> getRecipients(
+    public ResponseEntity<Page<ChartDetailResponse>> getAllChartByRecipientId(
             @RequestParam(value = "recipient-id", required = false) Long recipientId,
             @PageableDefault(size = DEFAULT_PAGE_SIZE, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<ChartDetailResponse> recipients = chartService.getRecipients(recipientId, pageable);
+        // 환자 정보 접근 권한 확인 로직 필요
+        Page<ChartDetailResponse> recipients = chartService.getAllChartByRecipientId(recipientId, pageable);
         return ResponseEntity.ok().body(recipients);
+    }
+
+    @GetMapping("/{chartId}")
+    public ResponseEntity<ChartDetailResponse> getChartById(@PathVariable Long chartId) {
+        // 환자 정보 접근 권한 확인 로직 필요
+        ChartDetailResponse chart = chartService.getChartById(chartId);
+        return ResponseEntity.ok().body(chart);
     }
 
 }
