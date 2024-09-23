@@ -1,8 +1,10 @@
-package dbdr.domain.guardians;
+package dbdr.controller;
 
+import dbdr.dto.request.GuardiansRequest;
+import dbdr.dto.response.GuardiansResponse;
+import dbdr.service.GuardiansService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.annotations.Comment;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,12 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/v1/guardians")
 @RequiredArgsConstructor
-@Comment("보호자 관련 API")
 public class GuardiansController {
 
     private final GuardiansService guardiansService;
 
-    @Comment("보호자 자신 정보 조회")
     @GetMapping("/{guardianId}")
     public ResponseEntity<GuardiansResponse> showGuardianInfo(
         @PathVariable("guardianId") Long guardianId) {
@@ -27,7 +27,6 @@ public class GuardiansController {
         return ResponseEntity.ok(guardiansResponse);
     }
 
-    @Comment("보호자 자신 정보 수정")
     @PutMapping("/{guardianId}")
     public ResponseEntity<GuardiansResponse> updateGuardianInfo(
         @PathVariable("guardianId") Long guardianId,

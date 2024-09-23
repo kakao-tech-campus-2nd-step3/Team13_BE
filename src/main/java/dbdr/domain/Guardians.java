@@ -1,6 +1,5 @@
-package dbdr.domain.guardians;
+package dbdr.domain;
 
-import dbdr.domain.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -8,7 +7,6 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Comment;
 
 @Entity
 @Getter
@@ -16,11 +14,9 @@ import org.hibernate.annotations.Comment;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Guardians extends BaseEntity {
 
-    @Comment("보호자 전화번호")
     @Column(nullable = false, unique = true)
     private String phone;
-    @Comment("보호자 성명")
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String name;
 
     @Builder
