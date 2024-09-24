@@ -30,8 +30,7 @@ dependencies {
 
     // 데이터베이스
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    testRuntimeOnly 'com.h2database:h2' // H2는 테스트 환경에서 주로 사용
-    implementation 'com.h2database:h2'
+    implementation 'mysql:mysql-connector-java:8.0.33' // MySQL 의존성 추가 (MySQL JDBC 드라이버)
 
     // 보안
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -48,6 +47,7 @@ dependencies {
 
     // 테스트 라이브러리
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testRuntimeOnly 'com.h2database:h2' // H2는 테스트 환경에서 주로 사용
 }
 
 tasks.named('test') {
