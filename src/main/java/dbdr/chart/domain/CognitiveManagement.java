@@ -17,6 +17,6 @@ public class CognitiveManagement extends BaseEntity {
     private boolean cognitiveHelp; // 의사소통 도움 여부
 
     @Comment("인지 관리 특이사항")
-    @Column(length = 1000)
+    @Column(columnDefinition = "TEXT")
     private String cognitiveNote; // 인지 관리 특이사항
 }

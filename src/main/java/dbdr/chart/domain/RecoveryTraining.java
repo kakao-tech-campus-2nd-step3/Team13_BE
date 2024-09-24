@@ -23,7 +23,7 @@ public class RecoveryTraining extends BaseEntity {
     private boolean recoveryTraining; // 회복훈련 완료 여부
 
     @Comment("회복 훈련 특이사항")
-    @Column(length = 1000)
+    @Column(columnDefinition = "TEXT")
     private String recoveryNote; // 회복훈련 특이사항
 
 }

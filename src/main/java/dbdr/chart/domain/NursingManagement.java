@@ -23,7 +23,7 @@ public class NursingManagement extends BaseEntity {
     private String healthTemperature; // 체온
 
     @Comment("특이사항")
-    @Column(length = 1000)
+    @Column(columnDefinition = "TEXT")
     private String healthNote; // 건강 및 간호관리 특이사항
 
 }

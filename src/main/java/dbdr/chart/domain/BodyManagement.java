@@ -23,13 +23,12 @@ public class BodyManagement extends BaseEntity {
     private PhysicalMeal physicalMeal; // 식사 종류와 섭취량
 
     @Comment("화장실 횟수")
-    @Column(length = 50)
     private int physicalRestroom; // 화장실 횟수
 
     @Embedded
     private PhysicalWalk physicalWalk; // 산책 or 외출 동행
 
     @Comment("특이사항")
-    @Column(length = 1000)
+    @Column(columnDefinition = "TEXT")
     private String physicalNote; // 특이사항 입력
 }
