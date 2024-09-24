@@ -22,41 +22,41 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class GuardianAdminController {
 
-    private final GuardianService guardiansService;
+    private final GuardianService guardianService;
 
     @GetMapping
-    public ResponseEntity<List<GuardianResponse>> showAllGuardians() {
-        List<GuardianResponse> guardiansResponseList = guardiansService.getAllGuardians();
+    public ResponseEntity<List<GuardianResponse>> showAllGuardian() {
+        List<GuardianResponse> guardiansResponseList = guardianService.getAllGuardian();
         return ResponseEntity.ok(guardiansResponseList);
     }
 
     @GetMapping("/{guardianId}")
     public ResponseEntity<GuardianResponse> showOneGuardian(
         @PathVariable("guardianId") Long guardianId) {
-        GuardianResponse guardiansResponse = guardiansService.getGuardianById(guardianId);
-        return ResponseEntity.ok(guardiansResponse);
+        GuardianResponse guardianResponse = guardianService.getGuardianById(guardianId);
+        return ResponseEntity.ok(guardianResponse);
     }
 
     @PostMapping
     public ResponseEntity<GuardianResponse> addGuardian(
         @Valid @RequestBody GuardianRequest guardiansRequest) {
-        GuardianResponse guardiansResponse = guardiansService.addGuardian(guardiansRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(guardiansResponse);
+        GuardianResponse guardianResponse = guardianService.addGuardian(guardiansRequest);
+        return ResponseEntity.status(HttpStatus.CREATED).body(guardianResponse);
     }
 
     @PutMapping("/{guardianId}")
     public ResponseEntity<GuardianResponse> updateGuardianAuth(
         @PathVariable("guardianId") Long guardianId,
         @Valid @RequestBody GuardianRequest guardiansRequest) {
-        GuardianResponse guardiansResponse = guardiansService.updateGuardianById(guardianId,
+        GuardianResponse guardianResponse = guardianService.updateGuardianById(guardianId,
             guardiansRequest);
-        return ResponseEntity.ok(guardiansResponse);
+        return ResponseEntity.ok(guardianResponse);
     }
 
     @DeleteMapping("/{guardianId}")
     public ResponseEntity<Void> deleteGuardianAuth(
         @PathVariable("guardianId") Long guardianId) {
-        guardiansService.deleteGuardianById(guardianId);
+        guardianService.deleteGuardianById(guardianId);
         return ResponseEntity.noContent().build();
     }
 }

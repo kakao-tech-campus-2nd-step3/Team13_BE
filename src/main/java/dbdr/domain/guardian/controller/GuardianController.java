@@ -18,22 +18,22 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class GuardianController {
 
-    private final GuardianService guardiansService;
+    private final GuardianService guardianService;
 
     @GetMapping("/{guardianId}")
     public ResponseEntity<GuardianResponse> showGuardianInfo(
         @PathVariable("guardianId") Long guardianId) {
-        GuardianResponse guardiansResponse
-            = guardiansService.getGuardianById(guardianId);
-        return ResponseEntity.ok(guardiansResponse);
+        GuardianResponse guardianResponse
+            = guardianService.getGuardianById(guardianId);
+        return ResponseEntity.ok(guardianResponse);
     }
 
     @PutMapping("/{guardianId}")
     public ResponseEntity<GuardianResponse> updateGuardianInfo(
         @PathVariable("guardianId") Long guardianId,
-        @Valid @RequestBody GuardianRequest guardiansRequest) {
-        GuardianResponse guardiansResponse
-            = guardiansService.updateGuardianById(guardianId, guardiansRequest);
-        return ResponseEntity.ok(guardiansResponse);
+        @Valid @RequestBody GuardianRequest guardianRequest) {
+        GuardianResponse guardianResponse
+            = guardianService.updateGuardianById(guardianId, guardianRequest);
+        return ResponseEntity.ok(guardianResponse);
     }
 }
