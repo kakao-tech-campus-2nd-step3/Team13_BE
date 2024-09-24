@@ -4,6 +4,7 @@ import dbdr.domain.core.entity.BaseEntity;
 import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.recipient.dto.request.RecipientRequestDTO;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,10 +15,9 @@ import java.time.LocalDate;
 
 @Entity
 @Getter
-@NoArgsConstructor
-@AllArgsConstructor
-@Table(name = "recipient")
-@SQLDelete(sql = "UPDATE recipient SET is_active = false WHERE id = ?")
+@Table(name = "recipients")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE recipients SET is_active = false WHERE id = ?")
 @SQLRestriction("is_active = true")
 public class Recipient extends BaseEntity {
 

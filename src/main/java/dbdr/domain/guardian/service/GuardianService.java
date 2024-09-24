@@ -29,8 +29,8 @@ public class GuardianService {
     }
 
     public List<GuardianResponse> getAllGuardian() {
-        List<Guardian> guardians = guardianRepository.findAll();
-        return guardians.stream()
+        List<Guardian> guardianList = guardianRepository.findAll();
+        return guardianList.stream()
             .map(guardian -> new GuardianResponse(guardian.getPhone(), guardian.getName(), guardian.isActive()))
             .toList();
     }

@@ -1,6 +1,8 @@
 package dbdr.domain.guardian.entity;
 
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 import dbdr.domain.core.entity.BaseEntity;
 import jakarta.persistence.Column;
@@ -15,6 +17,8 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "guardians")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE recipients SET is_active = false WHERE id = ?")
+@SQLRestriction("is_active = true")
 public class Guardian extends BaseEntity {
     @Column(unique = true)
     private String loginId;

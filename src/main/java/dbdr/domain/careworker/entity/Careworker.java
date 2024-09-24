@@ -3,6 +3,7 @@ package dbdr.domain.careworker.entity;
 import dbdr.domain.core.entity.BaseEntity;
 import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -10,10 +11,10 @@ import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
-@NoArgsConstructor
 @Table(name = "careworkers")
-@SQLDelete(sql = "UPDATE careworker SET is_active = false WHERE id = ?")
-@SQLRestriction("is_active= true")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@SQLDelete(sql = "UPDATE careworkers SET is_active = false WHERE id = ?")
+@SQLRestriction("is_active = true")
 public class Careworker extends BaseEntity {
     @Column(unique = true)
     private String loginId;

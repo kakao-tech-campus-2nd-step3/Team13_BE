@@ -26,8 +26,8 @@ public class GuardianAdminController {
 
     @GetMapping
     public ResponseEntity<List<GuardianResponse>> showAllGuardian() {
-        List<GuardianResponse> guardiansResponseList = guardianService.getAllGuardian();
-        return ResponseEntity.ok(guardiansResponseList);
+        List<GuardianResponse> guardianResponseList = guardianService.getAllGuardian();
+        return ResponseEntity.ok(guardianResponseList);
     }
 
     @GetMapping("/{guardianId}")
@@ -39,22 +39,22 @@ public class GuardianAdminController {
 
     @PostMapping
     public ResponseEntity<GuardianResponse> addGuardian(
-        @Valid @RequestBody GuardianRequest guardiansRequest) {
-        GuardianResponse guardianResponse = guardianService.addGuardian(guardiansRequest);
+        @Valid @RequestBody GuardianRequest guardianRequest) {
+        GuardianResponse guardianResponse = guardianService.addGuardian(guardianRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(guardianResponse);
     }
 
     @PutMapping("/{guardianId}")
-    public ResponseEntity<GuardianResponse> updateGuardianAuth(
+    public ResponseEntity<GuardianResponse> updateGuardian(
         @PathVariable("guardianId") Long guardianId,
-        @Valid @RequestBody GuardianRequest guardiansRequest) {
+        @Valid @RequestBody GuardianRequest guardianRequest) {
         GuardianResponse guardianResponse = guardianService.updateGuardianById(guardianId,
-            guardiansRequest);
+            guardianRequest);
         return ResponseEntity.ok(guardianResponse);
     }
 
     @DeleteMapping("/{guardianId}")
-    public ResponseEntity<Void> deleteGuardianAuth(
+    public ResponseEntity<Void> deleteGuardian(
         @PathVariable("guardianId") Long guardianId) {
         guardianService.deleteGuardianById(guardianId);
         return ResponseEntity.noContent().build();
