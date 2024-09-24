@@ -15,6 +15,10 @@ import org.hibernate.annotations.SQLRestriction;
 @SQLDelete(sql = "UPDATE careworker SET is_active = false WHERE id = ?")
 @SQLRestriction("is_active= true")
 public class Careworker extends BaseEntity {
+    @Column(unique = true)
+    private String loginId;
+
+    private String loginPassword;
 
     @Column(nullable = false)
     private Long institutionId;

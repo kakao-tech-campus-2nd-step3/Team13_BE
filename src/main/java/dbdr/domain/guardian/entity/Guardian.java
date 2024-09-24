@@ -1,5 +1,7 @@
 package dbdr.domain.guardian.entity;
 
+import org.hibernate.annotations.Comment;
+
 import dbdr.domain.core.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,9 +16,14 @@ import lombok.NoArgsConstructor;
 @Table(name = "guardians")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Guardian extends BaseEntity {
+    @Column(unique = true)
+    private String loginId;
+
+    private String loginPassword;
 
     @Column(nullable = false, unique = true)
     private String phone;
+
     @Column(nullable = false, length = 50)
     private String name;
 
