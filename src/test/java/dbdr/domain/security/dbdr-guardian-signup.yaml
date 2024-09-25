@@ -1,0 +1,45 @@
+openapi: "3.1.0"
+info:
+  title: "dbdr API"
+  description: "dbdr API"
+  version: "1.0.0"
+servers:
+  - url: "http://localhost:8080/"
+paths:
+  /v1/admin/guardian:
+    post:
+      summary: "POST v1/admin/guardian"
+      operationId: "addGuardian"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GuardianRequest"
+        required: true
+      responses:
+        "200":
+          description: "OK"
+          content:
+            '*/*':
+              schema:
+                $ref: "#/components/schemas/GuardianResponse"
+components:
+  schemas:
+    GuardianRequest:
+      type: "object"
+      properties:
+        phone:
+          type: "string"
+        name:
+          type: "string"
+        loginPassword:
+          type: "string"
+    GuardianResponse:
+      type: "object"
+      properties:
+        phone:
+          type: "string"
+        name:
+          type: "string"
+        isActive:
+          type: "boolean"
