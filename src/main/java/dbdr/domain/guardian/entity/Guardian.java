@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Table(name = "guardians")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SQLDelete(sql = "UPDATE recipients SET is_active = false WHERE id = ?")
+@SQLDelete(sql = "UPDATE guardians SET is_active = false WHERE id = ?")
 @SQLRestriction("is_active = true")
 public class Guardian extends BaseEntity {
     @Column(unique = true)
