@@ -43,7 +43,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
             .formLogin(AbstractAuthenticationFilterConfigurer::disable)
-            .authorizeHttpRequests((authorize) -> authorize.anyRequest().authenticated())
+            .authorizeHttpRequests((authorize) ->
+                authorize
+                    .requestMatchers("/v1/admin/guardian/**").permitAll() //TODO : 관리자 도메인 아직 없음
+                    .anyRequest().authenticated())
 
             .sessionManagement(
                 (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
