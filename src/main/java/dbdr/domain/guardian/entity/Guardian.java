@@ -23,6 +23,7 @@ public class Guardian extends BaseEntity {
     @Column(unique = true)
     private String loginId;
 
+    @Column(nullable = false)
     private String loginPassword;
 
     @Column(nullable = false, unique = true)
@@ -32,14 +33,16 @@ public class Guardian extends BaseEntity {
     private String name;
 
     @Builder
-    public Guardian(String phone, String name) {
+    public Guardian(String phone, String name,String loginPassword) {
         this.phone = phone;
         this.name = name;
+        this.loginPassword = loginPassword;
     }
 
     @Builder
-    public void updateGuardian(String phone, String name) {
+    public void updateGuardian(String phone, String name, String loginPassword) {
         this.phone = phone;
         this.name = name;
+        this.loginPassword = loginPassword;
     }
 }

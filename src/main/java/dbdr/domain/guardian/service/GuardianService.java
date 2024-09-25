@@ -7,6 +7,7 @@ import dbdr.domain.guardian.repository.GuardianRepository;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -14,6 +15,8 @@ import org.springframework.stereotype.Service;
 public class GuardianService {
 
     private final GuardianRepository guardianRepository;
+
+    private final PasswordEncoder passwordEncoder;
 
     public GuardianResponse getGuardianById(Long guardianId) {
         Guardian guardian = guardianRepository.findById(guardianId).orElseThrow();
@@ -23,7 +26,7 @@ public class GuardianService {
     public GuardianResponse updateGuardianById(Long guardianId,
         GuardianRequest guardianRequest) {
         Guardian guardian = guardianRepository.findById(guardianId).orElseThrow();
-        guardian.updateGuardian(guardianRequest.phone(), guardianRequest.name());
+        guardian.updateGuardian(guardianRequest.phone(), guardianRequest.name(), passwordEncoding(guardianRequest.loginPassword()));
         guardianRepository.save(guardian);
         return new GuardianResponse(guardianRequest.phone(), guardianRequest.name(), guardian.isActive());
     }
@@ -37,7 +40,7 @@ public class GuardianService {
 
     public GuardianResponse addGuardian(GuardianRequest guardianRequest) {
         phoneNumberExists(guardianRequest.phone());
-        Guardian guardian = new Guardian(guardianRequest.phone(), guardianRequest.name());
+        Guardian guardian = new Guardian(guardianRequest.phone(), guardianRequest.name(), passwordEncoding(guardianRequest.loginPassword()));
         guardian = guardianRepository.save(guardian);
         return new GuardianResponse(guardian.getPhone(), guardian.getName(), guardian.isActive());
     }
@@ -52,5 +55,9 @@ public class GuardianService {
         if(guardianRepository.existsByPhone(phone)){
             throw new IllegalArgumentException("존재하는 전화번호입니다.");
         }
+    }
+
+    private String passwordEncoding(String password) {
+        return passwordEncoder.encode(password);
     }
 }

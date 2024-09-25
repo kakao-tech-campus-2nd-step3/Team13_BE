@@ -8,6 +8,8 @@ public record GuardianRequest(
     @Pattern(regexp = "010\\d{8}", message = "010XXXXXXXX형식으로 입력해주세요.")
     String phone,
     @NotBlank(message = "이름을 입력하세요.")
-    String name) {
+    String name,
+    @NotBlank(message = "비밀번호를 입력하세요.")
+    String loginPassword) {
 
 }
