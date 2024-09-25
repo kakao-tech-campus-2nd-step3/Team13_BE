@@ -24,4 +24,8 @@ public class ChartService {
         Chart chart = chartRepository.findById(chartId).orElseThrow(); // 에러 처리 필요
         return ChartDetailResponse.fromEntity(chart);
     }
+
+    public void deleteChart(Long chartId) {
+        chartRepository.deleteById(chartId);
+    }
 }
