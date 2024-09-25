@@ -46,6 +46,7 @@ public class SecurityConfig {
             .authorizeHttpRequests((authorize) ->
                 authorize
                     .requestMatchers("/v1/admin/guardian/**").permitAll() //TODO : 관리자 도메인 아직 없음
+                    .requestMatchers("/v1/guardian/login").permitAll()
                     .anyRequest().authenticated())
 
             .sessionManagement(
