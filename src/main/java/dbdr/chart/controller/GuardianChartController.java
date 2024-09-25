@@ -4,6 +4,7 @@ import static dbdr.util.Utils.DEFAULT_PAGE_SIZE;
 
 import dbdr.chart.dto.response.ChartDetailResponse;
 import dbdr.chart.service.ChartService;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,12 +18,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/v1/charts")
-public class ChartController {
+@RequiredArgsConstructor
+public class GuardianChartController {
     private final ChartService chartService;
-
-    public ChartController(ChartService chartService) {
-        this.chartService = chartService;
-    }
 
     @GetMapping("/recipients")
     public ResponseEntity<Page<ChartDetailResponse>> getAllChartByRecipientId(
@@ -39,5 +37,4 @@ public class ChartController {
         ChartDetailResponse chart = chartService.getChartById(chartId);
         return ResponseEntity.ok().body(chart);
     }
-
 }
