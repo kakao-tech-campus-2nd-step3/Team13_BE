@@ -8,4 +8,6 @@ import java.util.List;
 public interface CareworkerRepository extends JpaRepository<Careworker, Long> {
 
     List<Careworker> findByInstitutionId(Long institutionId);
+
+    boolean existsByEmail(String email);
 }

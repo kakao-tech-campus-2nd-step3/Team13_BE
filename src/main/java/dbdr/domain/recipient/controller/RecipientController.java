@@ -11,7 +11,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/recipient")
+@RequestMapping("/${spring.app.version}/recipient")
 public class RecipientController {
 
     private final RecipientService recipientService;
@@ -35,7 +35,7 @@ public class RecipientController {
     @PostMapping
     public ResponseEntity<RecipientResponseDTO> createRecipient(@Valid @RequestBody RecipientRequestDTO recipientDTO) {
         RecipientResponseDTO newRecipient = recipientService.createRecipient(recipientDTO);
-        return ResponseEntity.created(URI.create("/v1/recipients/" + newRecipient.getId()))
+        return ResponseEntity.created(URI.create("/${spring.app.version}/recipient/" + newRecipient.getId()))
                 .body(newRecipient);
     }
 

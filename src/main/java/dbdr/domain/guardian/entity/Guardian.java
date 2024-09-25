@@ -1,5 +1,6 @@
 package dbdr.domain.guardian.entity;
 
+import jakarta.validation.constraints.Pattern;
 import org.hibernate.annotations.Comment;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
@@ -26,6 +27,7 @@ public class Guardian extends BaseEntity {
     private String loginPassword;
 
     @Column(nullable = false, unique = true)
+    @Pattern(regexp = "010\\d{8}")
     private String phone;
 
     @Column(nullable = false, length = 50)
@@ -37,7 +39,6 @@ public class Guardian extends BaseEntity {
         this.name = name;
     }
 
-    @Builder
     public void updateGuardian(String phone, String name) {
         this.phone = phone;
         this.name = name;
