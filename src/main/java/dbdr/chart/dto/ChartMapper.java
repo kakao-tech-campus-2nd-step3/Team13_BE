@@ -25,7 +25,6 @@ public interface ChartMapper {
     @Mapping(target = "chartId", source = "id")
     ChartDetailResponse toResponse(Chart chart);
 
-    @Mapping(target = "id", ignore = true)
     Chart toEntity(ChartDetailRequest request);
 
     // BodyManagement 매핑
@@ -40,7 +39,6 @@ public interface ChartMapper {
     BodyManagementResponse toResponse(BodyManagement bodyManagement);
 
     @Mappings({
-            @Mapping(target = "id", ignore = true),
             @Mapping(target = "physicalClear.wash", source = "wash"),
             @Mapping(target = "physicalClear.bath", source = "bath"),
             @Mapping(target = "physicalMeal.mealType", source = "mealType"),
@@ -58,7 +56,6 @@ public interface ChartMapper {
     NursingManagementResponse toResponse(NursingManagement nursingManagement);
 
     @Mappings({
-            @Mapping(target = "id", ignore = true),
             @Mapping(target = "healthBloodPressure.systolic", source = "systolic"),
             @Mapping(target = "healthBloodPressure.diastolic", source = "diastolic")
     })
@@ -67,12 +64,10 @@ public interface ChartMapper {
     // CognitiveManagement 매핑
     CognitiveManagementResponse toResponse(CognitiveManagement cognitiveManagement);
 
-    @Mapping(target = "id", ignore = true)
     CognitiveManagement toEntity(CognitiveManagementRequest request);
 
     // RecoveryTraining 매핑
     RecoveryTrainingResponse toResponse(RecoveryTraining recoveryTraining);
 
-    @Mapping(target = "id", ignore = true)
     RecoveryTraining toEntity(RecoveryTrainingRequest request);
 }
