@@ -2,22 +2,22 @@ package dbdr.chart;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import dbdr.chart.domain.BodyManagement;
-import dbdr.chart.domain.Chart;
-import dbdr.chart.domain.HealthBloodPressure;
-import dbdr.chart.domain.NursingManagement;
-import dbdr.chart.domain.PhysicalClear;
-import dbdr.chart.domain.PhysicalMeal;
-import dbdr.chart.domain.PhysicalWalk;
-import dbdr.chart.dto.ChartMapper;
-import dbdr.chart.dto.request.BodyManagementRequest;
-import dbdr.chart.dto.request.ChartDetailRequest;
-import dbdr.chart.dto.request.CognitiveManagementRequest;
-import dbdr.chart.dto.request.NursingManagementRequest;
-import dbdr.chart.dto.request.RecoveryTrainingRequest;
-import dbdr.chart.dto.response.BodyManagementResponse;
-import dbdr.chart.dto.response.ChartDetailResponse;
-import dbdr.chart.dto.response.NursingManagementResponse;
+import dbdr.domain.chart.dto.ChartMapper;
+import dbdr.domain.chart.dto.request.BodyManagementRequest;
+import dbdr.domain.chart.dto.request.ChartDetailRequest;
+import dbdr.domain.chart.dto.request.CognitiveManagementRequest;
+import dbdr.domain.chart.dto.request.NursingManagementRequest;
+import dbdr.domain.chart.dto.request.RecoveryTrainingRequest;
+import dbdr.domain.chart.dto.response.BodyManagementResponse;
+import dbdr.domain.chart.dto.response.ChartDetailResponse;
+import dbdr.domain.chart.dto.response.NursingManagementResponse;
+import dbdr.domain.chart.entity.BodyManagement;
+import dbdr.domain.chart.entity.Chart;
+import dbdr.domain.chart.entity.HealthBloodPressure;
+import dbdr.domain.chart.entity.NursingManagement;
+import dbdr.domain.chart.entity.PhysicalClear;
+import dbdr.domain.chart.entity.PhysicalMeal;
+import dbdr.domain.chart.entity.PhysicalWalk;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
