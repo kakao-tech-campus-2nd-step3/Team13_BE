@@ -2,6 +2,7 @@ package dbdr.chart.service;
 
 import dbdr.chart.domain.Chart;
 import dbdr.chart.dto.ChartMapper;
+import dbdr.chart.dto.request.ChartDetailRequest;
 import dbdr.chart.dto.response.ChartDetailResponse;
 import dbdr.chart.repository.ChartRepository;
 import lombok.RequiredArgsConstructor;
@@ -29,4 +30,12 @@ public class ChartService {
     public void deleteChart(Long chartId) {
         chartRepository.deleteById(chartId);
     }
+
+    public ChartDetailResponse saveChart(ChartDetailRequest request) {
+        Chart chart = chartMapper.toEntity(request);
+        Chart savedChart = chartRepository.save(chart);
+        return chartMapper.toResponse(savedChart);
+    }
+
+
 }

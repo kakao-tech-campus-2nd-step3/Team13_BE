@@ -48,4 +48,12 @@ public class Chart extends BaseEntity {
     @OneToOne
     @JoinColumn(name = "cognitive_management_id")
     private CognitiveManagement cognitiveManagement;
+
+    public void update(Chart chart) {
+        this.conditionDisease = chart.getConditionDisease();
+        this.bodyManagement = chart.getBodyManagement();
+        this.nursingManagement = chart.getNursingManagement();
+        this.recoveryTraining = chart.getRecoveryTraining();
+        this.cognitiveManagement = chart.getCognitiveManagement();
+    }
 }
