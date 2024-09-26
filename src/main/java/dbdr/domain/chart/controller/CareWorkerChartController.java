@@ -63,5 +63,4 @@ public class CareWorkerChartController {
         chartService.deleteChart(chartId);
         return ResponseEntity.ok().build();
     }
-
 }
