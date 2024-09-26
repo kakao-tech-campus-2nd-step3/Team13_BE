@@ -2,7 +2,6 @@ package dbdr.config;
 
 import dbdr.security.JwtFilter;
 import dbdr.security.JwtProvider;
-import dbdr.security.LoginFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -51,8 +50,8 @@ public class SecurityConfig {
 
             .sessionManagement(
                 (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .addFilterBefore(new JwtFilter(jwtProvider), LoginFilter.class)
-            .addFilterAt(new LoginFilter(authenticationManager(authenticationConfiguration), jwtProvider), UsernamePasswordAuthenticationFilter.class);
+            .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class);
+
         return http.build();
 
     }
