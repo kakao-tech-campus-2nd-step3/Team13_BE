@@ -21,10 +21,17 @@ import org.mapstruct.Mappings;
 
 @Mapper
 public interface ChartMapper {
-
-    @Mapping(target = "chartId", source = "id")
+    @Mappings({
+            @Mapping(source = "bodyManagement", target = "bodyManagement"),
+            @Mapping(target = "chartId", source = "id")})
     ChartDetailResponse toResponse(Chart chart);
 
+    @Mappings({
+            @Mapping(target = "bodyManagement", source = "bodyManagement"),
+            @Mapping(target = "nursingManagement", source = "nursingManagement"),
+            @Mapping(target = "cognitiveManagement", source = "cognitiveManagement"),
+            @Mapping(target = "recoveryTraining", source = "recoveryTraining")
+    })
     Chart toEntity(ChartDetailRequest request);
 
     // BodyManagement 매핑
