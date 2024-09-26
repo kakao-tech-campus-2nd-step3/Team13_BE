@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 // 요양사 권한 필요
 @RestController
-@RequestMapping("/v1/careworker/chart")
+@RequestMapping("/${spring.app.version}/careworker/chart")
 @RequiredArgsConstructor
 public class CareWorkerChartController {
     private final ChartService chartService;

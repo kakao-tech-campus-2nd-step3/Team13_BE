@@ -19,11 +19,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 // 보호자 권한 필요
 @RestController
-@RequestMapping("/v1/guardian/chart")
+@RequestMapping("/${spring.app.version}/guardian/chart")
 @RequiredArgsConstructor
 public class GuardianChartController {
     private final ChartService chartService;
-    
+
     @GetMapping("/recipient")
     public ResponseEntity<ApiUtils.ApiResult<Page<ChartDetailResponse>>> getAllChartByRecipientId(
             @RequestParam(value = "recipient-id", required = false) Long recipientId,
