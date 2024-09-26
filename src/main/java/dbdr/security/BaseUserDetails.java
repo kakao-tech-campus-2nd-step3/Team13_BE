@@ -4,11 +4,13 @@ import java.util.ArrayList;
 import java.util.Collection;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @RequiredArgsConstructor
 @Builder
+@Slf4j
 public class BaseUserDetails implements UserDetails {
 
     private final String username;
@@ -20,6 +22,7 @@ public class BaseUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
         collection.add((GrantedAuthority) () -> role);
+        log.debug("{} 의 auth : {}", username,collection.stream().findFirst().get().getAuthority());
         return collection;
     }
 

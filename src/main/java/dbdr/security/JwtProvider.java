@@ -1,11 +1,14 @@
 package dbdr.security;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
@@ -13,18 +16,20 @@ import org.springframework.stereotype.Component;
 public class JwtProvider {
 
     private final SecretKey secretKey;
+    private final BaseUserDetailsService baseUserDetailsService;
 
-    public JwtProvider(@Value("${spring.jwt.secret}") String secret) {
+    public JwtProvider(@Value("${spring.jwt.secret}") String secret, BaseUserDetailsService baseUserDetailsService) {
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
+        this.baseUserDetailsService = baseUserDetailsService;
     }
 
     public String getUserName(String token) {
-        return Jwts.parserBuilder()
+        Claims claims = Jwts.parserBuilder()
             .setSigningKey(secretKey)
             .build()
             .parseClaimsJws(token)
-            .getBody()
-            .get("username", String.class);
+            .getBody();
+        return claims.get("username", String.class);
     }
 
     public String getRole(String token) {
@@ -60,16 +65,9 @@ public class JwtProvider {
 
     }
 
-
-    public boolean validateToken(String token) {
-        try {
-            Jwts.parserBuilder()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(token);
-            return true;
-        } catch (Exception e) {
-            return false;
-        }
+    public Authentication getAuthentication(String token) {
+        BaseUserDetails userDetails = baseUserDetailsService.loadUserByUsername(getUserName(token));
+        return new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());
     }
+
 }

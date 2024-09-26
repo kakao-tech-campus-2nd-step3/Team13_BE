@@ -6,12 +6,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 @RequiredArgsConstructor
+@Slf4j
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtProvider jwtProvider;
@@ -20,18 +21,24 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //헤더에서 JWT 토큰 추출
         String token = request.getHeader("Authorization");
+        log.debug("토큰 : {}", token);
+
 
         //유효한 토큰인지 확인
-        if(token != null && jwtProvider.validateToken(token) && jwtProvider.isExpired(token)){
-            //토큰에서 유저 정보 추출
-            BaseUserDetails userDetails = BaseUserDetails.builder()
-                .username(jwtProvider.getUserName(token))
-                .role(jwtProvider.getRole(token))
-                .build();
-            Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-            //SecurityContext에 인증 정보 저장
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+        if(token != null){ //TODO 유효성 검사 필요
+            log.debug("토큰 유저 정보 추출 시작");
+            try {
+                //토큰에서 유저 정보 추출
+                Authentication authentication = jwtProvider.getAuthentication(token);
+
+                //SecurityContext에 인증 정보 저장
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            } catch (Exception e) {
+                log.debug("토큰 유저 정보 추출 실패");
+                log.debug("토큰 유저 정보 추출 실패 : {}", e.getMessage());
+            }
         }
+        log.debug("jwt 필터 수행 완료");
         filterChain.doFilter(request, response);
     }
 
