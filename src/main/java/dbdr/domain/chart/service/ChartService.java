@@ -35,6 +35,5 @@ public class ChartService {
         Chart savedChart = chartRepository.save(chart);
         return chartMapper.toResponse(savedChart);
     }
-
-
+    
 }
