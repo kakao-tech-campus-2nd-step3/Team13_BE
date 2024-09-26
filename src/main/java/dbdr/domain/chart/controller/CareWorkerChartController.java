@@ -5,11 +5,13 @@ import static dbdr.util.Utils.DEFAULT_PAGE_SIZE;
 import dbdr.domain.chart.dto.request.ChartDetailRequest;
 import dbdr.domain.chart.dto.response.ChartDetailResponse;
 import dbdr.domain.chart.service.ChartService;
+import dbdr.util.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,39 +30,40 @@ public class CareWorkerChartController {
     private final ChartService chartService;
 
     @GetMapping("/recipient")
-    public ResponseEntity<Page<ChartDetailResponse>> getAllChartByRecipientId(
+    public ResponseEntity<ApiUtils.ApiResult<Page<ChartDetailResponse>>> getAllChartByRecipientId(
             @RequestParam(value = "recipient-id", required = false) Long recipientId,
             @PageableDefault(size = DEFAULT_PAGE_SIZE, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         // 환자 정보 접근 권한 확인 로직 필요 -> 요양사가 맡은 환자 정보만 조회 가능
         Page<ChartDetailResponse> recipients = chartService.getAllChartByRecipientId(recipientId, pageable);
-        return ResponseEntity.ok().body(recipients);
+        return ResponseEntity.ok(ApiUtils.success(recipients));
     }
 
     @GetMapping("/{chartId}")
-    public ResponseEntity<ChartDetailResponse> getChartById(@PathVariable Long chartId) {
+    public ResponseEntity<ApiUtils.ApiResult<ChartDetailResponse>> getChartById(@PathVariable Long chartId) {
         // 환자 정보 접근 권한 확인 로직 필요 -> 요양사가 맡은 환자 정보만 조회 가능
         ChartDetailResponse chart = chartService.getChartById(chartId);
-        return ResponseEntity.ok().body(chart);
+        return ResponseEntity.ok(ApiUtils.success(chart));
     }
 
     @PostMapping
-    public ResponseEntity<ChartDetailResponse> saveChart(ChartDetailRequest request) {
-        // 환자 정보 접근 권한 확인 로직 필요 -> 요양사가 맡은 환자 정보만 수정 가능
+    public ResponseEntity<ApiUtils.ApiResult<ChartDetailResponse>> saveChart(ChartDetailRequest request) {
+        // 환자 정보 접근 권한 확인 로직 필요 -> 요양사가 맡은 환자 정보만 저장 가능
         ChartDetailResponse chart = chartService.saveChart(request);
-        return ResponseEntity.ok().body(chart);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiUtils.success(chart));
     }
 
     @PutMapping("/{chartId}")
-    public ResponseEntity<ChartDetailResponse> updateChart(@PathVariable Long chartId, ChartDetailRequest request) {
+    public ResponseEntity<ApiUtils.ApiResult<ChartDetailResponse>> updateChart(@PathVariable Long chartId,
+                                                                               ChartDetailRequest request) {
         // 환자 정보 접근 권한 확인 로직 필요 -> 요양사가 맡은 환자 정보만 수정 가능
         ChartDetailResponse chart = chartService.updateChart(chartId, request);
-        return ResponseEntity.ok().body(chart);
+        return ResponseEntity.ok(ApiUtils.success(chart));
     }
 
     @DeleteMapping("/{chartId}")
-    public ResponseEntity<?> deleteChart(@PathVariable Long chartId) {
+    public ResponseEntity<ApiUtils.ApiResult<String>> deleteChart(@PathVariable Long chartId) {
         // 환자 정보 접근 권한 확인 로직 필요 -> 요양사가 맡은 환자 정보만 삭제 가능
         chartService.deleteChart(chartId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }

@@ -4,6 +4,7 @@ import static dbdr.util.Utils.DEFAULT_PAGE_SIZE;
 
 import dbdr.domain.chart.dto.response.ChartDetailResponse;
 import dbdr.domain.chart.service.ChartService;
+import dbdr.util.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,20 +23,20 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class GuardianChartController {
     private final ChartService chartService;
-
+    
     @GetMapping("/recipient")
-    public ResponseEntity<Page<ChartDetailResponse>> getAllChartByRecipientId(
+    public ResponseEntity<ApiUtils.ApiResult<Page<ChartDetailResponse>>> getAllChartByRecipientId(
             @RequestParam(value = "recipient-id", required = false) Long recipientId,
             @PageableDefault(size = DEFAULT_PAGE_SIZE, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         // 환자 정보 접근 권한 확인 로직 필요 -> 보호자가 자신의 환자 정보만 조회 가능
         Page<ChartDetailResponse> recipients = chartService.getAllChartByRecipientId(recipientId, pageable);
-        return ResponseEntity.ok().body(recipients);
+        return ResponseEntity.ok(ApiUtils.success(recipients));
     }
 
     @GetMapping("/{chartId}")
-    public ResponseEntity<ChartDetailResponse> getChartById(@PathVariable Long chartId) {
+    public ResponseEntity<ApiUtils.ApiResult<ChartDetailResponse>> getChartById(@PathVariable Long chartId) {
         // 환자 정보 접근 권한 확인 로직 필요 -> 보호자가 자신의 환자 정보만 조회 가능
         ChartDetailResponse chart = chartService.getChartById(chartId);
-        return ResponseEntity.ok().body(chart);
+        return ResponseEntity.ok(ApiUtils.success(chart));
     }
 }
