@@ -24,13 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    private final AuthenticationConfiguration authenticationConfiguration;
     private final JwtProvider jwtProvider;
-
-
-    enum Role {
-        GUARDIAN, CAREWORKER
-    }
 
     @Bean
     public AuthenticationManager authenticationManager(
