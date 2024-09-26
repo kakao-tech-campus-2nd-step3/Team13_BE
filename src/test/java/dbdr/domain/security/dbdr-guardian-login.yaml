@@ -4,12 +4,12 @@ info:
   description: "dbdr API"
   version: "1.0.0"
 servers:
-  - url: "http://localhost:8080/"
+  - url: "http://localhost:8080"
 paths:
-  /v1/admin/guardian:
+  /v1/guardian/login:
     post:
-      summary: "POST v1/admin/guardian"
-      operationId: "addGuardian"
+      summary: "POST v1/guardian/login"
+      operationId: "login"
       requestBody:
         content:
           application/json:
@@ -22,7 +22,7 @@ paths:
           content:
             '*/*':
               schema:
-                $ref: "#/components/schemas/GuardianResponse"
+                $ref: "#/components/schemas/Void"
 components:
   schemas:
     GuardianRequest:
@@ -37,12 +37,6 @@ components:
         loginPassword:
           type: "string"
           default: "password"
-    GuardianResponse:
+    Void:
       type: "object"
-      properties:
-        phone:
-          type: "string"
-        name:
-          type: "string"
-        isActive:
-          type: "boolean"
+      properties: { }
