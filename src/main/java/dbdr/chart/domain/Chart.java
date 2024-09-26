@@ -10,13 +10,19 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Table(name = "chart")
 @Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @SQLDelete(sql = "UPDATE chart SET is_active = false WHERE id = ?")
 @SQLRestriction("is_active = true")
 public class Chart extends BaseEntity {
