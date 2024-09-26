@@ -1,6 +1,5 @@
 package dbdr.security;
 
-import dbdr.security.dto.BaseUserDetails;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -25,15 +24,11 @@ public class JwtFilter extends OncePerRequestFilter {
         //유효한 토큰인지 확인
         if(token != null && jwtProvider.validateToken(token) && jwtProvider.isExpired(token)){
             //토큰에서 유저 정보 추출
-            BaseUser baseUser = new BaseUser();
-            baseUser.setUsername(jwtProvider.getUserName(token));
-            baseUser.setRole(jwtProvider.getRole(token));
-
-            BaseUserDetails userDetails = new BaseUserDetails(baseUser);
-
+            BaseUserDetails userDetails = BaseUserDetails.builder()
+                .username(jwtProvider.getUserName(token))
+                .role(jwtProvider.getRole(token))
+                .build();
             Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-
             //SecurityContext에 인증 정보 저장
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
