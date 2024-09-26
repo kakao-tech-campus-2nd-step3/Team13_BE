@@ -35,5 +35,12 @@ public class ChartService {
         Chart savedChart = chartRepository.save(chart);
         return chartMapper.toResponse(savedChart);
     }
-    
+
+    public ChartDetailResponse updateChart(Long chartId, ChartDetailRequest request) {
+        Chart chart = chartRepository.findById(chartId).orElseThrow(); // 에러 처리 필요
+        chart.update(chartMapper.toEntity(request));
+        Chart savedChart = chartRepository.save(chart);
+        return chartMapper.toResponse(savedChart);
+    }
+
 }
