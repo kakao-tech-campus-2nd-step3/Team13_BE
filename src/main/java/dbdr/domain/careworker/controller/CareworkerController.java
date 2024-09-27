@@ -13,7 +13,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/careworker")
+@RequestMapping("/${spring.app.version}/careworker")
 @RequiredArgsConstructor
 public class CareworkerController {
 
@@ -21,7 +21,7 @@ public class CareworkerController {
 
     @GetMapping
     public ResponseEntity<List<CareworkerResponseDTO>> getAllCareworkers(
-            @RequestParam(value = "institutionId", required = false) Long institutionId) {
+        @RequestParam(value = "institutionId", required = false) Long institutionId) {
         List<CareworkerResponseDTO> careworkerList;
         if (institutionId != null) {
             careworkerList = careworkerService.getCareworkersByInstitution(institutionId);
@@ -42,13 +42,16 @@ public class CareworkerController {
     public ResponseEntity<CareworkerResponseDTO> createCareworker(
         @Valid @RequestBody CareworkerRequestDTO careworkerDTO) {
         CareworkerResponseDTO newCareworker = careworkerService.createCareworker(careworkerDTO);
-        return ResponseEntity.created(URI.create("/v1/careworker/" + newCareworker.getId()))
-                .body(newCareworker);
+        return ResponseEntity.created(
+                URI.create("/${spring.app.version}/careworker/" + newCareworker.getId()))
+            .body(newCareworker);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<CareworkerResponseDTO> updateCareworker(@PathVariable Long id, @Valid @RequestBody CareworkerRequestDTO careworkerDTO) {
-        CareworkerResponseDTO updatedCareworker = careworkerService.updateCareworker(id, careworkerDTO);
+    public ResponseEntity<CareworkerResponseDTO> updateCareworker(@PathVariable Long id,
+        @Valid @RequestBody CareworkerRequestDTO careworkerDTO) {
+        CareworkerResponseDTO updatedCareworker = careworkerService.updateCareworker(id,
+            careworkerDTO);
         return ResponseEntity.ok(updatedCareworker);
     }
 

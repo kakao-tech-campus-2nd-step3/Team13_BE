@@ -27,16 +27,16 @@ public class Guardian extends BaseEntity {
     private String loginPassword;
 
     @Column(nullable = false, unique = true)
+    @Pattern(regexp = "010\\d{8}")
     private String phone;
 
     @Column(nullable = false, length = 50)
     private String name;
 
     @Builder
-    public Guardian(String phone, String name,String loginPassword) {
+    public Guardian(String phone, String name) {
         this.phone = phone;
         this.name = name;
-        this.loginPassword = loginPassword;
     }
 
     @Builder

@@ -16,6 +16,7 @@ import org.hibernate.annotations.SQLRestriction;
 @SQLDelete(sql = "UPDATE careworkers SET is_active = false WHERE id = ?")
 @SQLRestriction("is_active = true")
 public class Careworker extends BaseEntity {
+
     @Column(unique = true)
     private String loginId;
 
@@ -32,7 +33,6 @@ public class Careworker extends BaseEntity {
 
     @Column(nullable = false)
     private String phone;
-
 
     public Careworker(Long institutionId, String name, String email, String phone) {
         this.institutionId = institutionId;
