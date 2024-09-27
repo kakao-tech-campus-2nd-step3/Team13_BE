@@ -22,7 +22,6 @@ public class BaseUserDetails implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
         collection.add((GrantedAuthority) () -> role);
-        log.debug("{} 의 auth : {}", username,collection.stream().findFirst().get().getAuthority());
         return collection;
     }
 
