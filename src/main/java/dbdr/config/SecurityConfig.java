@@ -1,20 +1,13 @@
 package dbdr.config;
 
-import dbdr.security.BaseUserDetailsService;
 import dbdr.security.JwtFilter;
 import dbdr.security.JwtProvider;
-import dbdr.security.Role;
 import jakarta.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Locale;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -22,9 +15,6 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -55,8 +45,8 @@ public class SecurityConfig {
                 (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests((authorize) -> {
                 authorize
-                    .requestMatchers("/${spring.app.version}/guardian/login").permitAll()
-                    .requestMatchers("/${spring.app.version}/careworker/login").permitAll()
+                    .requestMatchers("/**/guardian/login").permitAll()
+                    .requestMatchers("/**/careworker/login").permitAll()
                     .anyRequest().authenticated();
             })
 
