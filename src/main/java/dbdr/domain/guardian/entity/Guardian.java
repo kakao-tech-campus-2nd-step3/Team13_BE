@@ -42,7 +42,7 @@ public class Guardian extends BaseEntity {
         this.loginPassword = loginPassword;
     }
 
-    @Builder
+
     public void updateGuardian(String phone, String name, String loginPassword) {
         this.phone = phone;
         this.name = name;
