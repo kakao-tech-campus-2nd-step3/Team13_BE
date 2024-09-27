@@ -3,6 +3,7 @@ package dbdr.config;
 import dbdr.security.BaseUserDetailsService;
 import dbdr.security.JwtFilter;
 import dbdr.security.JwtProvider;
+import dbdr.security.Role;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,6 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -54,7 +56,6 @@ public class SecurityConfig {
             .authorizeHttpRequests((authorize) -> {
                 authorize
                     .requestMatchers("/v1/guardian/login").permitAll()
-                    .requestMatchers("/v1/admin/guardian").hasAnyRole("GUARDIAN", "ADMIN")
                     .anyRequest().authenticated();
             })
 
@@ -62,20 +63,12 @@ public class SecurityConfig {
 
             .exceptionHandling((exception) -> exception
             .accessDeniedHandler((request, response, accessDeniedException) -> {
-                log.debug("접근 거부: {}", accessDeniedException.getMessage());
-                Authentication auth = (Authentication) request.getUserPrincipal();
-                if (auth != null) {
-                    Collection<? extends GrantedAuthority> authorities = auth.getAuthorities();
-                    log.warn("User '{}' 거부됨: {} with authorities: {}", auth.getName(), request.getRequestURI(), authorities.stream().map(GrantedAuthority::getAuthority).toArray());
-                    log.warn("시큐리팃 : {}",SecurityContextHolder.getContext().getAuthentication().getAuthorities().stream().map(GrantedAuthority::getAuthority).toArray());
-                }
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "접근 거부");
             })
             .authenticationEntryPoint((request, response, authException) -> {
                 log.debug("인증 실패: {}", authException.getMessage());
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증 실패");
             }));
-
 
         return http.build();
 
