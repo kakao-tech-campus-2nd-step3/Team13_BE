@@ -4,8 +4,8 @@ import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
 import dbdr.domain.careworker.dto.response.CareworkerResponseDTO;
 import dbdr.domain.careworker.repository.CareworkerRepository;
-import dbdr.exception.IdNotFoundException;
-import dbdr.exception.NotUniqueException;
+import dbdr.exception.ApplicationError;
+import dbdr.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -71,12 +71,13 @@ public class CareworkerService {
 
     private Careworker findCareworkerById(Long id) {
         return careworkerRepository.findById(id)
-            .orElseThrow(() -> new IdNotFoundException("요양보호사를 찾을 수 없습니다."));
+            .orElseThrow(() -> new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND));
+
     }
 
     private void emailExists(String email) {
         if (careworkerRepository.existsByEmail(email)) {
-            throw new NotUniqueException("존재하는 이메일입니다.");
+            throw new ApplicationException(ApplicationError.DUPLICATE_EMAIL);
         }
     }
 

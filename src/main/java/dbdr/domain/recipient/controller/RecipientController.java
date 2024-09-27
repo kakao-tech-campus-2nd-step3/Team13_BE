@@ -3,6 +3,7 @@ package dbdr.domain.recipient.controller;
 import dbdr.domain.recipient.dto.request.RecipientRequestDTO;
 import dbdr.domain.recipient.dto.response.RecipientResponseDTO;
 import dbdr.domain.recipient.service.RecipientService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
@@ -15,6 +16,9 @@ import java.util.List;
 public class RecipientController {
 
     private final RecipientService recipientService;
+
+    @Value("${spring.app.version}")
+    private String appVersion;
 
     public RecipientController(RecipientService recipientService) {
         this.recipientService = recipientService;
@@ -35,7 +39,7 @@ public class RecipientController {
     @PostMapping
     public ResponseEntity<RecipientResponseDTO> createRecipient(@Valid @RequestBody RecipientRequestDTO recipientDTO) {
         RecipientResponseDTO newRecipient = recipientService.createRecipient(recipientDTO);
-        return ResponseEntity.created(URI.create("/${spring.app.version}/recipient/" + newRecipient.getId()))
+        return ResponseEntity.created(URI.create("/" + appVersion + "/recipient/" + newRecipient.getId()))
                 .body(newRecipient);
     }
 

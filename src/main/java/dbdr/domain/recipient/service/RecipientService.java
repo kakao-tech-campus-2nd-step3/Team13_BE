@@ -3,10 +3,10 @@ package dbdr.domain.recipient.service;
 import dbdr.domain.recipient.entity.Recipient;
 import dbdr.domain.recipient.dto.request.RecipientRequestDTO;
 import dbdr.domain.recipient.dto.response.RecipientResponseDTO;
-import dbdr.exception.IdNotFoundException;
 import dbdr.domain.recipient.repository.RecipientRepository;
 import dbdr.domain.careworker.repository.CareworkerRepository;
-import dbdr.exception.NotUniqueException;
+import dbdr.exception.ApplicationError;
+import dbdr.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -48,7 +48,7 @@ public class RecipientService {
             recipientRequestDTO.getInstitution(),
             recipientRequestDTO.getInstitutionNumber(),
             careworkerRepository.findById(recipientRequestDTO.getCareworkerId())
-                .orElseThrow(() -> new IdNotFoundException("요양보호사를 찾을 수 없습니다."))
+                .orElseThrow(() -> new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND))
         );
         recipientRepository.save(recipient);
         return toResponseDTO(recipient);
@@ -75,12 +75,12 @@ public class RecipientService {
 
     private Recipient findRecipientById(Long id) {
         return recipientRepository.findById(id)
-            .orElseThrow(() -> new IdNotFoundException("돌봄대상자를 찾을 수 없습니다."));
+            .orElseThrow(() -> new ApplicationException(ApplicationError.RECIPIENT_NOT_FOUND));
     }
 
     private void careNumberExists(String careNumber) {
         if (recipientRepository.existsByCareNumber(careNumber)) {
-            throw new NotUniqueException("케어번호가 존재합니다.");
+            throw new ApplicationException(ApplicationError.DUPLICATE_CARE_NUMBER);
         }
     }
 
