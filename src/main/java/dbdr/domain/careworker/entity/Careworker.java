@@ -31,7 +31,7 @@ public class Careworker extends BaseEntity {
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String phone;
 
     public Careworker(Long institutionId, String name, String email, String phone) {
