@@ -30,10 +30,9 @@ public class GuardianService {
         phoneNumberExists(guardianRequest.phone());
 
         Guardian guardian = findGuardianById(guardianId);
-        guardian.updateGuardian(guardianRequest.phone(), guardianRequest.name());
-        Guardian guardian = guardianRepository.findById(guardianId).orElseThrow();
         guardian.updateGuardian(guardianRequest.phone(), guardianRequest.name(), passwordEncoding(guardianRequest.loginPassword()));
         guardianRepository.save(guardian);
+
         return new GuardianResponse(guardianRequest.phone(), guardianRequest.name(),
             guardian.isActive());
     }
