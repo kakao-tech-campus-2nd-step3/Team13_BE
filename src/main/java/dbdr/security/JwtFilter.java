@@ -21,12 +21,9 @@ public class JwtFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         //헤더에서 JWT 토큰 추출
         String token = request.getHeader("Authorization");
-        log.debug("토큰 : {}", token);
-
 
         //유효한 토큰인지 확인
         if(token != null){ //TODO 유효성 검사 필요
-            log.debug("토큰 유저 정보 추출 시작");
             try {
                 //토큰에서 유저 정보 추출
                 Authentication authentication = jwtProvider.getAuthentication(token);
@@ -34,11 +31,9 @@ public class JwtFilter extends OncePerRequestFilter {
                 //SecurityContext에 인증 정보 저장
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             } catch (Exception e) {
-                log.debug("토큰 유저 정보 추출 실패");
                 log.debug("토큰 유저 정보 추출 실패 : {}", e.getMessage());
             }
         }
-        log.debug("jwt 필터 수행 완료");
         filterChain.doFilter(request, response);
     }
 
