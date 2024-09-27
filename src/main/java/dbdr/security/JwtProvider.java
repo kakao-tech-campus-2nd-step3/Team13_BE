@@ -39,7 +39,6 @@ public class JwtProvider {
             .getExpiration().before(new Date());
     }
 
-
     public String createToken(String username, String role, Long expireTime) {
         {
             return Jwts.builder().claim("username", username).claim("role", role)
@@ -47,7 +46,6 @@ public class JwtProvider {
                 .setExpiration(new Date(System.currentTimeMillis() + expireTime))
                 .signWith(secretKey).compact();
         }
-
     }
 
     public Authentication getAuthentication(String token) {
@@ -56,5 +54,4 @@ public class JwtProvider {
         return new UsernamePasswordAuthenticationToken(userDetails, "",
             userDetails.getAuthorities());
     }
-
 }

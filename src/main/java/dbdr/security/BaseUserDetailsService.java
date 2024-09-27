@@ -18,7 +18,6 @@ public class BaseUserDetailsService implements UserDetailsService {
     private final GuardianRepository guardianRepository;
     private final CareworkerRepository careWorkerRepository;
 
-
     @Override
     public BaseUserDetails loadUserByUsername(String username) {
         Role role;

@@ -17,7 +17,6 @@ public class BaseUserDetails implements UserDetails {
     private final String password;
     private final String role;
 
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         Collection<GrantedAuthority> collection = new ArrayList<>();
@@ -29,10 +28,10 @@ public class BaseUserDetails implements UserDetails {
     public String getPassword() {
         return password;
     }
-     @Override
+
+    @Override
     public String getUsername() {
         return username;
     }
-
 
 }

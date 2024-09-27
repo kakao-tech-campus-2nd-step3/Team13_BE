@@ -60,9 +60,7 @@ public class SecurityConfig {
                 log.debug("인증 실패: {}", authException.getMessage());
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증 실패");
             }));
-
         return http.build();
-
     }
 
     @Bean
