@@ -1,19 +1,21 @@
 package dbdr.exception;
 
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
 @AllArgsConstructor
 @Getter
-public class ApplicationException extends RuntimeException {
-    private final ApplicationError applicationError;
+public class BusinessException extends RuntimeException {
+    private final BusinessError businessError;
 
     public HttpStatus getHttpStatus() {
-        return applicationError.getStatus();
+        return businessError.getStatus();
     }
 
     public String getErrorMessage() {
-        return applicationError.getMessage();
+        return businessError.getMessage();
     }
 }
+

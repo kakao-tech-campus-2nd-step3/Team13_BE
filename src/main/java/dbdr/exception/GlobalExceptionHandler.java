@@ -37,8 +37,17 @@ public class GlobalExceptionHandler {
     public ErrorResponse applicationExceptionHandler(ApplicationException ex) {
         log.error("Application error: {}, ErrorCode: {}", ex.getMessage(), ex.getApplicationError());
 
-        return ErrorResponse.builder(ex, HttpStatus.BAD_REQUEST, ex.getApplicationError().getMessage())
+        return ErrorResponse.builder(ex, ex.getHttpStatus(), ex.getApplicationError().getMessage())
                 .title(ex.getApplicationError().name())
+                .build();
+    }
+
+    @ExceptionHandler(BusinessException.class)
+    public ErrorResponse businessExceptionHandler(BusinessException ex) {
+        log.error("Business error: {}, ErrorCode: {}", ex.getMessage(), ex.getBusinessError());
+
+        return ErrorResponse.builder(ex, ex.getHttpStatus(), ex.getBusinessError().getMessage())
+                .title(ex.getBusinessError().name())
                 .build();
     }
 
