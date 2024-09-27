@@ -21,6 +21,7 @@ import lombok.NoArgsConstructor;
 @SQLDelete(sql = "UPDATE guardians SET is_active = false WHERE id = ?")
 @SQLRestriction("is_active = true")
 public class Guardian extends BaseEntity {
+
     @Column(unique = true)
     private String loginId;
 

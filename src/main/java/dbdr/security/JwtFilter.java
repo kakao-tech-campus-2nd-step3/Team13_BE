@@ -18,12 +18,13 @@ public class JwtFilter extends OncePerRequestFilter {
     private final JwtProvider jwtProvider;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+        FilterChain filterChain) throws ServletException, IOException {
         //헤더에서 JWT 토큰 추출
         String token = request.getHeader("Authorization");
 
         //유효한 토큰인지 확인
-        if(token != null){ //TODO 유효성 검사 필요
+        if (token != null) { //TODO 유효성 검사 필요
             try {
                 //토큰에서 유저 정보 추출
                 Authentication authentication = jwtProvider.getAuthentication(token);

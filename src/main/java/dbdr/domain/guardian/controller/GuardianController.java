@@ -25,8 +25,7 @@ public class GuardianController {
     @GetMapping("/{guardianId}")
     public ResponseEntity<GuardianResponse> showGuardianInfo(
         @PathVariable("guardianId") Long guardianId) {
-        GuardianResponse guardianResponse
-            = guardianService.getGuardianById(guardianId);
+        GuardianResponse guardianResponse = guardianService.getGuardianById(guardianId);
         return ResponseEntity.ok(guardianResponse);
     }
 
@@ -34,8 +33,8 @@ public class GuardianController {
     public ResponseEntity<GuardianResponse> updateGuardianInfo(
         @PathVariable("guardianId") Long guardianId,
         @Valid @RequestBody GuardianRequest guardianRequest) {
-        GuardianResponse guardianResponse
-            = guardianService.updateGuardianById(guardianId, guardianRequest);
+        GuardianResponse guardianResponse = guardianService.updateGuardianById(guardianId,
+            guardianRequest);
         return ResponseEntity.ok(guardianResponse);
     }
 }

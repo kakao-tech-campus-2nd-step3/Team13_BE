@@ -23,19 +23,18 @@ public class BaseUserDetailsService implements UserDetailsService {
     public BaseUserDetails loadUserByUsername(String username) {
         Role role;
         String userId;
-        try{
+        try {
             var spliter = username.split("_");
             userId = spliter[0];
             role = Role.valueOf(spliter[1]);
 
-
-            if(role==Role.GUARDIAN){
+            if (role == Role.GUARDIAN) {
                 return getGuadianDetails(userId);
             }
-            if(role==Role.ADMIN){
+            if (role == Role.ADMIN) {
                 return getAdminDetails(userId);
             }
-            if(role==Role.CAREWORKER){
+            if (role == Role.CAREWORKER) {
                 return getCareWorkerDetails(userId);
             }
         } catch (IllegalArgumentException e) {
@@ -46,13 +45,12 @@ public class BaseUserDetailsService implements UserDetailsService {
 
     private BaseUserDetails getCareWorkerDetails(String userId) {
 
-        Careworker careWorker = careWorkerRepository.findByPhone(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
-        BaseUserDetails userDetails = BaseUserDetails.builder()
-            .username(careWorker.getPhone())
-            .password(careWorker.getLoginPassword())
-            .role(Role.CAREWORKER.name())
-            .build();
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        Careworker careWorker = careWorkerRepository.findByPhone(userId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
+        BaseUserDetails userDetails = BaseUserDetails.builder().username(careWorker.getPhone())
+            .password(careWorker.getLoginPassword()).role(Role.CAREWORKER.name()).build();
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
+            userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return userDetails;
     }
@@ -75,13 +73,12 @@ public class BaseUserDetailsService implements UserDetailsService {
     }
 
     private BaseUserDetails getGuadianDetails(String userId) {
-        Guardian guardian = guardianRepository.findByPhone(userId).orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
-        BaseUserDetails userDetails = BaseUserDetails.builder()
-            .username(guardian.getPhone())
-            .password(guardian.getLoginPassword())
-            .role(Role.GUARDIAN.name())
-            .build();
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+        Guardian guardian = guardianRepository.findByPhone(userId)
+            .orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
+        BaseUserDetails userDetails = BaseUserDetails.builder().username(guardian.getPhone())
+            .password(guardian.getLoginPassword()).role(Role.GUARDIAN.name()).build();
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
+            userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return userDetails;
     }
