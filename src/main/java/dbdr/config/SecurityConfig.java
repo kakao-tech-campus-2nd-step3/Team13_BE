@@ -55,8 +55,8 @@ public class SecurityConfig {
                 (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests((authorize) -> {
                 authorize
-                    .requestMatchers("/v1/guardian/login").permitAll()
-                    .requestMatchers("/v1/careworker/login").permitAll()
+                    .requestMatchers("/${spring.app.version}/guardian/login").permitAll()
+                    .requestMatchers("/${spring.app.version}/careworker/login").permitAll()
                     .anyRequest().authenticated();
             })
 
