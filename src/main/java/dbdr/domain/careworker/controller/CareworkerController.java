@@ -16,7 +16,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/${spring.app.version}/careworker")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyAuthority('CAREWORKER','ADMIN')")
+@PreAuthorize("hasAnyAuthority('ADMIN')")
 public class CareworkerController {
 
     private final CareworkerService careworkerService;
