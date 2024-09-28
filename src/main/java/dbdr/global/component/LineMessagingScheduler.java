@@ -1,4 +1,4 @@
-package dbdr.domain.core.messaging.component;
+package dbdr.global.component;
 
 import java.time.LocalTime;
 import java.util.List;
