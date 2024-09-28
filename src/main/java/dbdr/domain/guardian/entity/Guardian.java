@@ -1,11 +1,11 @@
 package dbdr.domain.guardian.entity;
 
 import jakarta.validation.constraints.Pattern;
-import org.hibernate.annotations.Comment;
+
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
-import dbdr.domain.core.entity.BaseEntity;
+import dbdr.domain.core.base.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
@@ -33,6 +33,10 @@ public class Guardian extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String name;
 
+    private String subscriptionEndpoint;
+    private String p256dh;
+    private String auth;
+
     @Builder
     public Guardian(String phone, String name) {
         this.phone = phone;
@@ -42,5 +46,11 @@ public class Guardian extends BaseEntity {
     public void updateGuardian(String phone, String name) {
         this.phone = phone;
         this.name = name;
+    }
+
+    public void updateSubscription(String endpoint, String p256dh, String auth) {
+        this.subscriptionEndpoint = endpoint;
+        this.p256dh = p256dh;
+        this.auth = auth;
     }
 }

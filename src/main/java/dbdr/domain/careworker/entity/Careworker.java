@@ -1,6 +1,6 @@
 package dbdr.domain.careworker.entity;
 
-import dbdr.domain.core.entity.BaseEntity;
+import dbdr.domain.core.base.entity.BaseEntity;
 import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;

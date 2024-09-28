@@ -1,11 +1,10 @@
 package dbdr.domain.recipient.entity;
 
-import dbdr.domain.core.entity.BaseEntity;
+import dbdr.domain.core.base.entity.BaseEntity;
 import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.recipient.dto.request.RecipientRequestDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

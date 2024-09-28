@@ -4,8 +4,8 @@ import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
 import dbdr.domain.careworker.dto.response.CareworkerResponseDTO;
 import dbdr.domain.careworker.repository.CareworkerRepository;
-import dbdr.exception.ApplicationError;
-import dbdr.exception.ApplicationException;
+import dbdr.global.exception.ApplicationError;
+import dbdr.global.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -69,14 +69,13 @@ public class CareworkerService {
         careworkerRepository.delete(careworker);
     }
 
-    @Transactional(readOnly = true)
-    public Careworker findCareworkerById(Long id) {
+    private Careworker findCareworkerById(Long id) {
         return careworkerRepository.findById(id)
             .orElseThrow(() -> new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND));
+
     }
 
-    @Transactional(readOnly = true)
-    public void emailExists(String email) {
+    private void emailExists(String email) {
         if (careworkerRepository.existsByEmail(email)) {
             throw new ApplicationException(ApplicationError.DUPLICATE_EMAIL);
         }

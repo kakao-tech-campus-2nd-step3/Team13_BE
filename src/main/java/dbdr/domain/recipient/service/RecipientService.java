@@ -5,8 +5,8 @@ import dbdr.domain.recipient.dto.request.RecipientRequestDTO;
 import dbdr.domain.recipient.dto.response.RecipientResponseDTO;
 import dbdr.domain.recipient.repository.RecipientRepository;
 import dbdr.domain.careworker.repository.CareworkerRepository;
-import dbdr.exception.ApplicationError;
-import dbdr.exception.ApplicationException;
+import dbdr.global.exception.ApplicationError;
+import dbdr.global.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
