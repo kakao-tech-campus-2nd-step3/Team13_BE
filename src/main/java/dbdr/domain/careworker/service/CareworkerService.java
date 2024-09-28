@@ -69,13 +69,14 @@ public class CareworkerService {
         careworkerRepository.delete(careworker);
     }
 
-    private Careworker findCareworkerById(Long id) {
+    @Transactional(readOnly = true)
+    public Careworker findCareworkerById(Long id) {
         return careworkerRepository.findById(id)
             .orElseThrow(() -> new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND));
-
     }
 
-    private void emailExists(String email) {
+    @Transactional(readOnly = true)
+    public void emailExists(String email) {
         if (careworkerRepository.existsByEmail(email)) {
             throw new ApplicationException(ApplicationError.DUPLICATE_EMAIL);
         }
