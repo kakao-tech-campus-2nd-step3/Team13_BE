@@ -116,9 +116,10 @@ public class LineMessagingService {
 		careworkerRepository.save(careworker);
 
 		String welcomeMessage =
-			userName + " 요양보호사님, 안녕하세요! 🌸 최고의 요양원 서비스 돌봄다리입니다. 🤗\n" +
-				"저희와 함께 해주셔서 정말 감사합니다! 🙏\n" +
-				"차트 작성 알림을 받고 싶은 시간을 알려주세요! 예: 오후 9시 💬";
+			" " + userName + " 요양보호사님, 안녕하세요! 🌸 \n" +
+				" 최고의 요양원 서비스 돌봄다리입니다. 🤗\n" +
+				" 저희와 함께 해주셔서 정말 감사합니다! 🙏\n" +
+				" 차트 작성 알림을 받고 싶은 시간을 알려주세요! 예: 오후 9시 💬";
 
 		sendMessageToUser(userId, welcomeMessage);
 	}
