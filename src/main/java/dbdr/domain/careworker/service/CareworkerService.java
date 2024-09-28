@@ -85,4 +85,18 @@ public class CareworkerService {
         return new CareworkerResponseDTO(careworker.getId(), careworker.getInstitutionId(),
             careworker.getName(), careworker.getEmail(), careworker.getPhone());
     }
+
+    public boolean nameExists(String name) {
+        return careworkerRepository.existsByName(name);
+    }
+
+    public Careworker findByName(String userName) {
+        return careworkerRepository.findByName(userName)
+            .orElseThrow(() -> new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND));
+    }
+
+    public Careworker findByLineUserId(String userId) {
+        return careworkerRepository.findByLineUserId(userId)
+            .orElseThrow(() -> new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND));
+    }
 }

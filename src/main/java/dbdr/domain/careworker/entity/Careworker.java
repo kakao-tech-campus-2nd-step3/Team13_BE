@@ -1,5 +1,9 @@
 package dbdr.domain.careworker.entity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import dbdr.domain.core.base.entity.BaseEntity;
 import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
 import jakarta.persistence.*;
@@ -34,6 +38,12 @@ public class Careworker extends BaseEntity {
     @Column(nullable = false)
     private String phone;
 
+    @Column(nullable = true)
+    private String lineUserId;
+
+    @Column(nullable = true)
+    private LocalTime alertTime;
+
     public Careworker(Long institutionId, String name, String email, String phone) {
         this.institutionId = institutionId;
         this.name = name;
@@ -46,5 +56,13 @@ public class Careworker extends BaseEntity {
         this.name = careworkerDTO.getName();
         this.email = careworkerDTO.getEmail();
         this.phone = careworkerDTO.getPhone();
+    }
+
+    public void updateLineUserId(String lineUserId) {
+        this.lineUserId = lineUserId;
+    }
+
+    public void updateAlertTime(LocalTime alertTime) {
+        this.alertTime = alertTime;
     }
 }

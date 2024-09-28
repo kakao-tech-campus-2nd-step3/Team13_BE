@@ -1,5 +1,9 @@
 package dbdr.domain.guardian.entity;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
 import jakarta.validation.constraints.Pattern;
 
 import org.hibernate.annotations.SQLDelete;
@@ -33,9 +37,11 @@ public class Guardian extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String name;
 
-    private String subscriptionEndpoint;
-    private String p256dh;
-    private String auth;
+    @Column(nullable = true)
+    private String lineUserId;
+
+    @Column(nullable = true)
+    private LocalTime alertTime;
 
     @Builder
     public Guardian(String phone, String name) {
@@ -48,9 +54,11 @@ public class Guardian extends BaseEntity {
         this.name = name;
     }
 
-    public void updateSubscription(String endpoint, String p256dh, String auth) {
-        this.subscriptionEndpoint = endpoint;
-        this.p256dh = p256dh;
-        this.auth = auth;
+    public void updateLineUserId(String lineUserId) {
+        this.lineUserId = lineUserId;
+    }
+
+    public void updateAlertTime(LocalTime alertTime) {
+        this.alertTime = alertTime;
     }
 }

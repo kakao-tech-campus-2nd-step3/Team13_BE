@@ -7,13 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import dbdr.domain.core.messaging.service.LineMessagingService;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 
 @RestController
 @RequestMapping("/line")
 @RequiredArgsConstructor
-@Slf4j
 public class LineMessagingController {
 	private final LineMessagingService lineMessagingService;
 

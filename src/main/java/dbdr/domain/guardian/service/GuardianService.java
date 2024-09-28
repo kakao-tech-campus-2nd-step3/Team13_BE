@@ -64,4 +64,18 @@ public class GuardianService {
             throw new ApplicationException(ApplicationError.DUPLICATE_PHONE);
         }
     }
+
+    public boolean nameExists(String name) {
+        return guardianRepository.existsByName(name);
+    }
+
+    public Guardian findByName(String name) {
+        return guardianRepository.findByName(name)
+            .orElseThrow(() -> new ApplicationException(ApplicationError.GUARDIAN_NOT_FOUND));
+    }
+
+    public Guardian findByLineUserId(String userId) {
+        return guardianRepository.findByLineUserId(userId)
+            .orElseThrow(() -> new ApplicationException(ApplicationError.GUARDIAN_NOT_FOUND));
+    }
 }
