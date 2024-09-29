@@ -4,8 +4,8 @@ import dbdr.domain.guardian.entity.Guardian;
 import dbdr.domain.guardian.dto.request.GuardianRequest;
 import dbdr.domain.guardian.dto.response.GuardianResponse;
 import dbdr.domain.guardian.repository.GuardianRepository;
-import dbdr.exception.IdNotFoundException;
-import dbdr.exception.NotUniqueException;
+import dbdr.exception.ApplicationError;
+import dbdr.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -60,12 +60,12 @@ public class GuardianService {
 
     private Guardian findGuardianById(Long guardianId) {
         return guardianRepository.findById(guardianId)
-            .orElseThrow(() -> new IdNotFoundException("존재하지 않는 보호자입니다."));
+            .orElseThrow(() -> new ApplicationException(ApplicationError.GUARDIAN_NOT_FOUND));
     }
 
     private void phoneNumberExists(String phone) {
         if (guardianRepository.existsByPhone(phone)) {
-            throw new NotUniqueException("존재하는 전화번호입니다.");
+            throw new ApplicationException(ApplicationError.DUPLICATE_PHONE);
         }
     }
 

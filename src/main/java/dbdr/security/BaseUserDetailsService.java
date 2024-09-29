@@ -4,7 +4,11 @@ import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.careworker.repository.CareworkerRepository;
 import dbdr.domain.guardian.entity.Guardian;
 import dbdr.domain.guardian.repository.GuardianRepository;
+import dbdr.exception.ApplicationError;
+import dbdr.exception.ApplicationException;
+import dbdr.exception.BusinessException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,6 +17,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class BaseUserDetailsService implements UserDetailsService {
 
     private final GuardianRepository guardianRepository;
@@ -37,7 +42,7 @@ public class BaseUserDetailsService implements UserDetailsService {
                 return getCareWorkerDetails(userId);
             }
         } catch (IllegalArgumentException e) {
-            throw new IllegalArgumentException("해당 유저를 찾을 수 없습니다."); //TODO : 예외 처리핸들링 필요
+            throw new ApplicationException(ApplicationError.ROLE_NOT_FOUND);
         }
         return null; //TODO : 예외 처리핸들링 필요
     }

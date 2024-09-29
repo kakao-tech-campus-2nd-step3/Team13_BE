@@ -6,6 +6,7 @@ import dbdr.domain.careworker.service.CareworkerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -20,6 +21,9 @@ import java.util.List;
 public class CareworkerController {
 
     private final CareworkerService careworkerService;
+
+    @Value("${spring.app.version}")
+    private String appVersion;
 
     @GetMapping
     public ResponseEntity<List<CareworkerResponseDTO>> getAllCareworkers(
@@ -45,7 +49,7 @@ public class CareworkerController {
         @Valid @RequestBody CareworkerRequestDTO careworkerDTO) {
         CareworkerResponseDTO newCareworker = careworkerService.createCareworker(careworkerDTO);
         return ResponseEntity.created(
-                URI.create("/${spring.app.version}/careworker/" + newCareworker.getId()))
+                URI.create("/" + appVersion + "/careworker/" + newCareworker.getId()))
             .body(newCareworker);
     }
 
