@@ -1,5 +1,7 @@
 package dbdr.security;
 
+import dbdr.exception.ApplicationError;
+import dbdr.exception.ApplicationException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import java.nio.charset.StandardCharsets;
@@ -24,28 +26,22 @@ public class JwtProvider {
     }
 
     public String getUserName(String token) {
-        Claims claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token)
-            .getBody();
-        return claims.get("username", String.class);
+        return getJwtsBody(token).get("username", String.class);
     }
 
     public String getRole(String token) {
-        return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody()
-            .get("role", String.class);
+        return getJwtsBody(token).get("role", String.class);
     }
 
     public boolean isExpired(String token) {
-        return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody()
-            .getExpiration().before(new Date());
+        return getJwtsBody(token).getExpiration().before(new Date());
     }
 
     public String createToken(String username, String role, Long expireTime) {
-        {
-            return Jwts.builder().claim("username", username).claim("role", role)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expireTime))
-                .signWith(secretKey).compact();
-        }
+        return Jwts.builder().claim("username", username).claim("role", role)
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + expireTime))
+            .signWith(secretKey).compact();
     }
 
     public Authentication getAuthentication(String token) {
@@ -53,5 +49,16 @@ public class JwtProvider {
             getUserName(token) + "_" + getRole(token));
         return new UsernamePasswordAuthenticationToken(userDetails, "",
             userDetails.getAuthorities());
+    }
+
+    public void validateToken(String token) {
+        if(isExpired(token)) {
+            throw new ApplicationException(ApplicationError.TOKEN_EXPIRED);
+        }
+    }
+
+    private Claims getJwtsBody(String token) {
+        return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token)
+            .getBody();
     }
 }
