@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/${spring.app.version}/admin/institution")
+@RequestMapping("/${spring.app.version}/developer/institution")
 @RequiredArgsConstructor
-public class InstitutionAdminController {
+public class InstitutionDeveloperController {
 
     private final InstitutionService institutionService;
 
