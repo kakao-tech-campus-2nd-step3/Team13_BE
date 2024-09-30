@@ -2,4 +2,3 @@ logging:
   level:
     root: info
     org.springframework.web: debug  # Spring Web 관련 로그
-
