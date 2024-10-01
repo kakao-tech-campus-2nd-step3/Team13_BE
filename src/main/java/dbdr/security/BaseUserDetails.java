@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Slf4j
 public class BaseUserDetails implements UserDetails {
 
+    private final Long id;
     private final String username;
     private final String password;
     private final String role;
@@ -32,6 +33,15 @@ public class BaseUserDetails implements UserDetails {
     @Override
     public String getUsername() {
         return username;
+    }
+
+    public Role getRole(){
+        return Role.valueOf(role);
+    }
+
+    public Long getId(){
+        //TODO : NULL CHECK
+        return id;
     }
 
 }
