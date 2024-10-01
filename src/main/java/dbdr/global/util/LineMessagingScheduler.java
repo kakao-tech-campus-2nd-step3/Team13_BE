@@ -1,4 +1,4 @@
-package dbdr.global.component;
+package dbdr.global.util;
 
 import java.time.LocalTime;
 import java.util.List;
