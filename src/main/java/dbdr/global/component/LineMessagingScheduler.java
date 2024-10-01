@@ -25,7 +25,7 @@ public class LineMessagingScheduler {
 	private final GuardianRepository guardianRepository;
 	private final CareworkerRepository careworkerRepository;
 
-	@Scheduled(cron = "0 * * * * ?")
+	@Scheduled(cron = "0 0/30 * * * ?")
 	public void sendChartUpdate() {
 		LocalTime currentTime = LocalTime.now().withSecond(0).withNano(0);  // 초와 나노초를 제거하고 분 단위로 비교
 

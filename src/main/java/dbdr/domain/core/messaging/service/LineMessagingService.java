@@ -64,7 +64,7 @@ public class LineMessagingService {
 					}
 				}
 			} else {
-				log.warn("events 배열을 찾을 수 없습니다.");
+				throw new ApplicationException(ApplicationError.EVENT_ARRAY_NOT_FOUND);
 			}
 		} catch (Exception e) {
 			throw new ApplicationException(ApplicationError.EVENT_ERROR);
@@ -101,8 +101,10 @@ public class LineMessagingService {
 				" " + userName + " 보호자님, 안녕하세요! 🌸\n" +
 				" 최고의 요양원 서비스 돌봄다리입니다. 🤗\n" +
 				" 저희와 함께 해주셔서 정말 감사합니다! 🙏\n" +
-				" 새롭게 작성된 차트 내용을 원하시는 시간에 맞춰 알려드릴 수 있어요. ⏰\n" +
-				" 알림을 받고 싶은 시간을 알려주세요! 💬 예: 오후 9시 ";
+				" 새롭게 작성된 일지 내용을 원하시는 시간에 맞춰 알려드릴 수 있어요. ⏰\n" +
+				" 기본적인 알림 시간은 매일 오전 9시로 설정되어있습니다. 😄\n" +
+				" 알림을 받고 싶은 시간을 수정하고 싶으시다면 알려주세요! 💬\n" +
+			    " 예 : `오전 10시' 혹은 '오전 10시 30분'";
 
 		sendMessageToUser(userId, welcomeMessage);
 	}
@@ -119,7 +121,9 @@ public class LineMessagingService {
 			" " + userName + " 요양보호사님, 안녕하세요! 🌸 \n" +
 				" 최고의 요양원 서비스 돌봄다리입니다. 🤗\n" +
 				" 저희와 함께 해주셔서 정말 감사합니다! 🙏\n" +
-				" 차트 작성 알림을 받고 싶은 시간을 알려주세요! 예: 오후 9시 💬";
+				" 기본적인 알림 시간은 매일 오후 5시로 설정되어있습니다. 😄\n" +
+				" 알림을 받고 싶은 시간을 수정하고 싶으시다면 알려주세요! 💬\n" +
+				" 예 : `오후 7시' 혹은 '오후 7시 30분'";
 
 		sendMessageToUser(userId, welcomeMessage);
 	}
@@ -142,19 +146,20 @@ public class LineMessagingService {
 	@Transactional
 	public void handleMessageEvent(MessageEvent<TextMessageContent> event) {
 		String userId = event.getSource().getUserId();
-		String messageText = event.getMessage().getText();  // 사용자가 입력한 알림 시간 예: 오후 9시
+		String messageText = event.getMessage().getText();  // 사용자가 입력한 알림 시간 예: '오전 9시 30분' 또는 '오후 3시'
 
 		log.info("User ID: {}, 알림 시간: {}", userId, messageText);
 
-		Pattern pattern = Pattern.compile("(오전|오후)\\s*(\\d{1,2})");
+		// '오전 9시 30분', '오후 3시'와 같은 형식을 처리하는 정규식
+		Pattern pattern = Pattern.compile("(오전|오후)\\s*(\\d{1,2})시\\s*(\\d{1,2})?분?");
 		Matcher matcher = pattern.matcher(messageText);
 
 		if (matcher.find()) {
-			String ampm = matcher.group(1);
-			String hour = matcher.group(2);
+			String ampm = matcher.group(1);  // '오전' 또는 '오후'
+			String hour = matcher.group(2);  // 시간
+			String minute = matcher.group(3) != null ? matcher.group(3) : "0";  // 분이 없는 경우 기본값 0
 
-
-			log.info("추출된 시ㅏ간 : {}, {}", ampm, hour);
+			log.info("추출된 시간: {} {}, {}분", ampm, hour, minute);
 
 			String confirmationMessage =
 				"감사합니다! 😊\n" +
@@ -163,15 +168,15 @@ public class LineMessagingService {
 
 			if (guardianService.findByLineUserId(userId) != null) {
 				sendMessageToUser(userId, confirmationMessage);
-				saveGuardianAlertTime(userId, ampm, hour);
+				saveGuardianAlertTime(userId, ampm, hour, minute);
 			} else if (careworkerService.findByLineUserId(userId) != null) {
 				sendMessageToUser(userId, confirmationMessage);
-				saveCareworkerAlertTime(userId, ampm, hour);
+				saveCareworkerAlertTime(userId, ampm, hour, minute);
 			} else {
 				throw new ApplicationException(ApplicationError.USER_NOT_FOUND);
 			}
 		} else {
-			String errorMessage = "알림 시간을 인식할 수 없습니다. '오전 9시' 또는 '오후 3시'와 같은 형식으로 입력해주세요!";
+			String errorMessage = "알림 시간을 인식할 수 없습니다. '오전 9시 30분' 또는 '오후 3시'와 같은 형식으로 입력해주세요!";
 			sendMessageToUser(userId, errorMessage);
 		}
 	}
@@ -179,17 +184,17 @@ public class LineMessagingService {
 	// +) 기타
 	// DB에 알림 시간을 저장하는 메서드
 	@Transactional
-	public void saveGuardianAlertTime(String userId, String ampm, String hour) {
+	public void saveGuardianAlertTime(String userId, String ampm, String hour, String minute) {
 		Guardian guardian = guardianService.findByLineUserId(userId);
-		LocalTime alertTime = convertToLocalTime(ampm, Integer.parseInt(hour));
+		LocalTime alertTime = convertToLocalTime(ampm, Integer.parseInt(hour), Integer.parseInt(minute));
 		guardian.updateAlertTime(alertTime);
 		guardianRepository.save(guardian);
 	}
 
 	@Transactional
-	public void saveCareworkerAlertTime(String userId, String ampm, String hour) {
+	public void saveCareworkerAlertTime(String userId, String ampm, String hour, String minute) {
 		Careworker careworker = careworkerService.findByLineUserId(userId);
-		LocalTime alertTime = convertToLocalTime(ampm, Integer.parseInt(hour));
+		LocalTime alertTime = convertToLocalTime(ampm, Integer.parseInt(hour), Integer.parseInt(minute));
 		careworker.updateAlertTime(alertTime);
 		careworkerRepository.save(careworker);
 	}
@@ -205,13 +210,13 @@ public class LineMessagingService {
 	}
 
 	// AM/PM 및 시간을 LocalTime으로 변환하는 메서드
-	private LocalTime convertToLocalTime(String ampm, int hour) {
+	private LocalTime convertToLocalTime(String ampm, int hour, int minute) {
 		if (ampm.equalsIgnoreCase("오후") && hour != 12) {
 			hour += 12;
 		} else if (ampm.equalsIgnoreCase("오전") && hour == 12) {
 			hour = 0;  // 오전 12시는 0시로 변환
 		}
-		return LocalTime.of(hour, 0);  // 시간에 0분 설정
+		return LocalTime.of(hour, minute);  // 시간과 분을 함께 설정
 	}
 
 	// 사용자에게 메시지를 보내는 메서드
