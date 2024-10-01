@@ -59,6 +59,9 @@ public class LineMessagingService {
 							MessageEvent<TextMessageContent> messageEvent = objectMapper.treeToValue(eventNode, MessageEvent.class);
 							handleMessageEvent(messageEvent);
 							break;
+						case "unfollow":
+							log.info("Unfollow event 발생");
+							break;
 						default:
 							throw new ApplicationException(ApplicationError.CANNOT_FIND_EVENT);
 					}
