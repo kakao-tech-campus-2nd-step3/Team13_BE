@@ -49,6 +49,7 @@ public class Careworker extends BaseEntity {
         this.name = name;
         this.email = email;
         this.phone = phone;
+        this.alertTime = LocalTime.of(17, 0); // 오후 5시로 초기화
     }
 
     public void updateCareworker(CareworkerRequestDTO careworkerDTO) {
