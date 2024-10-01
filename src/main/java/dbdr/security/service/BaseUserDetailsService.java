@@ -1,4 +1,4 @@
-package dbdr.security;
+package dbdr.security.service;
 
 import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.careworker.repository.CareworkerRepository;
@@ -6,7 +6,8 @@ import dbdr.domain.guardian.entity.Guardian;
 import dbdr.domain.guardian.repository.GuardianRepository;
 import dbdr.exception.ApplicationError;
 import dbdr.exception.ApplicationException;
-import dbdr.exception.BusinessException;
+import dbdr.security.dto.BaseUserDetails;
+import dbdr.security.Role;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

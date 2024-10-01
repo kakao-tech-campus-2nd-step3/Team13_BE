@@ -1,5 +1,7 @@
-package dbdr.security;
+package dbdr.security.config;
 
+import dbdr.security.dto.BaseUserDetails;
+import dbdr.security.Role;
 import org.springframework.security.access.expression.SecurityExpressionRoot;
 import org.springframework.security.access.expression.method.MethodSecurityExpressionOperations;
 import org.springframework.security.core.Authentication;

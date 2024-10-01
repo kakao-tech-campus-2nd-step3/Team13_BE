@@ -1,7 +1,6 @@
-package dbdr.config;
+package dbdr.security.config;
 
-import dbdr.security.JwtFilter;
-import dbdr.security.JwtProvider;
+import dbdr.security.service.JwtProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
