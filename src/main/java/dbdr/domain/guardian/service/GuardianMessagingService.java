@@ -5,10 +5,9 @@ import java.time.LocalTime;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import dbdr.domain.core.messaging.service.LineMessagingService;
 import dbdr.domain.guardian.entity.Guardian;
 import dbdr.domain.guardian.repository.GuardianRepository;
-import dbdr.global.util.LineMessagingUtil;
+import dbdr.global.util.line.LineMessagingUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

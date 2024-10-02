@@ -8,7 +8,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.event.FollowEvent;
 import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
@@ -19,7 +18,7 @@ import dbdr.domain.guardian.service.GuardianMessagingService;
 import dbdr.domain.guardian.service.GuardianService;
 import dbdr.global.exception.ApplicationError;
 import dbdr.global.exception.ApplicationException;
-import dbdr.global.util.LineMessagingUtil;
+import dbdr.global.util.line.LineMessagingUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

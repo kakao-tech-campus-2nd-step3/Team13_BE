@@ -9,7 +9,7 @@ import dbdr.domain.careworker.repository.CareworkerRepository;
 
 import org.springframework.transaction.annotation.Transactional;
 
-import dbdr.global.util.LineMessagingUtil;
+import dbdr.global.util.line.LineMessagingUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 

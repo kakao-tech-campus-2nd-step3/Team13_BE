@@ -1,4 +1,4 @@
-package dbdr.global.util;
+package dbdr.global.util.line;
 
 import java.time.LocalTime;
 import java.util.List;

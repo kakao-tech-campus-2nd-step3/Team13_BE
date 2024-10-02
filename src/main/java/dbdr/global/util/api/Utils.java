@@ -1,4 +1,4 @@
-package dbdr.global.util;
+package dbdr.global.util.api;
 
 public final class Utils {
 

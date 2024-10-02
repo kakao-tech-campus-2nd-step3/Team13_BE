@@ -1,10 +1,10 @@
 package dbdr.domain.chart.controller;
 
-import static dbdr.global.util.Utils.DEFAULT_PAGE_SIZE;
+import static dbdr.global.util.api.Utils.DEFAULT_PAGE_SIZE;
 
 import dbdr.domain.chart.dto.response.ChartDetailResponse;
 import dbdr.domain.chart.service.ChartService;
-import dbdr.global.util.ApiUtils;
+import dbdr.global.util.api.ApiUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
