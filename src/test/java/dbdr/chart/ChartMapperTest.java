@@ -2,6 +2,8 @@ package dbdr.chart;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.time.LocalDate;
+
 import dbdr.domain.chart.dto.ChartMapper;
 import dbdr.domain.chart.dto.request.BodyManagementRequest;
 import dbdr.domain.chart.dto.request.ChartDetailRequest;
@@ -18,6 +20,8 @@ import dbdr.domain.chart.entity.NursingManagement;
 import dbdr.domain.chart.entity.PhysicalClear;
 import dbdr.domain.chart.entity.PhysicalMeal;
 import dbdr.domain.chart.entity.PhysicalWalk;
+import dbdr.domain.recipient.entity.Recipient;
+
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
@@ -41,11 +45,24 @@ public class ChartMapperTest {
     @Test
     void testToEntity_chartDetailRequestToChart() {
         // given
+        Recipient recipient = Recipient.builder()
+            .name("John Doe")
+            .birth(LocalDate.of(1950, 1, 1))
+            .gender("Male")
+            .careLevel("Level 1")
+            .careNumber("12345678")
+            .startDate(LocalDate.of(2020, 1, 1))
+            .institution("HealthCare Institution")
+            .institutionNumber(100L)
+            .build();
+
         ChartDetailRequest request = new ChartDetailRequest(
-                new BodyManagementRequest(true, false, "Lunch", "Full", 3, true, false, "Good"),
-                new NursingManagementRequest(120, 80, "36.5", "All good"),
-                new CognitiveManagementRequest(true, "No issues"),
-                new RecoveryTrainingRequest("Physical Therapy", true, "Completed")
+            "Flu",
+            recipient,
+            new BodyManagementRequest(true, false, "Lunch", "Full", 3, true, false, "Good"),
+            new NursingManagementRequest(120, 80, "36.5", "All good"),
+            new CognitiveManagementRequest(true, "No issues"),
+            new RecoveryTrainingRequest("Physical Therapy", true, "Completed")
         );
 
         // when
@@ -53,9 +70,12 @@ public class ChartMapperTest {
 
         // then
         assertThat(chart).isNotNull();
+        assertThat(chart.getConditionDisease()).isEqualTo(request.conditionDisease());
+        assertThat(chart.getRecipient()).isNotNull();
+        assertThat(chart.getRecipient().getName()).isEqualTo("John Doe");
         assertThat(chart.getNursingManagement()).isNotNull();
         assertThat(chart.getBodyManagement().getPhysicalMeal().getMealType()).isEqualTo(
-                request.bodyManagement().mealType());
+            request.bodyManagement().mealType());
     }
 
     @Test
