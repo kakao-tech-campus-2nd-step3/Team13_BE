@@ -1,4 +1,4 @@
-package dbdr.domain.core.messaging.service;
+package dbdr.domain.careworker.service;
 
 import java.time.LocalTime;
 
@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 
 import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.careworker.repository.CareworkerRepository;
-import dbdr.domain.careworker.service.CareworkerService;
-import dbdr.global.util.LineMessagingUtil;
+import dbdr.domain.core.messaging.service.LineMessagingService;
+
 import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ public class CareworkerMessagingService {
 
 	private final CareworkerService careworkerService;
 	private final CareworkerRepository careworkerRepository;
-	private final LineMessagingUtil lineMessagingUtil;
+	private final LineMessagingService lineMessagingService;
 
 	@Transactional
 	public void handleCareworkerPhoneMessage(String userId, String phoneNumber) {
@@ -36,13 +36,13 @@ public class CareworkerMessagingService {
 				" 알림을 받고 싶은 시간을 수정하고 싶으시다면 알려주세요! 💬\n" +
 				" 예 : `오후 7시' 혹은 '오후 7시 30분'";
 
-		lineMessagingUtil.sendMessageToUser(userId, welcomeMessage);
+		lineMessagingService.sendMessageToUser(userId, welcomeMessage);
 	}
 
 	@Transactional
 	public void updateCareworkerAlertTime(String userId, String ampm, String hour, String minute) {
 		Careworker careworker = careworkerService.findByLineUserId(userId);
-		LocalTime alertTime = lineMessagingUtil.convertToLocalTime(ampm, Integer.parseInt(hour), Integer.parseInt(minute));
+		LocalTime alertTime = lineMessagingService.convertToLocalTime(ampm, Integer.parseInt(hour), Integer.parseInt(minute));
 		careworker.updateAlertTime(alertTime);
 		careworkerRepository.save(careworker);
 	}

@@ -1,14 +1,13 @@
-package dbdr.domain.core.messaging.service;
+package dbdr.domain.guardian.service;
 
 import java.time.LocalTime;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import dbdr.domain.core.messaging.service.LineMessagingService;
 import dbdr.domain.guardian.entity.Guardian;
 import dbdr.domain.guardian.repository.GuardianRepository;
-import dbdr.domain.guardian.service.GuardianService;
-import dbdr.global.util.LineMessagingUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,7 +18,7 @@ public class GuardianMessagingService {
 
 	private final GuardianService guardianService;
 	private final GuardianRepository guardianRepository;
-	private final LineMessagingUtil lineMessagingUtil;
+	private final LineMessagingService lineMessagingService;
 
 
 	@Transactional
@@ -38,13 +37,13 @@ public class GuardianMessagingService {
 				" 알림을 받고 싶은 시간을 수정하고 싶으시다면 알려주세요! 💬\n" +
 				" 예 : `오전 10시' 혹은 '오전 10시 30분'";
 
-		lineMessagingUtil.sendMessageToUser(userId, welcomeMessage);
+		lineMessagingService.sendMessageToUser(userId, welcomeMessage);
 	}
 
 	@Transactional
 	public void updateGuardianAlertTime(String userId, String ampm, String hour, String minute) {
 		Guardian guardian = guardianService.findByLineUserId(userId);
-		LocalTime alertTime = lineMessagingUtil.convertToLocalTime(ampm, Integer.parseInt(hour), Integer.parseInt(minute));
+		LocalTime alertTime = lineMessagingService.convertToLocalTime(ampm, Integer.parseInt(hour), Integer.parseInt(minute));
 		guardian.updateAlertTime(alertTime);
 		guardianRepository.save(guardian);
 	}
