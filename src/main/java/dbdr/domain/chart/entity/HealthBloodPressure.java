@@ -1,16 +1,22 @@
-package dbdr.domain.chart;
+package dbdr.domain.chart.entity;
 
 import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.Comment;
 
 @Embeddable
 @Getter
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
 public class HealthBloodPressure {
 
-    private int systolic;  // 혈압 최고
-    private int diastolic; // 혈압 최저
+    @Comment("혈압 최고")
+    private int systolic;
+
+    @Comment("혈압 최저")
+    private int diastolic;
 }
