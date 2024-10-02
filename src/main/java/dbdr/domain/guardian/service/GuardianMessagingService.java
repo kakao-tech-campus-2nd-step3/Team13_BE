@@ -42,10 +42,9 @@ public class GuardianMessagingService {
 	@Transactional
 	public void updateGuardianAlertTime(String userId, String ampm, String hour, String minute) {
 		Guardian guardian = guardianService.findByLineUserId(userId);
-		LocalTime alertTime = lineMessagingUtil.convertToLocalTime(ampm, Integer.parseInt(hour), Integer.parseInt(minute));
+		int minuteValue = (minute != null) ? Integer.parseInt(minute) : 0;  // minute이 null이면 0으로 처리
+		LocalTime alertTime = lineMessagingUtil.convertToLocalTime(ampm, Integer.parseInt(hour), minuteValue);
 		guardian.updateAlertTime(alertTime);
 		guardianRepository.save(guardian);
 	}
-
-
 }

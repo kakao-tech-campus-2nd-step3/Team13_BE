@@ -7,6 +7,7 @@ import java.time.LocalTime;
 import dbdr.domain.core.base.entity.BaseEntity;
 import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,22 +29,23 @@ public class Careworker extends BaseEntity {
     private String loginPassword;
 
     @Column(nullable = false)
-    private Long institutionId;
+    @Pattern(regexp = "010\\d{8}")
+    private String phone;
 
-    @Column(nullable = false)
+    @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(nullable = false, unique = true)
-    private String email;
-
     @Column(nullable = false)
-    private String phone;
+    private Long institutionId;
 
     @Column(nullable = true)
     private String lineUserId;
 
     @Column(nullable = true)
     private LocalTime alertTime;
+
+    @Column(nullable = false, unique = true)
+    private String email;
 
     @Builder
     public Careworker(Long institutionId, String name, String email, String phone) {

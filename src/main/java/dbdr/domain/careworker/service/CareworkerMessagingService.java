@@ -20,7 +20,7 @@ public class CareworkerMessagingService {
 
 	private final CareworkerService careworkerService;
 	private final CareworkerRepository careworkerRepository;
-	private LineMessagingUtil lineMessagingUtil;
+	private final LineMessagingUtil lineMessagingUtil;
 
 	@Transactional
 	public void handleCareworkerPhoneMessage(String userId, String phoneNumber) {
@@ -37,13 +37,17 @@ public class CareworkerMessagingService {
 				" 알림을 받고 싶은 시간을 수정하고 싶으시다면 알려주세요! 💬\n" +
 				" 예 : `오후 7시' 혹은 '오후 7시 30분'";
 
+		log.info("Careworker {} has been registered with Line ID {}", userName, userId);
+		log.info("Sending welcome message to CareworkerPhone {}", careworker.getPhone());
+
 		lineMessagingUtil.sendMessageToUser(userId, welcomeMessage);
 	}
 
 	@Transactional
 	public void updateCareworkerAlertTime(String userId, String ampm, String hour, String minute) {
 		Careworker careworker = careworkerService.findByLineUserId(userId);
-		LocalTime alertTime = lineMessagingUtil.convertToLocalTime(ampm, Integer.parseInt(hour), Integer.parseInt(minute));
+		int minuteValue = (minute != null) ? Integer.parseInt(minute) : 0;  // minute이 null이면 0으로 처리
+		LocalTime alertTime = lineMessagingUtil.convertToLocalTime(ampm, Integer.parseInt(hour), minuteValue);
 		careworker.updateAlertTime(alertTime);
 		careworkerRepository.save(careworker);
 	}

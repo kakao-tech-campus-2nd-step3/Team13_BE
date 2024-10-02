@@ -61,6 +61,7 @@ public class LineMessagingService {
 				throw new ApplicationException(ApplicationError.EVENT_ARRAY_NOT_FOUND);
 			}
 		} catch (Exception e) {
+			log.error("Error processing Line event : {}", e.getMessage());
 			throw new ApplicationException(ApplicationError.EVENT_ERROR);
 		}
 	}
@@ -96,7 +97,7 @@ public class LineMessagingService {
 		Matcher matcherPhone = phoneNumber.matcher(messageText);
 
 		// 알림 예약 형식인지 확인
-		Pattern reservation = Pattern.compile("(오전|오후)\\s*(\\d{1,2})시\\s*(\\d{1,2})?분?");
+		Pattern reservation = Pattern.compile("(오전|오후)\\s*(\\d{1,2})시(?:\\s*(\\d{1,2})분)?");
 		Matcher matcherReservation = reservation.matcher(messageText);
 
 		if (matcherPhone.find()) {
@@ -131,7 +132,7 @@ public class LineMessagingService {
 	public void handleReservationMessage(String userId, String ampm, String hour, String minute) {
 		String confirmationMessage =
 			" 감사합니다! 😊\n" +
-				" 입력하신 시간 " + ampm + " " + hour + "시 " + minute + "분" + "에 알림을 보내드릴게요. 💬\n" +
+				" 입력하신 시간 " + ampm + " " + hour + "시" + (minute != null ? " " + minute + "분" : "") + "에 알림을 보내드릴게요. 💬\n" +
 				" 언제든지 알림 시간을 변경하고 싶으시면 다시 알려주세요!";
 
 		if (guardianService.findByLineUserId(userId) != null) {

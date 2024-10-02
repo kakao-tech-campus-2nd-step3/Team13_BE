@@ -13,9 +13,9 @@ public interface CareworkerRepository extends JpaRepository<Careworker, Long> {
 
     boolean existsByEmail(String email);
 
-    Careworker findByLineUserId(String userId);
+    Optional<Careworker> findByLineUserId(String userId);
 
     List<Careworker> findByAlertTime(LocalTime currentTime);
 
-	Careworker findByPhone(String phoneNumber);
+	Optional<Careworker> findByPhone(String phoneNumber);
 }

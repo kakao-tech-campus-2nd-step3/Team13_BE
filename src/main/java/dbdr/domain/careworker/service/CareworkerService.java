@@ -87,16 +87,10 @@ public class CareworkerService {
     }
 
     public Careworker findByLineUserId(String userId) {
-        if (careworkerRepository.findByLineUserId(userId) == null) {
-            throw new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND);
-        }
-        return careworkerRepository.findByLineUserId(userId);
+        return careworkerRepository.findByLineUserId(userId).orElse(null);
     }
 
     public Careworker findByPhone(String phoneNumber) {
-        if (careworkerRepository.findByPhone(phoneNumber) == null) {
-            throw new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND);
-        }
-        return careworkerRepository.findByPhone(phoneNumber);
+        return careworkerRepository.findByPhone(phoneNumber).orElse(null);
     }
 }

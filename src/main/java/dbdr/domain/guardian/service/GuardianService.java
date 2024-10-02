@@ -66,16 +66,12 @@ public class GuardianService {
     }
 
     public Guardian findByLineUserId(String userId) {
-        if (guardianRepository.findByLineUserId(userId) == null) {
-            throw new ApplicationException(ApplicationError.GUARDIAN_NOT_FOUND);
-        }
-        return guardianRepository.findByLineUserId(userId);
+        return guardianRepository.findByLineUserId(userId)
+            .orElse(null);
     }
 
     public Guardian findByPhone(String phone) {
-        if (!guardianRepository.existsByPhone(phone)) {
-            throw new ApplicationException(ApplicationError.GUARDIAN_NOT_FOUND);
-        }
-        return guardianRepository.findByPhone(phone);
+        return guardianRepository.findByPhone(phone)
+            .orElse(null);
     }
 }
