@@ -3,7 +3,9 @@ package dbdr.security.service;
 import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
 import dbdr.domain.guardian.dto.request.GuardianRequest;
 import dbdr.security.Role;
+import dbdr.security.dto.BaseUserDetails;
 import dbdr.security.dto.LoginRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Slf4j
 public class LoginService {
 
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
@@ -28,9 +31,16 @@ public class LoginService {
 
     @Transactional
     public String login(Role role, LoginRequest loginRequest) {
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginRequest.userId(), loginRequest.password());
+        BaseUserDetails userDetails = BaseUserDetails.builder()
+            .username(loginRequest.userId())
+            .password(loginRequest.password())
+            .role(role.name())
+            .build();
+        log.debug("로그인 서비스 접근 시작");
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, loginRequest.password());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
-        return jwtProvider.createToken(loginRequest.userId(), role.name(), jwtExpiration);
+
+        return jwtProvider.createToken(authentication.getName(), role.name(), jwtExpiration);
     }
 
 }

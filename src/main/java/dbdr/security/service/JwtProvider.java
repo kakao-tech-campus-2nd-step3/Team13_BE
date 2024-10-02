@@ -2,6 +2,7 @@ package dbdr.security.service;
 
 import dbdr.exception.ApplicationError;
 import dbdr.exception.ApplicationException;
+import dbdr.security.Role;
 import dbdr.security.dto.BaseUserDetails;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -46,9 +47,9 @@ public class JwtProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        BaseUserDetails userDetails = baseUserDetailsService.loadUserByUsername(
-            getUserName(token) + "_" + getRole(token));
-        return new UsernamePasswordAuthenticationToken(userDetails, "",
+        BaseUserDetails userDetails = baseUserDetailsService.loadUserByUsernameAndRole(
+            getUserName(token), Role.valueOf(getRole(token)));
+        return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(),
             userDetails.getAuthorities());
     }
 

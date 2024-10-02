@@ -26,7 +26,6 @@ public class LoginController {
         this.authHeader = authHeader;
     }
 
-    //path 변수로 role을 입력받아서 하나의 컨트롤러에서 처리하도록 하는 방법은?
     @PostMapping("/{role}")
     public ResponseEntity<Void> login(@PathVariable("role") String role, @RequestBody LoginRequest loginRequest) {
 

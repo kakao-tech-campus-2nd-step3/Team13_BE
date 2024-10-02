@@ -14,10 +14,10 @@ import org.springframework.security.core.userdetails.UserDetails;
 @Slf4j
 public class BaseUserDetails implements UserDetails {
 
-    private final Long id;
-    private final String username;
+    private final Long id; //db pk
+    private final String username; //로그인 시 사용할 id
     private final String password;
-    private final String role;
+    private final String role; //권한
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

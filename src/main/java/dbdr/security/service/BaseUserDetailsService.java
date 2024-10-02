@@ -19,17 +19,18 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class BaseUserDetailsService implements UserDetailsService {
+public class BaseUserDetailsService {
 
     private final GuardianRepository guardianRepository;
     private final CareworkerRepository careWorkerRepository;
 
+    /*
     @Override
     public BaseUserDetails loadUserByUsername(String username) {
 
         var spliter = username.split("_");
         String userId = spliter[0];
-        Role role = Role.valueOf(spliter[1]);
+        Role role = Role.valueOf(spliter[1].toUpperCase());
 
         if (role == Role.GUARDIAN) {
             return getGuadianDetails(userId);
@@ -44,41 +45,48 @@ public class BaseUserDetailsService implements UserDetailsService {
         throw new ApplicationException(ApplicationError.ROLE_NOT_FOUND);
     }
 
+     */
+
+    public BaseUserDetails loadUserByUsernameAndRole(String username, Role role) {
+        if (role == Role.GUARDIAN) {
+            log.debug("보호자 username : {}",username);
+            return getGuadianDetails(username);
+        }
+        if (role == Role.ADMIN) {
+            return getAdminDetails(username);
+        }
+        if (role == Role.CAREWORKER) {
+            return getCareWorkerDetails(username);
+        }
+
+        throw new ApplicationException(ApplicationError.ROLE_NOT_FOUND);
+    }
+
     private BaseUserDetails getCareWorkerDetails(String userId) {
 
         Careworker careWorker = careWorkerRepository.findByPhone(userId)
             .orElseThrow(() -> new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND));
-        return securityRegister(careWorker.getPhone(), careWorker.getLoginPassword(), Role.CAREWORKER);
+        return securityRegister(careWorker.getId(),careWorker.getPhone(), careWorker.getLoginPassword(), Role.CAREWORKER);
     }
 
     private BaseUserDetails getAdminDetails(String username) {
         //TODO : admin 필요
-        /*
-        Admin admin = adminRepository.findByPhone(username).orElseThrow(() -> new IllegalArgumentException("해당 유저를 찾을 수 없습니다."));
-        BaseUserDetails userDetails = BaseUserDetails.builder()
-            .username(admin.getPhone())
-            .password(admin.getLoginPassword())
-            .role(Role.ADMIN.name())
-            .build();
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        return userDetails;
 
-         */
         return null;
     }
 
     private BaseUserDetails getGuadianDetails(String userId) {
+        log.debug("보호자 userId : {}",userId);
         Guardian guardian = guardianRepository.findByPhone(userId)
             .orElseThrow(() -> new ApplicationException(ApplicationError.GUARDIAN_NOT_FOUND));
 
-        return securityRegister(guardian.getPhone(), guardian.getLoginPassword(), Role.GUARDIAN);
+        return securityRegister(guardian.getId(),guardian.getPhone(), guardian.getLoginPassword(), Role.GUARDIAN);
     }
 
-    private BaseUserDetails securityRegister(String username,String password,Role role) {
-        BaseUserDetails userDetails = BaseUserDetails.builder().username(username)
+    private BaseUserDetails securityRegister(Long id,String username,String password,Role role) {
+        BaseUserDetails userDetails = BaseUserDetails.builder().id(id).username(username)
             .password(password).role(role.name()).build();
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, null,
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(),
             userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return userDetails;
