@@ -22,7 +22,7 @@ public class CareworkerMessagingService {
 	private final LineMessagingUtil lineMessagingUtil;
 
 	@Transactional
-	public void saveUserIdByPhone(String userId, String phoneNumber) {
+	public void handleCareworkerPhoneMessage(String userId, String phoneNumber) {
 		Careworker careworker = careworkerService.findByPhone(phoneNumber);
 		String userName = careworker.getName();
 		careworker.updateLineUserId(userId);

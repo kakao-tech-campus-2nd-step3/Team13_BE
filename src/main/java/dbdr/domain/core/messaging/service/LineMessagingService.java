@@ -108,9 +108,9 @@ public class LineMessagingService {
 		String userName = lineMessagingUtil.getUserProfile(userId).getDisplayName();
 
 		if (guardianService.findByPhone(phoneNumber) != null) {
-			guardianMessagingService.saveUserIdByPhone(userId, phoneNumber);
+			guardianMessagingService.handleGuardianPhoneMessage(userId, phoneNumber);
 		} else if (careworkerService.findByPhone(phoneNumber) != null) {
-			careworkerMessagingService.saveUserIdByPhone(userId, phoneNumber);
+			careworkerMessagingService.handleCareworkerPhoneMessage(userId, phoneNumber);
 		} else {
 			sendStrangerFollowMessage(userId, userName);
 		}
@@ -131,7 +131,7 @@ public class LineMessagingService {
 			lineMessagingUtil.sendMessageToUser(userId, confirmationMessage);
 			careworkerMessagingService.updateCareworkerAlertTime(userId, ampm, hour, minute);
 		} else {
-			throw new ApplicationException(ApplicationError.USER_NOT_FOUND);
+			userFoundFailedMessage(userId);
 		}
 	}
 
@@ -141,5 +141,13 @@ public class LineMessagingService {
 				" 저희 서비스는 보호자와 요양보호사를 위한 서비스입니다. \n" +
 				" 회원가입을 통해 이용해주시기 바랍니다. 😅";
 		lineMessagingUtil.sendMessageToUser(userId, welcomeMessage);
+	}
+
+	private void userFoundFailedMessage(String userId) {
+		String errorMessage =
+			"등록된 정보가 확인되지 않았습니다. 😊\n" +
+				"서비스 이용을 위해 요양원에 문의하시거나, 전화번호를 다시 인증해주시기 바랍니다. ☎️\n" +
+				"예: 01012345678";
+		lineMessagingUtil.sendMessageToUser(userId, errorMessage);
 	}
 }
