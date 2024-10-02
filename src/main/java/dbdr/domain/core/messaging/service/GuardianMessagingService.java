@@ -23,8 +23,9 @@ public class GuardianMessagingService {
 
 
 	@Transactional
-	public void handleGuardianFollowEvent(String userId, String userName) {
-		Guardian guardian = guardianService.findByName(userName);
+	public void saveUserIdByPhoneNumber(String userId, String phoneNumber) {
+		Guardian guardian = guardianService.findByPhone(phoneNumber);
+		String userName = guardian.getName();
 		guardian.updateLineUserId(userId);
 		guardianRepository.save(guardian);
 
@@ -41,10 +42,12 @@ public class GuardianMessagingService {
 	}
 
 	@Transactional
-	public void saveGuardianAlertTime(String userId, String ampm, String hour, String minute) {
+	public void updateGuardianAlertTime(String userId, String ampm, String hour, String minute) {
 		Guardian guardian = guardianService.findByLineUserId(userId);
 		LocalTime alertTime = lineMessagingUtil.convertToLocalTime(ampm, Integer.parseInt(hour), Integer.parseInt(minute));
 		guardian.updateAlertTime(alertTime);
 		guardianRepository.save(guardian);
 	}
+
+
 }

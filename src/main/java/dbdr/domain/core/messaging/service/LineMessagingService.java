@@ -44,16 +44,12 @@ public class LineMessagingService {
 
 					switch (eventType) {
 						case "follow":
-							log.info("Follow event 발생");
 							FollowEvent followEvent = objectMapper.treeToValue(eventNode, FollowEvent.class);
 							handleFollowEvent(followEvent);
 							break;
 						case "message":
 							MessageEvent<TextMessageContent> messageEvent = objectMapper.treeToValue(eventNode, MessageEvent.class);
 							handleMessageEvent(messageEvent);
-							break;
-						case "unfollow":
-							log.info("Unfollow event 발생");
 							break;
 						default:
 							throw new ApplicationException(ApplicationError.CANNOT_FIND_EVENT);
@@ -72,52 +68,70 @@ public class LineMessagingService {
 	@Transactional
 	public void handleFollowEvent(FollowEvent event) {
 		String userId = event.getSource().getUserId();
-		String userName = lineMessagingUtil.getUserProfile(userId).getDisplayName();
-
-		if (guardianService.nameExists(userName)) {
-			guardianMessagingService.handleGuardianFollowEvent(userId, userName);
-		} else if (careworkerService.nameExists(userName)) {
-			careworkerMessagingService.handleCareworkerFollowEvent(userId, userName);
-		} else {
-			sendStrangerFollowMessage(userId, userName);
-		}
+		String followMessage = "안녕하세요! 🌸\n" +
+			" 최고의 요양원 서비스 돌봄다리입니다. 🤗\n" +
+			" 서비스를 시작하려면 전화번호를 다음과 같은 형식으로 입력해주시기 바랍니다. 😄\n" +
+			" 예 : 01012345678";
+		lineMessagingUtil.sendMessageToUser(userId, followMessage);
 	}
 
 	// 2. Message Event 처리
-	// 사용자가 알림 예약 메시지를 보냈을 때 발생하는 이벤트 처리
 	@Transactional
 	public void handleMessageEvent(MessageEvent<TextMessageContent> event) {
 		String userId = event.getSource().getUserId();
 		String messageText = event.getMessage().getText();
 
-		// '오전 9시 30분', '오후 3시'와 같은 형식을 처리하는 정규식
-		Pattern pattern = Pattern.compile("(오전|오후)\\s*(\\d{1,2})시\\s*(\\d{1,2})?분?");
-		Matcher matcher = pattern.matcher(messageText);
+		// 전화번호 형식인지 확인
+		Pattern phoneNumber = Pattern.compile("01[0-9]{8,9}");
+		Matcher matcherPhone = phoneNumber.matcher(messageText);
 
-		if (matcher.find()) {
-			String ampm = matcher.group(1);  // '오전' 또는 '오후'
-			String hour = matcher.group(2);  // 시간
-			String minute = matcher.group(3) != null ? matcher.group(3) : "0";  // 분이 없는 경우 기본값 0
+		// 알림 예약 형식인지 확인
+		Pattern reservation = Pattern.compile("(오전|오후)\\s*(\\d{1,2})시\\s*(\\d{1,2})?분?");
+		Matcher matcherReservation = reservation.matcher(messageText);
 
-			log.info("추출된 시간: {} {}, {}분", ampm, hour, minute);
-
-			String confirmationMessage =
-				"감사합니다! 😊\n" +
-					"입력하신 시간 " + messageText + "에 알림을 보내드릴게요. 💬\n" +
-					"언제든지 알림 시간을 변경하고 싶으시면 다시 알려주세요!";
-
-			if (guardianService.findByLineUserId(userId) != null) {
-				lineMessagingUtil.sendMessageToUser(userId, confirmationMessage);
-				guardianMessagingService.saveGuardianAlertTime(userId, ampm, hour, minute);
-			} else if (careworkerService.findByLineUserId(userId) != null) {
-				lineMessagingUtil.sendMessageToUser(userId, confirmationMessage);
-				careworkerMessagingService.saveCareworkerAlertTime(userId, ampm, hour, minute);
-			} else {
-				throw new ApplicationException(ApplicationError.USER_NOT_FOUND);
-			}
+		if (matcherPhone.find()) {
+			handlePhoneNumberMessage(userId, matcherPhone.group());
+		} else if (matcherReservation.find()) {
+			handleReservationMessage(userId, matcherReservation.group(1), matcherReservation.group(2), matcherReservation.group(3));
 		} else {
-			String errorMessage = "알림 시간을 인식할 수 없습니다. '오전 9시 30분' 또는 '오후 3시'와 같은 형식으로 입력해주세요!";
+			String errorMessage =
+				" 입력값이 잘못되었습니다! 😅\n" +
+				" 다시 입력해주세요. 💬\n";
 			lineMessagingUtil.sendMessageToUser(userId, errorMessage);
+		}
+	}
+
+
+	// 사용자가 전화 번호를 입력했을 때 발생하는 이벤트 처리
+	@Transactional
+	public void handlePhoneNumberMessage(String userId, String phoneNumber) {
+		String userName = lineMessagingUtil.getUserProfile(userId).getDisplayName();
+
+		if (guardianService.findByPhone(phoneNumber) != null) {
+			guardianMessagingService.saveUserIdByPhoneNumber(userId, phoneNumber);
+		} else if (careworkerService.findByPhone(phoneNumber) != null) {
+			careworkerMessagingService.saveUserIdByPhoneNUmber(userId, phoneNumber);
+		} else {
+			sendStrangerFollowMessage(userId, userName);
+		}
+	}
+
+	// 사용자가 알림 예약 메시지를 보냈을 때 발생하는 이벤트 처리
+	@Transactional
+	public void handleReservationMessage(String userId, String ampm, String hour, String minute) {
+		String confirmationMessage =
+			"감사합니다! 😊\n" +
+				"입력하신 시간 " + ampm + " " + hour + "시 " + minute + "분" + "에 알림을 보내드릴게요. 💬\n" +
+				"언제든지 알림 시간을 변경하고 싶으시면 다시 알려주세요!";
+
+		if (guardianService.findByLineUserId(userId) != null) {
+			lineMessagingUtil.sendMessageToUser(userId, confirmationMessage);
+			guardianMessagingService.updateGuardianAlertTime(userId, ampm, hour, minute);
+		} else if (careworkerService.findByLineUserId(userId) != null) {
+			lineMessagingUtil.sendMessageToUser(userId, confirmationMessage);
+			careworkerMessagingService.updateCareworkerAlertTime(userId, ampm, hour, minute);
+		} else {
+			throw new ApplicationException(ApplicationError.USER_NOT_FOUND);
 		}
 	}
 

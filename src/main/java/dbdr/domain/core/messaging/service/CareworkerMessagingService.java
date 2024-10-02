@@ -22,8 +22,9 @@ public class CareworkerMessagingService {
 	private final LineMessagingUtil lineMessagingUtil;
 
 	@Transactional
-	public void handleCareworkerFollowEvent(String userId, String userName) {
-		Careworker careworker = careworkerService.findByName(userName);
+	public void saveUserIdByPhoneNUmber(String userId, String phoneNumber) {
+		Careworker careworker = careworkerService.findByPhone(phoneNumber);
+		String userName = careworker.getName();
 		careworker.updateLineUserId(userId);
 		careworkerRepository.save(careworker);
 
@@ -39,7 +40,7 @@ public class CareworkerMessagingService {
 	}
 
 	@Transactional
-	public void saveCareworkerAlertTime(String userId, String ampm, String hour, String minute) {
+	public void updateCareworkerAlertTime(String userId, String ampm, String hour, String minute) {
 		Careworker careworker = careworkerService.findByLineUserId(userId);
 		LocalTime alertTime = lineMessagingUtil.convertToLocalTime(ampm, Integer.parseInt(hour), Integer.parseInt(minute));
 		careworker.updateAlertTime(alertTime);

@@ -38,7 +38,9 @@ public enum ApplicationError {
     CANNOT_FIND_EVENT(HttpStatus.NOT_FOUND, "해당 이벤트를 찾을 수가 없습니다."),
     EVENT_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "이벤트 처리 중 오류가 발생했습니다."),
     EVENT_ARRAY_NOT_FOUND(HttpStatus.NOT_FOUND, "events 배열을 찾을 수가 없습니다."),
-    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 사용자를 찾을 수가 없습니다.");
+    USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 사용자를 찾을 수가 없습니다."),
+    MESSAGE_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "메시지 전송에 실패했습니다."),
+    FAILED_TO_GET_USER_PROFILE(HttpStatus.INTERNAL_SERVER_ERROR, "사용자 프로필을 가져오는데 실패했습니다.");
 
     private final HttpStatus status;
     private final String message;

@@ -7,6 +7,8 @@ import com.linecorp.bot.model.PushMessage;
 import com.linecorp.bot.model.message.TextMessage;
 import com.linecorp.bot.model.profile.UserProfileResponse;
 
+import dbdr.global.exception.ApplicationError;
+import dbdr.global.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -28,7 +30,7 @@ public class LineMessagingUtil {
 			log.info("Message sent successfully to user: {}", userId);
 		} catch (Exception e) {
 			log.error("Failed to send message to user: {}", userId, e);
-			throw new RuntimeException("Failed to send message.", e);
+			throw new ApplicationException(ApplicationError.MESSAGE_SEND_FAILED);
 		}
 	}
 
@@ -38,7 +40,7 @@ public class LineMessagingUtil {
 			return lineMessagingClient.getProfile(userId).get();
 		} catch (Exception e) {
 			log.error("Failed to get user profile: {}", userId, e);
-			throw new RuntimeException("Failed to get user profile.", e);
+			throw new ApplicationException(ApplicationError.FAILED_TO_GET_USER_PROFILE);
 		}
 	}
 

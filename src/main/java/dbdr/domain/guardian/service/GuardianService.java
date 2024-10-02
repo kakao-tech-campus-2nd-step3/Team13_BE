@@ -78,4 +78,9 @@ public class GuardianService {
         return guardianRepository.findByLineUserId(userId)
             .orElseThrow(() -> new ApplicationException(ApplicationError.GUARDIAN_NOT_FOUND));
     }
+
+    public Guardian findByPhone(String phone) {
+        return guardianRepository.findByPhone(phone)
+            .orElseThrow(() -> new ApplicationException(ApplicationError.GUARDIAN_NOT_FOUND));
+    }
 }

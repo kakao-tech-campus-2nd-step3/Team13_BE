@@ -99,4 +99,9 @@ public class CareworkerService {
         return careworkerRepository.findByLineUserId(userId)
             .orElseThrow(() -> new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND));
     }
+
+    public Careworker findByPhone(String phoneNumber) {
+        return careworkerRepository.findByPhone(phoneNumber)
+            .orElseThrow(() -> new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND));
+    }
 }
