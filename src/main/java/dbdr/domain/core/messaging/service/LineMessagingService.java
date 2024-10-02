@@ -108,9 +108,9 @@ public class LineMessagingService {
 		String userName = lineMessagingUtil.getUserProfile(userId).getDisplayName();
 
 		if (guardianService.findByPhone(phoneNumber) != null) {
-			guardianMessagingService.saveUserIdByPhoneNumber(userId, phoneNumber);
+			guardianMessagingService.saveUserIdByPhone(userId, phoneNumber);
 		} else if (careworkerService.findByPhone(phoneNumber) != null) {
-			careworkerMessagingService.saveUserIdByPhoneNUmber(userId, phoneNumber);
+			careworkerMessagingService.saveUserIdByPhone(userId, phoneNumber);
 		} else {
 			sendStrangerFollowMessage(userId, userName);
 		}

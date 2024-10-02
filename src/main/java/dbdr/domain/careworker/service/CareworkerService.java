@@ -86,22 +86,17 @@ public class CareworkerService {
             careworker.getName(), careworker.getEmail(), careworker.getPhone());
     }
 
-    public boolean nameExists(String name) {
-        return careworkerRepository.existsByName(name);
-    }
-
-    public Careworker findByName(String userName) {
-        return careworkerRepository.findByName(userName)
-            .orElseThrow(() -> new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND));
-    }
-
     public Careworker findByLineUserId(String userId) {
-        return careworkerRepository.findByLineUserId(userId)
-            .orElseThrow(() -> new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND));
+        if (careworkerRepository.findByLineUserId(userId) == null) {
+            throw new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND);
+        }
+        return careworkerRepository.findByLineUserId(userId);
     }
 
     public Careworker findByPhone(String phoneNumber) {
-        return careworkerRepository.findByPhone(phoneNumber)
-            .orElseThrow(() -> new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND));
+        if (careworkerRepository.findByPhone(phoneNumber) == null) {
+            throw new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND);
+        }
+        return careworkerRepository.findByPhone(phoneNumber);
     }
 }

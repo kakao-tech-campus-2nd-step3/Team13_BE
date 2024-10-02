@@ -23,7 +23,7 @@ public class GuardianMessagingService {
 
 
 	@Transactional
-	public void saveUserIdByPhoneNumber(String userId, String phoneNumber) {
+	public void saveUserIdByPhone(String userId, String phoneNumber) {
 		Guardian guardian = guardianService.findByPhone(phoneNumber);
 		String userName = guardian.getName();
 		guardian.updateLineUserId(userId);

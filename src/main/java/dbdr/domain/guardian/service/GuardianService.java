@@ -65,22 +65,17 @@ public class GuardianService {
         }
     }
 
-    public boolean nameExists(String name) {
-        return guardianRepository.existsByName(name);
-    }
-
-    public Guardian findByName(String name) {
-        return guardianRepository.findByName(name)
-            .orElseThrow(() -> new ApplicationException(ApplicationError.GUARDIAN_NOT_FOUND));
-    }
-
     public Guardian findByLineUserId(String userId) {
-        return guardianRepository.findByLineUserId(userId)
-            .orElseThrow(() -> new ApplicationException(ApplicationError.GUARDIAN_NOT_FOUND));
+        if (guardianRepository.findByLineUserId(userId) == null) {
+            throw new ApplicationException(ApplicationError.GUARDIAN_NOT_FOUND);
+        }
+        return guardianRepository.findByLineUserId(userId);
     }
 
     public Guardian findByPhone(String phone) {
-        return guardianRepository.findByPhone(phone)
-            .orElseThrow(() -> new ApplicationException(ApplicationError.GUARDIAN_NOT_FOUND));
+        if (!guardianRepository.existsByPhone(phone)) {
+            throw new ApplicationException(ApplicationError.GUARDIAN_NOT_FOUND);
+        }
+        return guardianRepository.findByPhone(phone);
     }
 }
