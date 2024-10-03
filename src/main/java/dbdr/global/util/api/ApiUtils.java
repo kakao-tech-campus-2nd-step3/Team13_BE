@@ -1,4 +1,4 @@
-package dbdr.util;
+package dbdr.global.util.api;
 
 import org.springframework.http.HttpStatus;
 

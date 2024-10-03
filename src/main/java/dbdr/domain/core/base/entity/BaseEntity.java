@@ -1,4 +1,4 @@
-package dbdr.domain.core.entity;
+package dbdr.domain.core.base.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;

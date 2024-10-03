@@ -1,4 +1,4 @@
-package dbdr.exception;
+package dbdr.global.exception;
 
 import org.springframework.web.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;

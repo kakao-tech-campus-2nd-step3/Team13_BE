@@ -1,7 +1,7 @@
 package dbdr.domain.chart.entity;
 
 
-import dbdr.domain.core.entity.BaseEntity;
+import dbdr.domain.core.base.entity.BaseEntity;
 import dbdr.domain.recipient.entity.Recipient;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

@@ -4,9 +4,10 @@ import dbdr.domain.institution.dto.request.InstitutionRequest;
 import dbdr.domain.institution.dto.response.InstitutionResponse;
 import dbdr.domain.institution.entity.Institution;
 import dbdr.domain.institution.repository.InstitutionRepository;
-import dbdr.exception.ApplicationError;
-import dbdr.exception.ApplicationException;
 import java.util.List;
+
+import dbdr.global.exception.ApplicationError;
+import dbdr.global.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

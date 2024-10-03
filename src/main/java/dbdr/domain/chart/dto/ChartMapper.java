@@ -27,21 +27,23 @@ public interface ChartMapper {
     ChartDetailResponse toResponse(Chart chart);
 
     @Mappings({
-            @Mapping(target = "bodyManagement", source = "bodyManagement"),
-            @Mapping(target = "nursingManagement", source = "nursingManagement"),
-            @Mapping(target = "cognitiveManagement", source = "cognitiveManagement"),
-            @Mapping(target = "recoveryTraining", source = "recoveryTraining")
+        @Mapping(target = "bodyManagement", source = "bodyManagement"),
+        @Mapping(target = "nursingManagement", source = "nursingManagement"),
+        @Mapping(target = "cognitiveManagement", source = "cognitiveManagement"),
+        @Mapping(target = "recoveryTraining", source = "recoveryTraining"),
+        @Mapping(target = "conditionDisease", source = "conditionDisease"),
+        @Mapping(target = "recipient", source = "recipient")
     })
     Chart toEntity(ChartDetailRequest request);
 
     // BodyManagement 매핑
     @Mappings({
-            @Mapping(target = "wash", source = "physicalClear.wash"),
-            @Mapping(target = "bath", source = "physicalClear.bath"),
-            @Mapping(target = "mealType", source = "physicalMeal.mealType"),
-            @Mapping(target = "intakeAmount", source = "physicalMeal.intakeAmount"),
-            @Mapping(target = "has_walked", source = "physicalWalk.hasWalked"),
-            @Mapping(target = "has_companion", source = "physicalWalk.hasCompanion"),
+        @Mapping(target = "wash", source = "physicalClear.wash"),
+        @Mapping(target = "bath", source = "physicalClear.bath"),
+        @Mapping(target = "mealType", source = "physicalMeal.mealType"),
+        @Mapping(target = "intakeAmount", source = "physicalMeal.intakeAmount"),
+        @Mapping(target = "has_walked", source = "physicalWalk.hasWalked"),
+        @Mapping(target = "has_companion", source = "physicalWalk.hasCompanion"),
     })
     BodyManagementResponse toResponse(BodyManagement bodyManagement);
 

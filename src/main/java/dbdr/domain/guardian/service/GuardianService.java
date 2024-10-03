@@ -4,8 +4,8 @@ import dbdr.domain.guardian.entity.Guardian;
 import dbdr.domain.guardian.dto.request.GuardianRequest;
 import dbdr.domain.guardian.dto.response.GuardianResponse;
 import dbdr.domain.guardian.repository.GuardianRepository;
-import dbdr.exception.ApplicationError;
-import dbdr.exception.ApplicationException;
+import dbdr.global.exception.ApplicationError;
+import dbdr.global.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -63,5 +63,15 @@ public class GuardianService {
         if (guardianRepository.existsByPhone(phone)) {
             throw new ApplicationException(ApplicationError.DUPLICATE_PHONE);
         }
+    }
+
+    public Guardian findByLineUserId(String userId) {
+        return guardianRepository.findByLineUserId(userId)
+            .orElse(null);
+    }
+
+    public Guardian findByPhone(String phone) {
+        return guardianRepository.findByPhone(phone)
+            .orElse(null);
     }
 }
