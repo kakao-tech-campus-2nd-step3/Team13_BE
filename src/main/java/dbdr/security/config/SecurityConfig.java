@@ -61,7 +61,6 @@ public class SecurityConfig {
                     .anyRequest().authenticated();
             })
 
-
             .exceptionHandling((exception) -> exception
             .accessDeniedHandler((request, response, accessDeniedException) -> {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "접근 거부");

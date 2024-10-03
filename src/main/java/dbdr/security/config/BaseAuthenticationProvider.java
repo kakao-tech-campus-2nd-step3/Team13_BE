@@ -25,6 +25,7 @@ public class BaseAuthenticationProvider implements AuthenticationProvider {
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
         // 로그인 시도에서 해당 부분에 의해서 호출됨
         // Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
+
         BaseUserDetails unAuthUser = (BaseUserDetails) authentication.getPrincipal();
         BaseUserDetails authUser = baseUserDetailsService.loadUserByUsernameAndRole(unAuthUser.getUsername(), unAuthUser.getRole());
 

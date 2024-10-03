@@ -12,6 +12,7 @@ public enum ApplicationError {
     ROLE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 유저가 ROLE을 가지고 있지 않습니다."),
     ACCESS_NOT_ALLOWED(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
+    PASSWORD_NOT_MATCH(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
 
     // Guardian (보호자)
     GUARDIAN_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 보호자를 찾을 수가 없습니다."),
