@@ -114,8 +114,7 @@ public class LineMessagingService {
 
 
 	// 사용자가 전화 번호를 입력했을 때 발생하는 이벤트 처리
-	@Transactional
-	public void handlePhoneNumberMessage(String userId, String phoneNumber) {
+	private void handlePhoneNumberMessage(String userId, String phoneNumber) {
 		String userName = lineMessagingUtil.getUserProfile(userId).getDisplayName();
 
 		if (guardianService.findByPhone(phoneNumber) != null) {
