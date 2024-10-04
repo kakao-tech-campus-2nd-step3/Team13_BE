@@ -48,6 +48,14 @@ dependencies {
     // 테스트 라이브러리
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'com.h2database:h2' // H2는 테스트 환경에서 주로 사용
+
+    // Line-messaging-api 라이브러리
+    implementation 'com.linecorp.bot:line-bot-spring-boot:4.7.0'
+
+
+    // MapStruct
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 }
 
 tasks.named('test') {

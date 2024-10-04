@@ -4,8 +4,8 @@ import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
 import dbdr.domain.careworker.dto.response.CareworkerResponseDTO;
 import dbdr.domain.careworker.repository.CareworkerRepository;
-import dbdr.exception.ApplicationError;
-import dbdr.exception.ApplicationException;
+import dbdr.global.exception.ApplicationError;
+import dbdr.global.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -84,5 +84,13 @@ public class CareworkerService {
     private CareworkerResponseDTO toResponseDTO(Careworker careworker) {
         return new CareworkerResponseDTO(careworker.getId(), careworker.getInstitutionId(),
             careworker.getName(), careworker.getEmail(), careworker.getPhone());
+    }
+
+    public Careworker findByLineUserId(String userId) {
+        return careworkerRepository.findByLineUserId(userId).orElse(null);
+    }
+
+    public Careworker findByPhone(String phoneNumber) {
+        return careworkerRepository.findByPhone(phoneNumber).orElse(null);
     }
 }
