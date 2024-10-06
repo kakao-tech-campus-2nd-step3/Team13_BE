@@ -37,10 +37,10 @@ public class ExcelService {
 
     public byte[] generateCareworkerTemplate() {
         try (Workbook workbook = new XSSFWorkbook()) {
-            Sheet sheet = workbook.createSheet("Careworkers");
+            Sheet sheet = workbook.createSheet("요양보호사");
             sheet.setDefaultColumnWidth(28);
 
-            createHeaderRow(sheet, "Name", "Phone");
+            createHeaderRow(sheet, "성명", "휴대폰 번호");
             setCellStyleText(workbook, sheet, 1);
 
             String[] sampleData = {"홍길동", "01012345678"};
@@ -54,10 +54,10 @@ public class ExcelService {
 
     public byte[] generateGuardianTemplate() {
         try (Workbook workbook = new XSSFWorkbook()) {
-            Sheet sheet = workbook.createSheet("Guardians");
+            Sheet sheet = workbook.createSheet("보호자");
             sheet.setDefaultColumnWidth(28);
 
-            createHeaderRow(sheet, "Phone", "Name");
+            createHeaderRow(sheet, "휴대폰 번호", "성명");
             setCellStyleText(workbook, sheet, 0);
 
             String[] sampleData = {"01012345678", "홍길동"};
@@ -71,14 +71,14 @@ public class ExcelService {
 
     public byte[] generateRecipientTemplate() {
         try (Workbook workbook = new XSSFWorkbook()) {
-            Sheet sheet = workbook.createSheet("Recipients");
+            Sheet sheet = workbook.createSheet("돌봄대상자");
             sheet.setDefaultColumnWidth(28);
 
-            createHeaderRow(sheet, "Name", "Care Number", "Birth");
+            createHeaderRow(sheet, "성명", "장기요양인정번호", "생년월일");
             setCellStyleText(workbook, sheet, 1);
             setCellStyleDate(workbook, sheet, 2);
 
-            String[] sampleData = {"홍길동", "L495-245", "1990-01-01"};
+            String[] sampleData = {"홍길동", "L0000000000-102", "1990-01-01"};
             createSampleData(sheet, sampleData);
 
             return convertWorkbookToByteArray(workbook);
@@ -86,7 +86,6 @@ public class ExcelService {
             throw new ApplicationException(ApplicationError.FILE_DOWNLOAD_ERROR);
         }
     }
-
 
     private void setCellStyleText(Workbook workbook, Sheet sheet, int index) {
         XSSFCellStyle style = (XSSFCellStyle) workbook.createCellStyle();
@@ -152,6 +151,7 @@ public class ExcelService {
                 try {
                     rowProcessor.process(row, successList, failedList);
                 } catch (ApplicationException e) {
+
                 }
             }
             return new FileUploadResponseDto(file.getOriginalFilename(), successList, failedList);
