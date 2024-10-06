@@ -12,6 +12,8 @@ import dbdr.global.exception.ApplicationError;
 import dbdr.global.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFDataFormat;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -33,42 +35,51 @@ public class ExcelService {
     private final GuardianRepository guardianRepository;
     private final RecipientRepository recipientRepository;
 
-
     public byte[] generateCareworkerTemplate() {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Careworkers");
-            createHeaderRow(sheet, "Name", "Phone");
+            sheet.setDefaultColumnWidth(28);
 
-            applyTextStyle(sheet, 1);
+            createHeaderRow(sheet, "Name", "Phone");
+            setCellStyleText(workbook, sheet, 1);
+
+            String[] sampleData = {"홍길동", "01012345678"};
+            createSampleData(sheet, sampleData);
 
             return convertWorkbookToByteArray(workbook);
         } catch (IOException e) {
             throw new ApplicationException(ApplicationError.FILE_DOWNLOAD_ERROR);
         }
     }
-
 
     public byte[] generateGuardianTemplate() {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Guardians");
-            createHeaderRow(sheet, "Phone", "Name");
+            sheet.setDefaultColumnWidth(28);
 
-            applyTextStyle(sheet, 0);
+            createHeaderRow(sheet, "Phone", "Name");
+            setCellStyleText(workbook, sheet, 0);
+
+            String[] sampleData = {"01012345678", "홍길동"};
+            createSampleData(sheet, sampleData);
 
             return convertWorkbookToByteArray(workbook);
         } catch (IOException e) {
             throw new ApplicationException(ApplicationError.FILE_DOWNLOAD_ERROR);
         }
     }
-
 
     public byte[] generateRecipientTemplate() {
         try (Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Recipients");
-            createHeaderRow(sheet, "Name", "Care Number", "Birth");
+            sheet.setDefaultColumnWidth(28);
 
-            applyTextStyle(sheet, 1);
-            applyDateStyle(sheet, 2);
+            createHeaderRow(sheet, "Name", "Care Number", "Birth");
+            setCellStyleText(workbook, sheet, 1);
+            setCellStyleDate(workbook, sheet, 2);
+
+            String[] sampleData = {"홍길동", "L495-245", "1990-01-01"};
+            createSampleData(sheet, sampleData);
 
             return convertWorkbookToByteArray(workbook);
         } catch (IOException e) {
@@ -77,33 +88,40 @@ public class ExcelService {
     }
 
 
-    private void applyTextStyle(Sheet sheet, int columnIndex) {
-        Workbook workbook = sheet.getWorkbook();
-        CellStyle textStyle = workbook.createCellStyle();
-        DataFormat format = workbook.createDataFormat();
-        textStyle.setDataFormat(format.getFormat("@"));  // 텍스트 형식
+    private void setCellStyleText(Workbook workbook, Sheet sheet, int index) {
+        XSSFCellStyle style = (XSSFCellStyle) workbook.createCellStyle();
+        XSSFDataFormat xssfDataFormat = (XSSFDataFormat) workbook.createDataFormat();
+        style.setDataFormat(xssfDataFormat.getFormat("@"));
+        sheet.setDefaultColumnStyle(index, style);
+    }
 
-        for (int rowIndex = 0; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
-            Row row = sheet.getRow(rowIndex);
-            if (row == null) row = sheet.createRow(rowIndex);
-            Cell cell = row.getCell(columnIndex);
-            if (cell == null) cell = row.createCell(columnIndex);
-            cell.setCellStyle(textStyle);
+    private void setCellStyleDate(Workbook workbook, Sheet sheet, int index) {
+        XSSFCellStyle style = (XSSFCellStyle) workbook.createCellStyle();
+        XSSFDataFormat xssfDataFormat = (XSSFDataFormat) workbook.createDataFormat();
+        style.setDataFormat(xssfDataFormat.getFormat("yyyy-MM-dd"));
+        sheet.setDefaultColumnStyle(index, style);
+    }
+
+    private void createHeaderRow(Sheet sheet, String... headers) {
+        Row headerRow = sheet.createRow(0);
+        for (int i = 0; i < headers.length; i++) {
+            Cell cell = headerRow.createCell(i);
+            cell.setCellValue(headers[i]);
         }
     }
 
-    private void applyDateStyle(Sheet sheet, int columnIndex) {
-        Workbook workbook = sheet.getWorkbook();
-        CellStyle dateStyle = workbook.createCellStyle();
-        DataFormat dateFormat = workbook.createDataFormat();
-        dateStyle.setDataFormat(dateFormat.getFormat("yyyy-MM-dd"));  // 날짜 형식
+    private void createSampleData(Sheet sheet, String[] sampleData) {
+        Row bodyRow = sheet.createRow(1);
+        for (int i = 0; i < sampleData.length; i++) {
+            Cell bodyCell = bodyRow.createCell(i);
+            bodyCell.setCellValue(sampleData[i]);
+        }
+    }
 
-        for (int rowIndex = 0; rowIndex <= sheet.getLastRowNum(); rowIndex++) {
-            Row row = sheet.getRow(rowIndex);
-            if (row == null) row = sheet.createRow(rowIndex);
-            Cell cell = row.getCell(columnIndex);
-            if (cell == null) cell = row.createCell(columnIndex);
-            cell.setCellStyle(dateStyle);
+    private byte[] convertWorkbookToByteArray(Workbook workbook) throws IOException {
+        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+            workbook.write(outputStream);
+            return outputStream.toByteArray();
         }
     }
 
@@ -141,7 +159,6 @@ public class ExcelService {
             throw new ApplicationException(ApplicationError.FILE_UPLOAD_ERROR);
         }
     }
-
 
     private void processCareworkerRow(Row row, List<FileDataResponseDto> successList, List<FileDataResponseDto> failedList, Set<String> seenPhones) {
         String name = getCellValue(row.getCell(0));
@@ -183,7 +200,6 @@ public class ExcelService {
         }
     }
 
-
     private void processRecipientRow(Row row, List<FileDataResponseDto> successList, List<FileDataResponseDto> failedList, Set<String> seenCareNumbers) {
         String name = getCellValue(row.getCell(0));
         String careNumber = getCellValue(row.getCell(1));
@@ -205,13 +221,11 @@ public class ExcelService {
         }
     }
 
-
     private void checkDuplicate(Set<String> seenSet, String value, ApplicationError error) {
         if (seenSet.contains(value)) {
             throw new ApplicationException(error);
         }
     }
-
 
     private void validatePhone(String phone, boolean exists) {
         if (!phone.matches("010\\d{8}")) {
@@ -227,7 +241,6 @@ public class ExcelService {
             throw new ApplicationException(ApplicationError.DUPLICATE_CARE_NUMBER);
         }
     }
-
 
     private String getCellValue(Cell cell) {
         if (cell == null) {
@@ -251,23 +264,6 @@ public class ExcelService {
                 return cell.getCellFormula();
             default:
                 return "";
-        }
-    }
-
-
-    private byte[] convertWorkbookToByteArray(Workbook workbook) throws IOException {
-        try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-            workbook.write(outputStream);
-            return outputStream.toByteArray();
-        }
-    }
-
-
-    private void createHeaderRow(Sheet sheet, String... headers) {
-        Row headerRow = sheet.createRow(0);
-        for (int i = 0; i < headers.length; i++) {
-            Cell cell = headerRow.createCell(i);
-            cell.setCellValue(headers[i]);
         }
     }
 
