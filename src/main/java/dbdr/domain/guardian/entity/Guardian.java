@@ -1,14 +1,15 @@
 package dbdr.domain.guardian.entity;
 
-import jakarta.validation.constraints.Pattern;
-import org.hibernate.annotations.Comment;
+import java.time.LocalTime;
+
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
-import dbdr.domain.core.entity.BaseEntity;
+import dbdr.domain.core.base.entity.BaseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -21,11 +22,9 @@ import lombok.NoArgsConstructor;
 @SQLDelete(sql = "UPDATE guardians SET is_active = false WHERE id = ?")
 @SQLRestriction("is_active = true")
 public class Guardian extends BaseEntity {
-
     @Column(unique = true)
     private String loginId;
 
-    @Column(nullable = false)
     private String loginPassword;
 
     @Column(nullable = false, unique = true)
@@ -35,16 +34,29 @@ public class Guardian extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String name;
 
+    @Column(nullable = true)
+    private String lineUserId;
+
+    @Column(nullable = true)
+    private LocalTime alertTime;
+
     @Builder
-    public Guardian(String phone, String name, String loginPassword) {
+    public Guardian(String phone, String name) {
         this.phone = phone;
         this.name = name;
-        this.loginPassword = loginPassword;
+        this.alertTime = LocalTime.of(9, 0); // 오전 9시로 초기화
     }
 
-    public void updateGuardian(String phone, String name, String loginPassword) {
+    public void updateGuardian(String phone, String name) {
         this.phone = phone;
         this.name = name;
-        this.loginPassword = loginPassword;
+    }
+
+    public void updateLineUserId(String lineUserId) {
+        this.lineUserId = lineUserId;
+    }
+
+    public void updateAlertTime(LocalTime alertTime) {
+        this.alertTime = alertTime;
     }
 }

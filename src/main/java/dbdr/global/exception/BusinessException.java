@@ -1,4 +1,4 @@
-package dbdr.exception;
+package dbdr.global.exception;
 
 
 import lombok.AllArgsConstructor;
