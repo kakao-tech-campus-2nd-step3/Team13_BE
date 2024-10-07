@@ -18,6 +18,9 @@ public class BaseUserDetails implements UserDetails {
     private final String username; //로그인 시 사용할 id
     private final String password;
     private final String role; //권한
+    private final Long institutionNumber; //기관번호
+
+
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -43,6 +46,11 @@ public class BaseUserDetails implements UserDetails {
     public Long getId(){
         //TODO : NULL CHECK
         return id;
+    }
+
+    public Long getInstitutionNumber(){
+        //TODO : NULL CHECK
+        return institutionNumber;
     }
 
 }

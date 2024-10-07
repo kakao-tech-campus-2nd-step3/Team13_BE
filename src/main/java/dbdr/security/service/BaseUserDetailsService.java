@@ -4,6 +4,8 @@ import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.careworker.repository.CareworkerRepository;
 import dbdr.domain.guardian.entity.Guardian;
 import dbdr.domain.guardian.repository.GuardianRepository;
+import dbdr.domain.institution.entity.Institution;
+import dbdr.domain.institution.repository.InstitutionRepository;
 import dbdr.exception.ApplicationError;
 import dbdr.exception.ApplicationException;
 import dbdr.security.dto.BaseUserDetails;
@@ -23,50 +25,44 @@ public class BaseUserDetailsService {
 
     private final GuardianRepository guardianRepository;
     private final CareworkerRepository careWorkerRepository;
+    private final InstitutionRepository institutionRepository;
 
-    /*
-    @Override
-    public BaseUserDetails loadUserByUsername(String username) {
-
-        var spliter = username.split("_");
-        String userId = spliter[0];
-        Role role = Role.valueOf(spliter[1].toUpperCase());
+    public BaseUserDetails loadUserByUsernameAndRole(String username, Role role) {
 
         if (role == Role.GUARDIAN) {
-            return getGuadianDetails(userId);
-        }
-        if (role == Role.ADMIN) {
-            return getAdminDetails(userId);
+            return getGuadianDetails(username);
         }
         if (role == Role.CAREWORKER) {
-            return getCareWorkerDetails(userId);
+            return getCareWorkerDetails(username);
+        }
+        if (role == Role.INSTITUTION) {
+            return getInstitutionDetails(username);
+        }
+        if (role == Role.ADMIN) {
+            return getAdminDetails(username);
         }
 
         throw new ApplicationException(ApplicationError.ROLE_NOT_FOUND);
     }
 
-     */
-
-    public BaseUserDetails loadUserByUsernameAndRole(String username, Role role) {
-        if (role == Role.GUARDIAN) {
-            log.debug("보호자 username : {}",username);
-            return getGuadianDetails(username);
-        }
-        if (role == Role.ADMIN) {
-            return getAdminDetails(username);
-        }
-        if (role == Role.CAREWORKER) {
-            return getCareWorkerDetails(username);
+    private BaseUserDetails getInstitutionDetails(String userId) {
+        if (!institutionRepository.existsByInstitutionNumber(Long.parseLong(userId))) {
+            throw new ApplicationException(ApplicationError.INSTITUTION_NOT_FOUND);
         }
 
-        throw new ApplicationException(ApplicationError.ROLE_NOT_FOUND);
+        Institution institution = institutionRepository.findByInstitutionNumber(
+            Long.parseLong(userId));
+
+        return securityRegister(institution.getId(), institution.getInstitutionNumber().toString(),
+            institution.getLoginPassword(), Role.INSTITUTION);
     }
 
     private BaseUserDetails getCareWorkerDetails(String userId) {
 
         Careworker careWorker = careWorkerRepository.findByPhone(userId)
             .orElseThrow(() -> new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND));
-        return securityRegister(careWorker.getId(),careWorker.getPhone(), careWorker.getLoginPassword(), Role.CAREWORKER);
+        return securityRegister(careWorker.getId(), careWorker.getPhone(),
+            careWorker.getLoginPassword(), Role.CAREWORKER);
     }
 
     private BaseUserDetails getAdminDetails(String username) {
@@ -76,17 +72,19 @@ public class BaseUserDetailsService {
     }
 
     private BaseUserDetails getGuadianDetails(String userId) {
-        log.debug("보호자 userId : {}",userId);
+        log.debug("보호자 userId : {}", userId);
         Guardian guardian = guardianRepository.findByPhone(userId)
             .orElseThrow(() -> new ApplicationException(ApplicationError.GUARDIAN_NOT_FOUND));
 
-        return securityRegister(guardian.getId(),guardian.getPhone(), guardian.getLoginPassword(), Role.GUARDIAN);
+        return securityRegister(guardian.getId(), guardian.getPhone(), guardian.getLoginPassword(),
+            Role.GUARDIAN);
     }
 
-    private BaseUserDetails securityRegister(Long id,String username,String password,Role role) {
+    private BaseUserDetails securityRegister(Long id, String username, String password, Role role) {
         BaseUserDetails userDetails = BaseUserDetails.builder().id(id).username(username)
             .password(password).role(role.name()).build();
-        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(),
+        Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails,
+            userDetails.getPassword(),
             userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return userDetails;
