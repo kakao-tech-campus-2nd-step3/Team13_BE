@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/${spring.app.version}/guardian")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyAuthority('GUARDIAN','ADMIN')")
 public class GuardianController {
 
     private final GuardianService guardianService;

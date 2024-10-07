@@ -54,13 +54,11 @@ public class SecurityConfig {
 
             .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
             .authenticationProvider(baseAuthenticationProvider())
-
             .authorizeHttpRequests((authorize) -> {
                 authorize
                     .requestMatchers("/*/login/*").permitAll()
                     .anyRequest().authenticated();
             })
-
             .exceptionHandling((exception) -> exception
             .accessDeniedHandler((request, response, accessDeniedException) -> {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "접근 거부");
