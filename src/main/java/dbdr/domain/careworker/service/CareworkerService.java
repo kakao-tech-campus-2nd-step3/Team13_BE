@@ -84,7 +84,7 @@ public class CareworkerService {
     }
 
     private void phoneExists(String phone) {
-        if (careworkerRepository.existsByPhone(phone)) {
+        if (careworkerRepository.findByPhone(phone).isPresent()) {
             throw new ApplicationException(ApplicationError.DUPLICATE_PHONE);
         }
     }

@@ -6,8 +6,8 @@ import dbdr.domain.guardian.entity.Guardian;
 import dbdr.domain.guardian.repository.GuardianRepository;
 import dbdr.domain.institution.entity.Institution;
 import dbdr.domain.institution.repository.InstitutionRepository;
-import dbdr.exception.ApplicationError;
-import dbdr.exception.ApplicationException;
+import dbdr.global.exception.ApplicationError;
+import dbdr.global.exception.ApplicationException;
 import dbdr.security.dto.BaseUserDetails;
 import dbdr.security.Role;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Service;
 
 @Service

@@ -1,4 +1,4 @@
-package dbdr.security.service;
+package dbdr.security;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

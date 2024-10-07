@@ -1,7 +1,7 @@
 package dbdr.security.controller;
 
-import dbdr.exception.ApplicationError;
-import dbdr.exception.ApplicationException;
+import dbdr.global.exception.ApplicationError;
+import dbdr.global.exception.ApplicationException;
 import dbdr.security.Role;
 import dbdr.security.dto.LoginRequest;
 import dbdr.security.service.LoginService;
