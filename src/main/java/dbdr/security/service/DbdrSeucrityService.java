@@ -1,33 +1,54 @@
 package dbdr.security.service;
 
-import dbdr.security.Role;
-import dbdr.security.dto.BaseUserDetails;
-import org.springframework.security.core.Authentication;
+import dbdr.domain.careworker.repository.CareworkerRepository;
+import dbdr.domain.chart.repository.ChartRepository;
+import dbdr.domain.core.base.entity.BaseEntity;
+import dbdr.domain.guardian.repository.GuardianRepository;
+import dbdr.domain.institution.repository.InstitutionRepository;
+import dbdr.domain.recipient.repository.RecipientRepository;
+import dbdr.security.model.AuthParam;
+import dbdr.security.model.DbdrAcess;
+import dbdr.security.model.Role;
+import dbdr.security.model.BaseUserDetails;
+import jakarta.validation.constraints.NotNull;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class DbdrSeucrityService {
 
-    //
-    public boolean hasRole(String role, String institutionId) {
+    private final InstitutionRepository institutionRepository;
+    private final CareworkerRepository careworkerRepository;
+    private final GuardianRepository guardianRepository;
+    private final ChartRepository chartRepository;
+    private final RecipientRepository recipientRepository;
 
-        if(Role.valueOf(role) == Role.ADMIN){
-            return true;
-        }
+    private final DbdrAcess dbdrAcess;
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+    public boolean hasAcesssPermission(Role role, @NotNull AuthParam type, String id) {
 
-        BaseUserDetails baseUserDetails = (BaseUserDetails) authentication.getPrincipal();
+        BaseUserDetails baseUserDetails = (BaseUserDetails) SecurityContextHolder.getContext()
+            .getAuthentication().getPrincipal();
 
-        //같은 요양원 번호에서는 접근 가능
-        if(baseUserDetails.getInstitutionNumber()==Long.parseLong(institutionId)){
-            //TODO : careworker일 경우 본인 담당만 조회 ok
-            if(Role.valueOf(role)==Role.INSTITUTION){
-                return true;
-            }
-        }
+        return dbdrAcess.hasAccessPermission(baseUserDetails,
+            findEntity(type, Long.parseLong(id))); //TODO : id가 long이 아닌 경우 처리
 
-        return false;
     }
+
+    private BaseEntity findEntity(AuthParam type, long id) {
+        return switch (type) {
+            case INSTITUTION_ID -> institutionRepository.findById(id).orElse(null);
+            case CAREWORKER_ID -> careworkerRepository.findById(id).orElse(null);
+            case GUARDIAN_ID -> guardianRepository.findById(id).orElse(null);
+            case CHART_ID -> chartRepository.findById(id).orElse(null);
+            case RECIPIENT_ID -> recipientRepository.findById(id).orElse(null);
+            default -> null;
+        };
+    }
+
+
 }
