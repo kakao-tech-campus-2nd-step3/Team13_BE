@@ -1,7 +1,5 @@
 package dbdr.security.service;
 
-import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
-import dbdr.domain.guardian.dto.request.GuardianRequest;
 import dbdr.security.Role;
 import dbdr.security.dto.BaseUserDetails;
 import dbdr.security.dto.LoginRequest;
@@ -21,18 +19,18 @@ public class LoginService {
 
     private final JwtProvider jwtProvider;
 
-    private final Long jwtExpiration;
+    @Value("${spring.jwt.expiration}")
+    private Long jwtExpiration;
 
-    public LoginService(AuthenticationManagerBuilder authenticationManagerBuilder, JwtProvider jwtProvider, @Value("${spring.jwt.jwtexpiration}") Long jwtExpiration) {
+    public LoginService(AuthenticationManagerBuilder authenticationManagerBuilder, JwtProvider jwtProvider) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.jwtProvider = jwtProvider;
-        this.jwtExpiration = jwtExpiration;
     }
 
     @Transactional
     public String login(Role role, LoginRequest loginRequest) {
         BaseUserDetails userDetails = BaseUserDetails.builder()
-            .username(loginRequest.userId())
+            .userLoginId(loginRequest.userId())
             .password(loginRequest.password())
             .role(role.name())
             .build();

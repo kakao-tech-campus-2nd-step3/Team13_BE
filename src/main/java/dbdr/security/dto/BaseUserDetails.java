@@ -17,7 +17,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 public class BaseUserDetails implements UserDetails {
 
     private final Long id; //db pk
-    private final String username; //로그인 시 사용할 id
+    private final String userLoginId; //로그인 시 사용할 id
     private final String password;
     private final String role; //권한
     private final Long institutionNumber; //기관번호
@@ -36,10 +36,10 @@ public class BaseUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return userLoginId;
     }
 
-    public Role getRole(){
+    public Role getRole() {
         return Role.valueOf(role);
     }
 

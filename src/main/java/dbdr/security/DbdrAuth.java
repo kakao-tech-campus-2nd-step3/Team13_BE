@@ -12,6 +12,4 @@ import org.springframework.security.access.prepost.PreAuthorize;
 public @interface DbdrAuth {
     String role() default "";
     String institutionId() default "";
-
-
 }

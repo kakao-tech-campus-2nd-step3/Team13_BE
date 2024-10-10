@@ -25,10 +25,10 @@ public class BaseAuthenticationProvider implements AuthenticationProvider {
         // Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         BaseUserDetails unAuthUser = (BaseUserDetails) authentication.getPrincipal();
-        BaseUserDetails authUser = baseUserDetailsService.loadUserByUsernameAndRole(unAuthUser.getUsername(), unAuthUser.getRole());
+        BaseUserDetails authUser = baseUserDetailsService.loadUserByUsernameAndRole(unAuthUser.getUserLoginId(), unAuthUser.getRole());
 
 
-        log.debug("unAuthUser : 검사시작 {}", unAuthUser.getUsername());
+        log.debug("unAuthUser : 검사시작 {}", unAuthUser.getUserLoginId());
         //비밀번호 일치 확인
         if (!passwordEncoder.matches(unAuthUser.getPassword(), authUser.getPassword())) {
             throw new ApplicationException(ApplicationError.PASSWORD_NOT_MATCH);
