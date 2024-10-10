@@ -4,6 +4,7 @@ import dbdr.security.Role;
 import java.util.ArrayList;
 import java.util.Collection;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 @RequiredArgsConstructor
 @Builder
+@Getter
 @Slf4j
 public class BaseUserDetails implements UserDetails {
 
@@ -19,8 +21,6 @@ public class BaseUserDetails implements UserDetails {
     private final String password;
     private final String role; //권한
     private final Long institutionNumber; //기관번호
-
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -41,16 +41,6 @@ public class BaseUserDetails implements UserDetails {
 
     public Role getRole(){
         return Role.valueOf(role);
-    }
-
-    public Long getId(){
-        //TODO : NULL CHECK
-        return id;
-    }
-
-    public Long getInstitutionNumber(){
-        //TODO : NULL CHECK
-        return institutionNumber;
     }
 
 }
