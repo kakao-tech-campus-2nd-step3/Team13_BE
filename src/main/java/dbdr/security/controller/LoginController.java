@@ -2,7 +2,7 @@ package dbdr.security.controller;
 
 import dbdr.global.exception.ApplicationError;
 import dbdr.global.exception.ApplicationException;
-import dbdr.security.Role;
+import dbdr.security.model.Role;
 import dbdr.security.dto.LoginRequest;
 import dbdr.security.service.LoginService;
 import jakarta.validation.Valid;

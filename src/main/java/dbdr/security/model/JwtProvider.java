@@ -1,9 +1,8 @@
-package dbdr.security.service;
+package dbdr.security.model;
 
 import dbdr.global.exception.ApplicationError;
 import dbdr.global.exception.ApplicationException;
-import dbdr.security.Role;
-import dbdr.security.dto.BaseUserDetails;
+import dbdr.security.service.BaseUserDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import java.nio.charset.StandardCharsets;

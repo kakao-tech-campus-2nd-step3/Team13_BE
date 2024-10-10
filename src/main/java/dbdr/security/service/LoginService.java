@@ -1,9 +1,8 @@
 package dbdr.security.service;
 
-import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
-import dbdr.domain.guardian.dto.request.GuardianRequest;
-import dbdr.security.Role;
-import dbdr.security.dto.BaseUserDetails;
+import dbdr.security.model.JwtProvider;
+import dbdr.security.model.Role;
+import dbdr.security.model.BaseUserDetails;
 import dbdr.security.dto.LoginRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

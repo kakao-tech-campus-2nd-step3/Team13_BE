@@ -1,24 +1,21 @@
-package dbdr.security.dto;
+package dbdr.security.model;
 
-import dbdr.security.Role;
 import java.util.ArrayList;
 import java.util.Collection;
 import lombok.Builder;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @RequiredArgsConstructor
 @Builder
-@Slf4j
 public class BaseUserDetails implements UserDetails {
 
     private final Long id; //db pk
     private final String username; //로그인 시 사용할 id
     private final String password;
     private final String role; //권한
-    private final Long institutionNumber; //기관번호
+    private final Long institutionId;
 
 
 
@@ -48,9 +45,9 @@ public class BaseUserDetails implements UserDetails {
         return id;
     }
 
-    public Long getInstitutionNumber(){
+    public Long getInstitutionId(){
         //TODO : NULL CHECK
-        return institutionNumber;
+        return institutionId;
     }
 
 }
