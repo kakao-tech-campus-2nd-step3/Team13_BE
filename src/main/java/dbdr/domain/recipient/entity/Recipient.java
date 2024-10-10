@@ -27,22 +27,22 @@ public class Recipient extends BaseEntity {
     @Column(nullable = false)
     private LocalDate birth;
 
-    @Column(nullable = false)
+    @Column
     private String gender;
 
-    @Column(nullable = false)
+    @Column
     private String careLevel;
 
     @Column(nullable = false, unique = true)
     private String careNumber;
 
-    @Column(nullable = false)
+    @Column
     private LocalDate startDate;
 
-    @Column(nullable = false)
+    @Column
     private String institution;
 
-    @Column(nullable = false)
+    @Column
     private Long institutionNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
