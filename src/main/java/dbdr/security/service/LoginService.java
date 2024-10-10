@@ -31,7 +31,7 @@ public class LoginService {
     @Transactional
     public String login(Role role, LoginRequest loginRequest) {
         BaseUserDetails userDetails = BaseUserDetails.builder()
-            .username(loginRequest.userId())
+            .userLoginId(loginRequest.userId())
             .password(loginRequest.password())
             .role(role.name())
             .build();

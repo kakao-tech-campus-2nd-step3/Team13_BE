@@ -1,6 +1,6 @@
 package dbdr.security.model;
 
-import dbdr.security.Role;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import lombok.Builder;

@@ -3,6 +3,9 @@ package dbdr.domain.guardian.controller;
 import dbdr.domain.guardian.dto.request.GuardianRequest;
 import dbdr.domain.guardian.dto.response.GuardianResponse;
 import dbdr.domain.guardian.service.GuardianService;
+import dbdr.security.model.AuthParam;
+import dbdr.security.model.DbdrAuth;
+import dbdr.security.model.Role;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +32,7 @@ public class GuardianInstitutionController {
         List<GuardianResponse> guardianResponseList = guardianService.getAllGuardian();
         return ResponseEntity.ok(guardianResponseList);
     }
-
+    @DbdrAuth(role = Role.INSTITUTION,type= AuthParam.GUARDIAN_ID,id="#guardianId")
     @GetMapping("/{guardianId}")
     public ResponseEntity<GuardianResponse> showOneGuardian(
         @PathVariable("guardianId") Long guardianId) {
