@@ -63,7 +63,6 @@ public class SecurityConfig {
                 response.sendError(HttpServletResponse.SC_FORBIDDEN, "접근 거부");
             })
             .authenticationEntryPoint((request, response, authException) -> {
-                log.debug("인증 실패: {}", authException.getMessage());
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증 실패");
             }));
         return http.build();

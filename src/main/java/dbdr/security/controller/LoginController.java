@@ -19,24 +19,20 @@ import org.springframework.web.bind.annotation.RestController;
 public class LoginController {
 
     private final LoginService loginService;
-
     private final String authHeader;
 
-    public LoginController(LoginService loginService, @Value("${spring.jwt.authheader}") String authHeader) {
+    public LoginController(LoginService loginService,
+        @Value("${spring.jwt.authheader}") String authHeader) {
         this.loginService = loginService;
         this.authHeader = authHeader;
     }
 
     @PostMapping("/{role}")
-    public ResponseEntity<Void> login(@PathVariable("role") String role, @RequestBody @Valid LoginRequest loginRequest) {
-
+    public ResponseEntity<Void> login(@PathVariable("role") String role,
+        @RequestBody @Valid LoginRequest loginRequest) {
         Role roleEnum = roleCheck(role);
-
         String token = loginService.login(roleEnum, loginRequest);
-
-        return ResponseEntity.ok().header(authHeader,token).build();
-
-
+        return ResponseEntity.ok().header(authHeader, token).build();
     }
 
     private Role roleCheck(String role) {
@@ -46,5 +42,4 @@ public class LoginController {
             throw new ApplicationException(ApplicationError.ROLE_NOT_FOUND);
         }
     }
-
 }

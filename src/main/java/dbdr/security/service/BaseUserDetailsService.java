@@ -80,11 +80,10 @@ public class BaseUserDetailsService {
     }
 
     private BaseUserDetails securityRegister(Long id, String username, String password, Role role) {
-        BaseUserDetails userDetails = BaseUserDetails.builder().id(id).username(username)
+        BaseUserDetails userDetails = BaseUserDetails.builder().id(id).userLoginId(username)
             .password(password).role(role.name()).build();
         Authentication authentication = new UsernamePasswordAuthenticationToken(userDetails,
-            userDetails.getPassword(),
-            userDetails.getAuthorities());
+            userDetails.getPassword(), userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return userDetails;
     }

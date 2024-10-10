@@ -1,23 +1,24 @@
 package dbdr.security.model;
 
+import dbdr.security.Role;
 import java.util.ArrayList;
 import java.util.Collection;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @RequiredArgsConstructor
 @Builder
+@Getter
 public class BaseUserDetails implements UserDetails {
 
     private final Long id; //db pk
-    private final String username; //로그인 시 사용할 id
+    private final String userLoginId; //로그인 시 사용할 id
     private final String password;
     private final String role; //권한
     private final Long institutionId;
-
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -33,21 +34,10 @@ public class BaseUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return userLoginId;
     }
 
-    public Role getRole(){
+    public Role getRole() {
         return Role.valueOf(role);
     }
-
-    public Long getId(){
-        //TODO : NULL CHECK
-        return id;
-    }
-
-    public Long getInstitutionId(){
-        //TODO : NULL CHECK
-        return institutionId;
-    }
-
 }
