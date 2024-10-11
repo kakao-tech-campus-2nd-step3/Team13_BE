@@ -40,6 +40,9 @@ public class Guardian extends BaseEntity {
     @Column(nullable = true)
     private LocalTime alertTime;
 
+    @Column(nullable = false) //TODO : 한 보호자가 여러기관에 id를 가지고 있다면?
+    private Long institutionId;
+
     @Builder
     public Guardian(String phone, String name) {
         this.phone = phone;
