@@ -6,7 +6,4 @@ spring :
       - optional:application-secret.yml
   app:
     version: v1
-  jwt:
-    secret: testsecretabcdefghijklmnopqrstuvwxyzabcdefghijklmnopqrstuvwxyz
-    jwtexpiration: 86400000
-    authheader: Authorization
+
