@@ -35,7 +35,7 @@ public class Careworker extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @Column(nullable = false)
+    @Column
     private Long institutionId;
 
     @Column(nullable = true)
@@ -44,7 +44,7 @@ public class Careworker extends BaseEntity {
     @Column(nullable = true)
     private LocalTime alertTime;
 
-    @Column(nullable = false, unique = true)
+    @Column(unique = true)
     private String email;
 
     @Builder

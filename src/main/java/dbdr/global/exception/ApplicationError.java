@@ -11,6 +11,8 @@ public enum ApplicationError {
     //Auth
     ROLE_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 유저가 ROLE을 가지고 있지 않습니다."),
     ACCESS_NOT_ALLOWED(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
+    TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
+    PASSWORD_NOT_MATCH(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
 
     // Guardian (보호자)
     GUARDIAN_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 보호자를 찾을 수가 없습니다."),
@@ -30,6 +32,7 @@ public enum ApplicationError {
     DUPLICATE_CARE_NUMBER(HttpStatus.CONFLICT, "이미 존재하는 장기요양번호입니다."),
     DUPLICATE_INSTITUTION_NUMBER(HttpStatus.CONFLICT, "이미 존재하는 요양기관번호입니다."),
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "잘못된 입력값입니다."),
+    INVALID_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "잘못된 입력입니다. 010XXXXXXXX 형식으로 입력해주세요."),
 
     // 시스템
     DATABASE_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "데이터베이스 처리 중 오류가 발생했습니다."),
@@ -40,7 +43,11 @@ public enum ApplicationError {
     EVENT_ARRAY_NOT_FOUND(HttpStatus.NOT_FOUND, "events 배열을 찾을 수가 없습니다."),
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 사용자를 찾을 수가 없습니다."),
     MESSAGE_SEND_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "메시지 전송에 실패했습니다."),
-    FAILED_TO_GET_USER_PROFILE(HttpStatus.INTERNAL_SERVER_ERROR, "사용자 프로필을 가져오는데 실패했습니다.");
+    FAILED_TO_GET_USER_PROFILE(HttpStatus.INTERNAL_SERVER_ERROR, "사용자 프로필을 가져오는데 실패했습니다."),
+
+    //엑셀 파일
+    FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드 중 오류가 발생했습니다."),
+    FILE_DOWNLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 다운로드 중 오류가 발생했습니다.");
 
     private final HttpStatus status;
     private final String message;
