@@ -1,6 +1,5 @@
 package dbdr.security.model;
 
-import static org.junit.jupiter.api.Assertions.*;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import dbdr.security.service.BaseUserDetailsService;
@@ -35,7 +34,7 @@ class JwtProviderTest {
         Long expireTime = 1000L;
 
         //when
-        String token = jwtProvider.createToken(username, role, expireTime);
+        String token = jwtProvider.createAccessToken(username, role, expireTime);
 
         //then
         assertThat(token).isNotNull();
@@ -47,7 +46,7 @@ class JwtProviderTest {
         String username = "asdf";
         String role = "testRole";
         Long expireTime = 1000L;
-        String token = jwtProvider.createToken(username, role, expireTime);
+        String token = jwtProvider.createAccessToken(username, role, expireTime);
 
         //when
         String result = jwtProvider.getUserName(token);
@@ -62,7 +61,7 @@ class JwtProviderTest {
         String username = "asdf";
         String role = "testRole";
         Long expireTime = 1000L;
-        String token = jwtProvider.createToken(username, role, expireTime);
+        String token = jwtProvider.createAccessToken(username, role, expireTime);
 
         //when
         String result = jwtProvider.getRole(token);
@@ -77,7 +76,7 @@ class JwtProviderTest {
         String username = "asdf";
         String role = "testRole";
         Long expireTime = 1000L;
-        String token = jwtProvider.createToken(username, role, expireTime);
+        String token = jwtProvider.createAccessToken(username, role, expireTime);
 
         //when
         boolean result = jwtProvider.isExpired(token);
@@ -92,7 +91,7 @@ class JwtProviderTest {
         String username = "asdf";
         String role = "ADMIN";
         Long expireTime = 10000L;
-        String token = jwtProvider.createToken(username, role, expireTime);
+        String token = jwtProvider.createAccessToken(username, role, expireTime);
 
         Mockito.doAnswer(invocation -> {
             String username1 = invocation.getArgument(0);

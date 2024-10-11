@@ -39,7 +39,7 @@ public class LoginService {
         UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails, loginRequest.password());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        return jwtProvider.createToken(authentication.getName(), role.name(), jwtExpiration);
+        return jwtProvider.createAccessToken(authentication.getName(), role.name(), jwtExpiration);
     }
 
 }

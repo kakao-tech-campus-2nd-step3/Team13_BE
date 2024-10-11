@@ -51,8 +51,8 @@ public class SecurityConfig {
             .sessionManagement(
                 (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-            .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
-            .authenticationProvider(baseAuthenticationProvider())
+            .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class) //jwt 필터 추가
+            .authenticationProvider(baseAuthenticationProvider()) //인증 프로바이더 추가
             .authorizeHttpRequests((authorize) -> {
                 authorize
                     .requestMatchers("/*/login/*").permitAll()
