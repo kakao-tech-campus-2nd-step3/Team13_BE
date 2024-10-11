@@ -21,19 +21,13 @@ public class BaseAuthenticationProvider implements AuthenticationProvider {
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-        // 로그인 시도에서 해당 부분에 의해서 호출됨
-        // Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
         BaseUserDetails unAuthUser = (BaseUserDetails) authentication.getPrincipal();
         BaseUserDetails authUser = baseUserDetailsService.loadUserByUsernameAndRole(unAuthUser.getUserLoginId(), unAuthUser.getRole());
 
-
-        log.debug("unAuthUser : 검사시작 {}", unAuthUser.getUserLoginId());
-        //비밀번호 일치 확인
         if (!passwordEncoder.matches(unAuthUser.getPassword(), authUser.getPassword())) {
             throw new ApplicationException(ApplicationError.PASSWORD_NOT_MATCH);
         }
-
         return new UsernamePasswordAuthenticationToken(authUser, authUser.getPassword(), authUser.getAuthorities());
     }
 
