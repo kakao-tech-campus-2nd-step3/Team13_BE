@@ -54,8 +54,7 @@ public class GuardianInstitutionController {
     }
 
     @DeleteMapping("/{guardianId}")
-    public ResponseEntity<Void> deleteGuardian(
-        @PathVariable("guardianId") Long guardianId) {
+    public ResponseEntity<Void> deleteGuardian(@PathVariable("guardianId") Long guardianId) {
         guardianService.deleteGuardianById(guardianId);
         return ResponseEntity.noContent().build();
     }
