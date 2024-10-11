@@ -1,9 +1,12 @@
 package dbdr.security.model;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
-import dbdr.domain.core.base.entity.BaseEntity;
+import dbdr.domain.careworker.entity.Careworker;
+import dbdr.domain.chart.entity.Chart;
 import dbdr.domain.guardian.entity.Guardian;
+import dbdr.domain.institution.entity.Institution;
 import org.junit.jupiter.api.Test;
 
 class DbdrAcessTest {
@@ -23,15 +26,66 @@ class DbdrAcessTest {
 
         DbdrAcess dbdrAcess = new DbdrAcess();
 
-        Guardian guardian = Guardian.builder()
+        Guardian guardian = new Guardian("123", "123");
+        Careworker careworker = new Careworker(1L, "123","ee","123");
+        Institution institution = new Institution(1L, "123");
+        //when
+        boolean resultGuardian = dbdrAcess.hasAccessPermission(userDetails, guardian);
+        boolean resultCareworker = dbdrAcess.hasAccessPermission(userDetails, careworker);
+        boolean resultInstitution = dbdrAcess.hasAccessPermission(userDetails, institution);
+        boolean resultChart  = dbdrAcess.hasAccessPermission(userDetails, new Chart());
+
+        //then
+        assertThat(resultGuardian).isTrue();
+        assertThat(resultCareworker).isTrue();
+        assertThat(resultInstitution).isTrue();
+        assertThat(resultChart).isTrue();
+    }
+    @Test
+    void Careworker는_Guardian_접근불가(){
+        //given
+        BaseUserDetails userDetails = BaseUserDetails.builder()
             .id(1L)
+            .userLoginId("careworker")
+            .password("careworker")
+            .role("CAREWORKER")
             .institutionId(1L)
             .build();
 
+        DbdrAcess dbdrAcess = new DbdrAcess();
+
+        Guardian guardian = new Guardian("123", "123");
+
         //when
-        boolean result = dbdrAcess.hasAccessPermission(userDetails, baseEntity);
+        boolean resultGuardian = dbdrAcess.hasAccessPermission(userDetails, guardian);
 
         //then
-        assertTrue(result);
+        assertThat(resultGuardian).isFalse();
     }
+
+    @Test
+    void Careworker는_접근자가_요양원ID같아야_접근가능(){
+        //given
+        BaseUserDetails userDetails = BaseUserDetails.builder()
+            .id(1L)
+            .userLoginId("careworker")
+            .password("careworker")
+            .role("CAREWORKER")
+            .institutionId(1L)
+            .build();
+
+        DbdrAcess dbdrAcess = new DbdrAcess();
+
+        Careworker careworker = new Careworker(1L, "123","ee","123");
+        Careworker careworker2 = new Careworker(2L, "123","ee","123");
+
+        //when
+        boolean resultCareworker = dbdrAcess.hasAccessPermission(userDetails, careworker);
+        boolean resultCareworker2 = dbdrAcess.hasAccessPermission(userDetails, careworker2);
+
+        //then
+        assertThat(resultCareworker).isTrue();
+        assertThat(resultCareworker2).isFalse();
+    }
+
 }
