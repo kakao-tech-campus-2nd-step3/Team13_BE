@@ -4,8 +4,8 @@ import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
 import dbdr.domain.careworker.dto.response.CareworkerResponseDTO;
 import dbdr.domain.careworker.repository.CareworkerRepository;
-import dbdr.exception.IdNotFoundException;
-import dbdr.exception.NotUniqueException;
+import dbdr.global.exception.ApplicationError;
+import dbdr.global.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.stereotype.Service;
@@ -41,6 +41,7 @@ public class CareworkerService {
     @Transactional
     public CareworkerResponseDTO createCareworker(CareworkerRequestDTO careworkerRequestDTO) {
         emailExists(careworkerRequestDTO.getEmail());
+        phoneExists(careworkerRequestDTO.getPhone());
 
         Careworker careworker = new Careworker(careworkerRequestDTO.getInstitutionId(),
             careworkerRequestDTO.getName(), careworkerRequestDTO.getEmail(),
@@ -53,6 +54,7 @@ public class CareworkerService {
     public CareworkerResponseDTO updateCareworker(Long id,
         CareworkerRequestDTO careworkerRequestDTO) {
         emailExists(careworkerRequestDTO.getEmail());
+        phoneExists(careworkerRequestDTO.getPhone());
 
         Careworker careworker = findCareworkerById(id);
 
@@ -71,17 +73,32 @@ public class CareworkerService {
 
     private Careworker findCareworkerById(Long id) {
         return careworkerRepository.findById(id)
-            .orElseThrow(() -> new IdNotFoundException("요양보호사를 찾을 수 없습니다."));
+            .orElseThrow(() -> new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND));
+
     }
 
     private void emailExists(String email) {
         if (careworkerRepository.existsByEmail(email)) {
-            throw new NotUniqueException("존재하는 이메일입니다.");
+            throw new ApplicationException(ApplicationError.DUPLICATE_EMAIL);
+        }
+    }
+
+    private void phoneExists(String phone) {
+        if (careworkerRepository.findByPhone(phone).isPresent()) {
+            throw new ApplicationException(ApplicationError.DUPLICATE_PHONE);
         }
     }
 
     private CareworkerResponseDTO toResponseDTO(Careworker careworker) {
         return new CareworkerResponseDTO(careworker.getId(), careworker.getInstitutionId(),
             careworker.getName(), careworker.getEmail(), careworker.getPhone());
+    }
+
+    public Careworker findByLineUserId(String userId) {
+        return careworkerRepository.findByLineUserId(userId).orElse(null);
+    }
+
+    public Careworker findByPhone(String phoneNumber) {
+        return careworkerRepository.findByPhone(phoneNumber).orElse(null);
     }
 }

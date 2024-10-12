@@ -18,9 +18,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/${spring.app.version}/admin/guardian")
+@RequestMapping("/${spring.app.version}/institution/guardian")
 @RequiredArgsConstructor
-public class GuardianAdminController {
+public class GuardianInstitutionController {
 
     private final GuardianService guardianService;
 
@@ -54,8 +54,7 @@ public class GuardianAdminController {
     }
 
     @DeleteMapping("/{guardianId}")
-    public ResponseEntity<Void> deleteGuardian(
-        @PathVariable("guardianId") Long guardianId) {
+    public ResponseEntity<Void> deleteGuardian(@PathVariable("guardianId") Long guardianId) {
         guardianService.deleteGuardianById(guardianId);
         return ResponseEntity.noContent().build();
     }

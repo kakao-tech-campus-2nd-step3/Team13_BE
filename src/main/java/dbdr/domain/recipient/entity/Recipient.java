@@ -1,11 +1,10 @@
 package dbdr.domain.recipient.entity;
 
-import dbdr.domain.core.entity.BaseEntity;
+import dbdr.domain.core.base.entity.BaseEntity;
 import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.recipient.dto.request.RecipientRequestDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,22 +27,22 @@ public class Recipient extends BaseEntity {
     @Column(nullable = false)
     private LocalDate birth;
 
-    @Column(nullable = false)
+    @Column
     private String gender;
 
-    @Column(nullable = false)
+    @Column
     private String careLevel;
 
     @Column(nullable = false, unique = true)
     private String careNumber;
 
-    @Column(nullable = false)
+    @Column
     private LocalDate startDate;
 
-    @Column(nullable = false)
+    @Column
     private String institution;
 
-    @Column(nullable = false)
+    @Column
     private Long institutionNumber;
 
     @ManyToOne(fetch = FetchType.LAZY)
