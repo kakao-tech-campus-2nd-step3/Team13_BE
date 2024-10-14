@@ -6,3 +6,4 @@ spring :
       - optional:application-secret.yml
   app:
     version: v1
+
