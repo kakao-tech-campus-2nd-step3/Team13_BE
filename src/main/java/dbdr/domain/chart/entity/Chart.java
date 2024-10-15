@@ -3,6 +3,7 @@ package dbdr.domain.chart.entity;
 
 import dbdr.domain.core.base.entity.BaseEntity;
 import dbdr.domain.recipient.entity.Recipient;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -33,19 +34,19 @@ public class Chart extends BaseEntity {
     @Column(nullable = false, length = 500)
     private String conditionDisease;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "body_management_id")
     private BodyManagement bodyManagement;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "nursing_management_id")
     private NursingManagement nursingManagement;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "recovery_training_id")
     private RecoveryTraining recoveryTraining;
 
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "cognitive_management_id")
     private CognitiveManagement cognitiveManagement;
 
