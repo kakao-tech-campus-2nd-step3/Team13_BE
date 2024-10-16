@@ -8,7 +8,6 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -17,7 +16,6 @@ import java.util.List;
 @RestController
 @RequestMapping("/${spring.app.version}/careworker")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyAuthority('ADMIN')")
 public class CareworkerController {
 
     private final CareworkerService careworkerService;

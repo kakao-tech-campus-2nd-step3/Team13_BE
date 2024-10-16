@@ -11,12 +11,13 @@ public interface CareworkerRepository extends JpaRepository<Careworker, Long> {
 
     List<Careworker> findByInstitutionId(Long institutionId);
 
-    boolean existsByEmail(String email);
-
     Optional<Careworker> findByLineUserId(String userId);
 
     List<Careworker> findByAlertTime(LocalTime currentTime);
 
 	Optional<Careworker> findByPhone(String phoneNumber);
-    boolean existsByPhone(String phone);
+
+    boolean ensureUniqueEmail(String email);
+
+    boolean ensureUniquePhone(String phone);
 }

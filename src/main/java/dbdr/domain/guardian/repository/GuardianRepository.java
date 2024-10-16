@@ -10,7 +10,7 @@ import dbdr.domain.guardian.entity.Guardian;
 
 public interface GuardianRepository extends JpaRepository<Guardian, Long> {
 
-    boolean existsByPhone(String phone);
+    boolean ensureUniquePhone(String phone);
 
     Optional<Guardian> findByLineUserId(String userId);
 
