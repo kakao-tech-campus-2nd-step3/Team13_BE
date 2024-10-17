@@ -82,7 +82,7 @@ public class ExcelUploadService {
 
         try {
             checkDuplicate(seenPhones, phone, ApplicationError.DUPLICATE_PHONE);
-            validatePhone(phone, careworkerRepository.existsByPhone(phone));
+            validatePhone(phone, careworkerRepository.ensureUniquePhone(phone));
             seenPhones.add(phone);
 
             Careworker careworker = Careworker.builder()
@@ -104,7 +104,7 @@ public class ExcelUploadService {
 
         try {
             checkDuplicate(seenPhones, phone, ApplicationError.DUPLICATE_PHONE);
-            validatePhone(phone, guardianRepository.existsByPhone(phone));
+            validatePhone(phone, guardianRepository.ensureUniquePhone(phone));
             seenPhones.add(phone);
 
             Guardian guardian = Guardian.builder()
@@ -127,7 +127,7 @@ public class ExcelUploadService {
 
         try {
             checkDuplicate(seenCareNumbers, careNumber, ApplicationError.DUPLICATE_CARE_NUMBER);
-            validateCareNumber(careNumber, recipientRepository.existsByCareNumber(careNumber));
+            validateCareNumber(careNumber, recipientRepository.ensureUniqueCareNumber(careNumber));
             seenCareNumbers.add(careNumber);
 
             Recipient recipient = Recipient.builder()

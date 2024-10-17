@@ -56,7 +56,7 @@ public class InstitutionService {
     }
 
     private void institutionIdExists(Long institutionNumber) {
-        if (institutionRepository.existsByInstitutionNumber(institutionNumber)) {
+        if (institutionRepository.ensureUniqueInstitutionNumber(institutionNumber)) {
             throw new ApplicationException(ApplicationError.DUPLICATE_INSTITUTION_NUMBER);
         }
     }
