@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -39,29 +40,29 @@ public class CareWorkerChartController {
     }
 
     @GetMapping("/{chartId}")
-    public ResponseEntity<ApiUtils.ApiResult<ChartDetailResponse>> getChartById(@PathVariable Long chartId) {
+    public ResponseEntity<ApiUtils.ApiResult<ChartDetailResponse>> getChartById(@PathVariable("chartId") Long chartId) {
         // 환자 정보 접근 권한 확인 로직 필요 -> 요양사가 맡은 환자 정보만 조회 가능
         ChartDetailResponse chart = chartService.getChartById(chartId);
         return ResponseEntity.ok(ApiUtils.success(chart));
     }
 
     @PostMapping
-    public ResponseEntity<ApiUtils.ApiResult<ChartDetailResponse>> saveChart(ChartDetailRequest request) {
+    public ResponseEntity<ApiUtils.ApiResult<ChartDetailResponse>> saveChart(@RequestBody ChartDetailRequest request) {
         // 환자 정보 접근 권한 확인 로직 필요 -> 요양사가 맡은 환자 정보만 저장 가능
         ChartDetailResponse chart = chartService.saveChart(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiUtils.success(chart));
     }
 
     @PutMapping("/{chartId}")
-    public ResponseEntity<ApiUtils.ApiResult<ChartDetailResponse>> updateChart(@PathVariable Long chartId,
-                                                                               ChartDetailRequest request) {
+    public ResponseEntity<ApiUtils.ApiResult<ChartDetailResponse>> updateChart(@PathVariable("chartId") Long chartId,
+        @RequestBody ChartDetailRequest request) {
         // 환자 정보 접근 권한 확인 로직 필요 -> 요양사가 맡은 환자 정보만 수정 가능
         ChartDetailResponse chart = chartService.updateChart(chartId, request);
         return ResponseEntity.ok(ApiUtils.success(chart));
     }
 
     @DeleteMapping("/{chartId}")
-    public ResponseEntity<ApiUtils.ApiResult<String>> deleteChart(@PathVariable Long chartId) {
+    public ResponseEntity<ApiUtils.ApiResult<String>> deleteChart(@PathVariable("chartId") Long chartId) {
         // 환자 정보 접근 권한 확인 로직 필요 -> 요양사가 맡은 환자 정보만 삭제 가능
         chartService.deleteChart(chartId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();

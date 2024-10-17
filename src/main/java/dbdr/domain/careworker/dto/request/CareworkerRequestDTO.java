@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class CareworkerRequestDTO {
 
-    @NotNull
+    @NotNull(message = "요양기관 아이디는 필수 항목입니다.")
     private Long institutionId;
 
     @NotBlank(message = "이름은 필수 항목입니다.")

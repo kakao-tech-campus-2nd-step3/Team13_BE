@@ -17,7 +17,7 @@ public interface CareworkerRepository extends JpaRepository<Careworker, Long> {
 
 	Optional<Careworker> findByPhone(String phoneNumber);
 
-    boolean ensureUniqueEmail(String email);
+    boolean existsByEmail(String email);
 
-    boolean ensureUniquePhone(String phone);
+    boolean existsByPhone(String phone);
 }

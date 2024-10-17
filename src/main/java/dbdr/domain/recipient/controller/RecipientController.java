@@ -31,7 +31,7 @@ public class RecipientController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<RecipientResponseDTO> getRecipientById(@PathVariable Long id) {
+    public ResponseEntity<RecipientResponseDTO> getRecipientById(@PathVariable("id") Long id) {
         RecipientResponseDTO recipient = recipientService.getRecipientById(id);
         return ResponseEntity.ok(recipient);
     }
@@ -44,13 +44,13 @@ public class RecipientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<RecipientResponseDTO> updateRecipient(@PathVariable Long id, @RequestBody RecipientRequestDTO recipientDTO) {
+    public ResponseEntity<RecipientResponseDTO> updateRecipient(@PathVariable("id") Long id, @RequestBody RecipientRequestDTO recipientDTO) {
         RecipientResponseDTO updatedRecipient = recipientService.updateRecipient(id, recipientDTO);
         return ResponseEntity.ok(updatedRecipient);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRecipient(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteRecipient(@PathVariable("id") Long id) {
         recipientService.deleteRecipient(id);
         return ResponseEntity.noContent().build();
     }
