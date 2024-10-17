@@ -78,7 +78,7 @@ public class CareworkerService {
     }
 
     private void emailExists(String email) {
-        if (careworkerRepository.existsByEmail(email)) {
+        if (careworkerRepository.ensureUniqueEmail(email)) {
             throw new ApplicationException(ApplicationError.DUPLICATE_EMAIL);
         }
     }
