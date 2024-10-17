@@ -37,7 +37,7 @@ public class RecipientService {
 
     @Transactional
     public RecipientResponseDTO createRecipient(RecipientRequestDTO recipientRequestDTO) {
-        careNumberExists(recipientRequestDTO.getCareNumber());
+        ensureUniqueCareNumber(recipientRequestDTO.getCareNumber());
         Recipient recipient = new Recipient(
             recipientRequestDTO.getName(),
             recipientRequestDTO.getBirth(),
@@ -56,7 +56,7 @@ public class RecipientService {
 
     @Transactional
     public RecipientResponseDTO updateRecipient(Long id, RecipientRequestDTO recipientRequestDTO) {
-        careNumberExists(recipientRequestDTO.getCareNumber());
+        ensureUniqueCareNumber(recipientRequestDTO.getCareNumber());
 
         Recipient recipient = findRecipientById(id);
 
@@ -78,8 +78,8 @@ public class RecipientService {
             .orElseThrow(() -> new ApplicationException(ApplicationError.RECIPIENT_NOT_FOUND));
     }
 
-    private void careNumberExists(String careNumber) {
-        if (recipientRepository.ensureUniqueCareNumber(careNumber)) {
+    private void ensureUniqueCareNumber(String careNumber) {
+        if (recipientRepository.existsByCareNumber(careNumber)) {
             throw new ApplicationException(ApplicationError.DUPLICATE_CARE_NUMBER);
         }
     }

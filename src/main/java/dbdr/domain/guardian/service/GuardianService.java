@@ -24,7 +24,7 @@ public class GuardianService {
 
     public GuardianResponse updateGuardianById(Long guardianId,
         GuardianRequest guardianRequest) {
-        phoneNumberExists(guardianRequest.phone());
+        ensureUniquePhone(guardianRequest.phone());
 
         Guardian guardian = findGuardianById(guardianId);
         guardian.updateGuardian(guardianRequest.phone(), guardianRequest.name());
@@ -42,7 +42,7 @@ public class GuardianService {
     }
 
     public GuardianResponse addGuardian(GuardianRequest guardianRequest) {
-        phoneNumberExists(guardianRequest.phone());
+        ensureUniquePhone(guardianRequest.phone());
         Guardian guardian = new Guardian(guardianRequest.phone(), guardianRequest.name());
         guardian = guardianRepository.save(guardian);
         return new GuardianResponse(guardian.getPhone(), guardian.getName(), guardian.isActive());
@@ -59,8 +59,8 @@ public class GuardianService {
             .orElseThrow(() -> new ApplicationException(ApplicationError.GUARDIAN_NOT_FOUND));
     }
 
-    private void phoneNumberExists(String phone) {
-        if (guardianRepository.ensureUniquePhone(phone)) {
+    private void ensureUniquePhone(String phone) {
+        if (guardianRepository.existsByPhone(phone)) {
             throw new ApplicationException(ApplicationError.DUPLICATE_PHONE);
         }
     }

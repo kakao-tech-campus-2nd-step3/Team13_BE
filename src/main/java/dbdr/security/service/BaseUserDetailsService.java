@@ -29,7 +29,7 @@ public class BaseUserDetailsService {
     public BaseUserDetails loadUserByUsernameAndRole(String username, Role role) {
 
         if (role == Role.GUARDIAN) {
-            return getGuadianDetails(username);
+            return getGuardianDetails(username);
         }
         if (role == Role.CAREWORKER) {
             return getCareWorkerDetails(username);
@@ -45,7 +45,7 @@ public class BaseUserDetailsService {
     }
 
     private BaseUserDetails getInstitutionDetails(String userId) {
-        if (!institutionRepository.ensureUniqueInstitutionNumber(Long.parseLong(userId))) {
+        if (!institutionRepository.existsByInstitutionNumber(Long.parseLong(userId))) {
             throw new ApplicationException(ApplicationError.INSTITUTION_NOT_FOUND);
         }
 
@@ -70,7 +70,7 @@ public class BaseUserDetailsService {
         return null;
     }
 
-    private BaseUserDetails getGuadianDetails(String userId) {
+    private BaseUserDetails getGuardianDetails(String userId) {
         log.debug("보호자 userId : {}", userId);
         Guardian guardian = guardianRepository.findByPhone(userId)
             .orElseThrow(() -> new ApplicationException(ApplicationError.GUARDIAN_NOT_FOUND));

@@ -24,7 +24,7 @@ public class InstitutionService {
     }
 
     public InstitutionResponse updateInstitution(Long id, InstitutionRequest institutionRequest) {
-        institutionIdExists(institutionRequest.institutionNumber());
+        ensureUniqueInstitutionNumber(institutionRequest.institutionNumber());
 
         Institution institution = getInstitution(id);
         institution.updateInstitution(institutionRequest.institutionNumber(), institutionRequest.institutionName());
@@ -41,7 +41,7 @@ public class InstitutionService {
     }
 
     public InstitutionResponse addInstitution(InstitutionRequest institutionRequest) {
-        institutionIdExists(institutionRequest.institutionNumber());
+        ensureUniqueInstitutionNumber(institutionRequest.institutionNumber());
         Institution institution = new Institution(institutionRequest.institutionNumber(),
             institutionRequest.institutionName());
         institution = institutionRepository.save(institution);
@@ -55,8 +55,8 @@ public class InstitutionService {
         institutionRepository.delete(institution);
     }
 
-    private void institutionIdExists(Long institutionNumber) {
-        if (institutionRepository.ensureUniqueInstitutionNumber(institutionNumber)) {
+    private void ensureUniqueInstitutionNumber(Long institutionNumber) {
+        if (institutionRepository.existsByInstitutionNumber(institutionNumber)) {
             throw new ApplicationException(ApplicationError.DUPLICATE_INSTITUTION_NUMBER);
         }
     }

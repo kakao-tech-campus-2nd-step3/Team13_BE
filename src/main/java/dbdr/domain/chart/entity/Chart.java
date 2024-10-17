@@ -19,19 +19,19 @@ import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Entity
-@Table(name = "chart")
+@Table(name = "charts")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@SQLDelete(sql = "UPDATE chart SET is_active = false WHERE id = ?")
+@SQLDelete(sql = "UPDATE charts SET is_active = false WHERE id = ?")
 @SQLRestriction("is_active = true")
 public class Chart extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "recipient_id", nullable = false)
     private Recipient recipient;
 
-    @Column(nullable = false, length = 500)
+    @Column(name = "condition_disease", nullable = false, length = 500)
     private String conditionDisease;
 
     @OneToOne(cascade = CascadeType.ALL)

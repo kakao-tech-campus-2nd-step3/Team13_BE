@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface InstitutionRepository extends JpaRepository<Institution, Long> {
 
-    boolean ensureUniqueInstitutionNumber(Long institutionNumber);
+    boolean existsByInstitutionNumber(Long institutionNumber);
 
     Institution findByInstitutionNumber(Long institutionNumber);
 }

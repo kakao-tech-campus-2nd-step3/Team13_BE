@@ -40,8 +40,8 @@ public class CareworkerService {
 
     @Transactional
     public CareworkerResponseDTO createCareworker(CareworkerRequestDTO careworkerRequestDTO) {
-        emailExists(careworkerRequestDTO.getEmail());
-        phoneExists(careworkerRequestDTO.getPhone());
+        ensureUniqueEmail(careworkerRequestDTO.getEmail());
+        ensureUniquePhone(careworkerRequestDTO.getPhone());
 
         Careworker careworker = new Careworker(careworkerRequestDTO.getInstitutionId(),
             careworkerRequestDTO.getName(), careworkerRequestDTO.getEmail(),
@@ -53,8 +53,8 @@ public class CareworkerService {
     @Transactional
     public CareworkerResponseDTO updateCareworker(Long id,
         CareworkerRequestDTO careworkerRequestDTO) {
-        emailExists(careworkerRequestDTO.getEmail());
-        phoneExists(careworkerRequestDTO.getPhone());
+        ensureUniqueEmail(careworkerRequestDTO.getEmail());
+        ensureUniquePhone(careworkerRequestDTO.getPhone());
 
         Careworker careworker = findCareworkerById(id);
 
@@ -77,13 +77,13 @@ public class CareworkerService {
 
     }
 
-    private void emailExists(String email) {
-        if (careworkerRepository.ensureUniqueEmail(email)) {
+    private void ensureUniqueEmail(String email) {
+        if (careworkerRepository.existsByEmail(email)) {
             throw new ApplicationException(ApplicationError.DUPLICATE_EMAIL);
         }
     }
 
-    private void phoneExists(String phone) {
+    private void ensureUniquePhone(String phone) {
         if (careworkerRepository.findByPhone(phone).isPresent()) {
             throw new ApplicationException(ApplicationError.DUPLICATE_PHONE);
         }

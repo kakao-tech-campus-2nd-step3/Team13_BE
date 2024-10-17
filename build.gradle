@@ -45,6 +45,9 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+//    // SpringDoc OpenAPI (Swagger UI 포함)
+//    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
+
     // 테스트 라이브러리
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'com.h2database:h2' // H2는 테스트 환경에서 주로 사용

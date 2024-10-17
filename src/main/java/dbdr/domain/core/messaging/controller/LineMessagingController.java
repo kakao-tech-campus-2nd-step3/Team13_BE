@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import dbdr.domain.core.messaging.service.LineMessagingService;
 import lombok.RequiredArgsConstructor;
 
-
 @RestController
 @RequestMapping("/line")
 @RequiredArgsConstructor
