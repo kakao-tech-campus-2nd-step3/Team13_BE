@@ -79,7 +79,7 @@ public class RecipientService {
     }
 
     private void careNumberExists(String careNumber) {
-        if (recipientRepository.existsByCareNumber(careNumber)) {
+        if (recipientRepository.ensureUniqueCareNumber(careNumber)) {
             throw new ApplicationException(ApplicationError.DUPLICATE_CARE_NUMBER);
         }
     }
