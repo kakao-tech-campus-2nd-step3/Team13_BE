@@ -4,20 +4,24 @@ import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
 import dbdr.domain.careworker.dto.response.CareworkerResponseDTO;
 import dbdr.domain.careworker.service.CareworkerService;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
-
 import java.net.URI;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/${spring.app.version}/careworker")
 @RequiredArgsConstructor
-@PreAuthorize("hasAnyAuthority('ADMIN')")
 public class CareworkerController {
 
     private final CareworkerService careworkerService;
@@ -27,7 +31,7 @@ public class CareworkerController {
 
     @GetMapping
     public ResponseEntity<List<CareworkerResponseDTO>> getAllCareworkers(
-        @RequestParam(value = "institutionId", required = false) Long institutionId) {
+            @RequestParam(value = "institutionId", required = false) Long institutionId) {
         List<CareworkerResponseDTO> careworkerList;
         if (institutionId != null) {
             careworkerList = careworkerService.getCareworkersByInstitution(institutionId);
@@ -39,25 +43,25 @@ public class CareworkerController {
 
     @GetMapping("/{id}")
     public ResponseEntity<CareworkerResponseDTO> getCareworkerById(
-        @PathVariable Long id) {
+            @PathVariable Long id) {
         CareworkerResponseDTO careworker = careworkerService.getCareworkerById(id);
         return ResponseEntity.ok(careworker);
     }
 
     @PostMapping
     public ResponseEntity<CareworkerResponseDTO> createCareworker(
-        @Valid @RequestBody CareworkerRequestDTO careworkerDTO) {
+            @Valid @RequestBody CareworkerRequestDTO careworkerDTO) {
         CareworkerResponseDTO newCareworker = careworkerService.createCareworker(careworkerDTO);
         return ResponseEntity.created(
-                URI.create("/" + appVersion + "/careworker/" + newCareworker.getId()))
-            .body(newCareworker);
+                        URI.create("/" + appVersion + "/careworker/" + newCareworker.getId()))
+                .body(newCareworker);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<CareworkerResponseDTO> updateCareworker(@PathVariable Long id,
-        @Valid @RequestBody CareworkerRequestDTO careworkerDTO) {
+                                                                  @Valid @RequestBody CareworkerRequestDTO careworkerDTO) {
         CareworkerResponseDTO updatedCareworker = careworkerService.updateCareworker(id,
-            careworkerDTO);
+                careworkerDTO);
         return ResponseEntity.ok(updatedCareworker);
     }
 
