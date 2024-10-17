@@ -60,7 +60,7 @@ public class GuardianService {
     }
 
     private void phoneNumberExists(String phone) {
-        if (guardianRepository.ensureUniquePhone(phone)) {
+        if (guardianRepository.existsByPhone(phone)) {
             throw new ApplicationException(ApplicationError.DUPLICATE_PHONE);
         }
     }

@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RecipientRepository extends JpaRepository<Recipient, Long> {
 
-    boolean ensureUniqueCareNumber(String careNumber);
+    boolean existsByCareNumber(String careNumber);
 }
