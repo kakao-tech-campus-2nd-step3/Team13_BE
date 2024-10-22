@@ -52,7 +52,7 @@ public class JwtProvider {
                 .refreshToken(createToken(username, role, REFRESH_TOKEN_EXPIRATION_TIME))
                 .accessToken(createToken(username, role, ACCESS_TOKEN_EXPIRATION_TIME))
                 .build();
-        redisService.saveRefreshToken(username, token.refreshToken());
+        redisService.saveRefreshToken(role + username, token.refreshToken());
         return token;
     }
 
@@ -65,7 +65,8 @@ public class JwtProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        BaseUserDetails userDetails = getBaseUserDetails(token);
+        BaseUserDetails userDetails = baseUserDetailsService.loadUserByUsernameAndRole(getUserName(token),
+                Role.valueOf(getRole(token)));
         return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(),
                 userDetails.getAuthorities());
     }
@@ -77,36 +78,32 @@ public class JwtProvider {
     }
 
     public TokenDTO renewTokens(String refreshToken) {
-        BaseUserDetails userDetails = getBaseUserDetails(refreshToken);
-        if (!isValidRedisRefreshToken(userDetails.getUsername(), refreshToken)) {
+        if (!isValidRedisRefreshToken(getRedisCode(refreshToken), refreshToken)) {
             throw new ApplicationException(REFRESH_TOKEN_EXPIRED);
         }
-        return createAllToken(userDetails.getUsername(), userDetails.getRole().name());
+        return createAllToken(getUserName(refreshToken), getRole(refreshToken));
     }
 
     public void deleteRefreshToken(String accessToken) {
-        BaseUserDetails userDetails = getBaseUserDetails(accessToken);
-        String username = userDetails.getUsername();
-        redisService.deleteRefreshToken(username);
-        redisService.saveBlackList(username, accessToken);
-
+        String redisCode = getRedisCode(accessToken);
+        redisService.deleteRefreshToken(redisCode);
+        redisService.saveBlackList(redisCode, accessToken);
     }
 
-    private Boolean isValidRedisRefreshToken(String username, String refreshToken) {
-        String token = redisService.getRefreshToken(username);
+    private Boolean isValidRedisRefreshToken(String code, String refreshToken) {
+        String token = redisService.getRefreshToken(code);
         if (token == null) {
             return false;
         }
         return token.equals(refreshToken);
     }
 
+    private String getRedisCode(String token) {
+        return getRole(token) + getUserName(token);
+    }
+
     private Claims getJwtsBody(String token) {
         return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token)
                 .getBody();
-    }
-
-    private BaseUserDetails getBaseUserDetails(String token) {
-        return baseUserDetailsService.loadUserByUsernameAndRole(getUserName(token),
-                Role.valueOf(getRole(token)));
     }
 }
