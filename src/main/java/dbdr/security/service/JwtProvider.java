@@ -55,7 +55,7 @@ public class JwtProvider {
         return token;
     }
 
-    public String createToken(String username, String role, Long expireTime) {
+    private String createToken(String username, String role, Long expireTime) {
         return Jwts.builder().claim("username", username).claim("role", role)
                 .setIssuer(JwtUtils.ISSUER)
                 .setIssuedAt(new Date(System.currentTimeMillis()))

@@ -4,6 +4,7 @@ import dbdr.global.exception.ApplicationError;
 import dbdr.global.exception.ApplicationException;
 import dbdr.security.Role;
 import dbdr.security.dto.LoginRequest;
+import dbdr.security.dto.TokenDTO;
 import dbdr.security.service.LoginService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,17 +23,17 @@ public class LoginController {
     private final String authHeader;
 
     public LoginController(LoginService loginService,
-        @Value("${spring.jwt.authheader}") String authHeader) {
+                           @Value("${spring.jwt.authheader}") String authHeader) {
         this.loginService = loginService;
         this.authHeader = authHeader;
     }
 
     @PostMapping("/{role}")
-    public ResponseEntity<Void> login(@PathVariable("role") String role,
-        @RequestBody @Valid LoginRequest loginRequest) {
+    public ResponseEntity<TokenDTO> login(@PathVariable("role") String role,
+                                          @RequestBody @Valid LoginRequest loginRequest) {
         Role roleEnum = roleCheck(role);
-        String token = loginService.login(roleEnum, loginRequest);
-        return ResponseEntity.ok().header(authHeader, token).build();
+        TokenDTO token = loginService.login(roleEnum, loginRequest);
+        return ResponseEntity.ok().header(authHeader, token.accessToken()).body(token);
     }
 
     private Role roleCheck(String role) {

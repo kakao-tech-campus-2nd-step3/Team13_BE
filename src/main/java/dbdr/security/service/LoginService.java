@@ -3,6 +3,7 @@ package dbdr.security.service;
 import dbdr.security.Role;
 import dbdr.security.dto.BaseUserDetails;
 import dbdr.security.dto.LoginRequest;
+import dbdr.security.dto.TokenDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,15 +19,13 @@ public class LoginService {
 
     private final JwtProvider jwtProvider;
 
-    private Long jwtExpiration;
-
     public LoginService(AuthenticationManagerBuilder authenticationManagerBuilder, JwtProvider jwtProvider) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.jwtProvider = jwtProvider;
     }
 
     @Transactional
-    public String login(Role role, LoginRequest loginRequest) {
+    public TokenDTO login(Role role, LoginRequest loginRequest) {
         BaseUserDetails userDetails = BaseUserDetails.builder()
                 .userLoginId(loginRequest.userId())
                 .password(loginRequest.password())
@@ -37,7 +36,7 @@ public class LoginService {
                 loginRequest.password());
         Authentication authentication = authenticationManagerBuilder.getObject().authenticate(authenticationToken);
 
-        return jwtProvider.createToken(authentication.getName(), role.name(), jwtExpiration);
+        return jwtProvider.createAllToken(authentication.getName(), role.name());
     }
 
 }
