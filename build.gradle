@@ -60,6 +60,9 @@ dependencies {
     //POI
     implementation 'org.apache.poi:poi-ooxml:5.3.0'
     implementation 'org.apache.commons:commons-compress:1.27.1'
+
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 tasks.named('test') {
