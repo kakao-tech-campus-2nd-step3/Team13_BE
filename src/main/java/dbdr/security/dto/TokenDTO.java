@@ -6,6 +6,6 @@ import lombok.Builder;
 public record TokenDTO(
         String refreshToken,
         String accessToken,
-        String email
+        String username
 ) {
 }
