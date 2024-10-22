@@ -13,6 +13,7 @@ public enum ApplicationError {
     ACCESS_NOT_ALLOWED(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
     PASSWORD_NOT_MATCH(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
+    REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "유효하지 않은 리프레시 토큰입니다. 재로그인 해주세요."),
 
     // Guardian (보호자)
     GUARDIAN_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 보호자를 찾을 수가 없습니다."),
