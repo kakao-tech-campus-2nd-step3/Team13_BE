@@ -84,7 +84,9 @@ public class JwtProvider {
         return createAllToken(userDetails.getUsername(), userDetails.getRole().name());
     }
 
-    public void deleteRefreshToken(String username, String accessToken) {
+    public void deleteRefreshToken(String accessToken) {
+        BaseUserDetails userDetails = getBaseUserDetails(accessToken);
+        String username = userDetails.getUsername();
         redisService.deleteRefreshToken(username);
         redisService.saveBlackList(username, accessToken);
 
