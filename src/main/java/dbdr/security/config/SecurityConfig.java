@@ -24,7 +24,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 @RequiredArgsConstructor
 @Configuration
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @EnableMethodSecurity
 @Slf4j
 public class SecurityConfig {
@@ -52,16 +52,17 @@ public class SecurityConfig {
                 .sessionManagement(
                         (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-                .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new ExceptionHandlingFilter(), UsernamePasswordAuthenticationFilter.class)
                 .authenticationProvider(baseAuthenticationProvider())
                 .authorizeHttpRequests((authorize) -> {
                     authorize
                             .requestMatchers(HttpMethod.POST,
                                     "/*/auth/login/*",
-                                    "/*/auth/renew", "")
+                                    "/*/auth/renew")
                             .permitAll()
                             .anyRequest().authenticated();
                 })
+                .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling((exception) -> exception
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
                             response.sendError(HttpServletResponse.SC_FORBIDDEN, "접근 거부");
