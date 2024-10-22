@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/${spring.app.version}/login")
+@RequestMapping("/${spring.app.version}/auth")
 public class LoginController {
 
     private final LoginService loginService;
@@ -28,7 +28,7 @@ public class LoginController {
         this.authHeader = authHeader;
     }
 
-    @PostMapping("/{role}")
+    @PostMapping("/login/{role}")
     public ResponseEntity<TokenDTO> login(@PathVariable("role") String role,
                                           @RequestBody @Valid LoginRequest loginRequest) {
         Role roleEnum = roleCheck(role);
