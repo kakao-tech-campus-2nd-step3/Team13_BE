@@ -36,7 +36,7 @@ public class RedisService {
 
     public void saveBlackList(String code, String accessToken) {
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
-        Duration duration = Duration.ofSeconds(JwtUtils.REFRESH_TOKEN_EXPIRATION_TIME);
+        Duration duration = Duration.ofSeconds(JwtUtils.ACCESS_TOKEN_EXPIRATION_TIME);
         valueOperations.set(getBlackListKey(code), accessToken, duration);
     }
 
