@@ -45,7 +45,7 @@ public class BaseUserDetailsService {
     }
 
     private BaseUserDetails getInstitutionDetails(String userId) {
-        if (!institutionRepository.ensureUniqueInstitutionNumber(Long.parseLong(userId))) {
+        if (!institutionRepository.existsByInstitutionNumber(Long.parseLong(userId))) {
             throw new ApplicationException(ApplicationError.INSTITUTION_NOT_FOUND);
         }
 
