@@ -91,6 +91,7 @@ public class JwtProvider {
 
     public TokenDTO renewTokens(String refreshToken) {
         if (!isValidRedisRefreshToken(getRedisCode(refreshToken), refreshToken)) {
+            redisService.deleteRefreshToken(getRedisCode(refreshToken));
             throw new ApplicationException(REFRESH_TOKEN_EXPIRED);
         }
         return createAllToken(getUserName(refreshToken), getRole(refreshToken));
