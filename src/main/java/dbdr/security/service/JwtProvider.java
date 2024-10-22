@@ -4,6 +4,7 @@ import static dbdr.global.exception.ApplicationError.REFRESH_TOKEN_EXPIRED;
 import static dbdr.global.exception.ApplicationError.TOKEN_EXPIRED;
 import static dbdr.global.util.api.JwtUtils.ACCESS_TOKEN_EXPIRATION_TIME;
 import static dbdr.global.util.api.JwtUtils.REFRESH_TOKEN_EXPIRATION_TIME;
+import static dbdr.global.util.api.JwtUtils.TOKEN_PREFIX;
 
 import dbdr.global.exception.ApplicationException;
 import dbdr.global.util.api.JwtUtils;
@@ -12,6 +13,7 @@ import dbdr.security.dto.BaseUserDetails;
 import dbdr.security.dto.TokenDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import jakarta.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import javax.crypto.SecretKey;
@@ -20,6 +22,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 @Component
 public class JwtProvider {
@@ -33,6 +36,14 @@ public class JwtProvider {
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
         this.baseUserDetailsService = baseUserDetailsService;
         this.redisService = redisService;
+    }
+
+    public String extractToken(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (StringUtils.hasText(bearerToken) && bearerToken.startsWith(TOKEN_PREFIX)) {
+            return bearerToken;
+        }
+        return null;
     }
 
     public String getUserName(String token) {
