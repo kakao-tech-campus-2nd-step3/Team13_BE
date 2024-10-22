@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,6 +41,12 @@ public class LoginController {
     public ResponseEntity<TokenDTO> renewAccessToken(@RequestBody String refreshToken) {
         TokenDTO token = loginService.renewAccessToken(refreshToken);
         return ResponseEntity.ok().header(authHeader, token.accessToken()).body(token);
+    }
+
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String accessToken) {
+        loginService.logout(accessToken);
+        return ResponseEntity.ok().build();
     }
 
     private Role roleCheck(String role) {

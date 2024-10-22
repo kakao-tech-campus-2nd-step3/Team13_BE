@@ -43,4 +43,8 @@ public class LoginService {
         return jwtProvider.renewTokens(refreshToken);
     }
 
+    public void logout(String accessToken) {
+        jwtProvider.deleteRefreshToken(accessToken);
+    }
+
 }
