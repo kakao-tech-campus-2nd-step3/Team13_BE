@@ -36,6 +36,12 @@ public class LoginController {
         return ResponseEntity.ok().header(authHeader, token.accessToken()).body(token);
     }
 
+    @PostMapping("/renew")
+    public ResponseEntity<TokenDTO> renewAccessToken(@RequestBody String refreshToken) {
+        TokenDTO token = loginService.renewAccessToken(refreshToken);
+        return ResponseEntity.ok().header(authHeader, token.accessToken()).body(token);
+    }
+
     private Role roleCheck(String role) {
         try {
             return Role.valueOf(role.toUpperCase());

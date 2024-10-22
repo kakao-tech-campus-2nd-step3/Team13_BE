@@ -39,4 +39,8 @@ public class LoginService {
         return jwtProvider.createAllToken(authentication.getName(), role.name());
     }
 
+    public TokenDTO renewAccessToken(String refreshToken) {
+        return jwtProvider.renewTokens(refreshToken);
+    }
+
 }
