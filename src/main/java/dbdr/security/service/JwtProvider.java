@@ -1,9 +1,10 @@
 package dbdr.security.service;
 
+import static dbdr.global.exception.ApplicationError.REFRESH_TOKEN_EXPIRED;
+import static dbdr.global.exception.ApplicationError.TOKEN_EXPIRED;
 import static dbdr.global.util.api.JwtUtils.ACCESS_TOKEN_EXPIRATION_TIME;
 import static dbdr.global.util.api.JwtUtils.REFRESH_TOKEN_EXPIRATION_TIME;
 
-import dbdr.global.exception.ApplicationError;
 import dbdr.global.exception.ApplicationException;
 import dbdr.global.util.api.JwtUtils;
 import dbdr.security.Role;
@@ -64,20 +65,40 @@ public class JwtProvider {
     }
 
     public Authentication getAuthentication(String token) {
-        BaseUserDetails userDetails = baseUserDetailsService.loadUserByUsernameAndRole(
-                getUserName(token), Role.valueOf(getRole(token)));
+        BaseUserDetails userDetails = getBaseUserDetails(token);
         return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(),
                 userDetails.getAuthorities());
     }
 
     public void validateToken(String token) {
         if (isExpired(token)) {
-            throw new ApplicationException(ApplicationError.TOKEN_EXPIRED);
+            throw new ApplicationException(TOKEN_EXPIRED);
         }
+    }
+
+    public TokenDTO renewTokens(String refreshToken) {
+        BaseUserDetails userDetails = getBaseUserDetails(refreshToken);
+        if (!isValidRedisRefreshToken(userDetails.getUsername(), refreshToken)) {
+            throw new ApplicationException(REFRESH_TOKEN_EXPIRED);
+        }
+        return createAllToken(userDetails.getUsername(), userDetails.getRole().name());
+    }
+
+    private Boolean isValidRedisRefreshToken(String username, String refreshToken) {
+        String token = redisService.getRefreshToken(username);
+        if (token == null) {
+            return false;
+        }
+        return token.equals(refreshToken);
     }
 
     private Claims getJwtsBody(String token) {
         return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token)
                 .getBody();
+    }
+
+    private BaseUserDetails getBaseUserDetails(String token) {
+        return baseUserDetailsService.loadUserByUsernameAndRole(getUserName(token),
+                Role.valueOf(getRole(token)));
     }
 }
