@@ -67,12 +67,13 @@ public class JwtProvider {
     public Authentication getAuthentication(String token) {
         BaseUserDetails userDetails = baseUserDetailsService.loadUserByUsernameAndRole(getUserName(token),
                 Role.valueOf(getRole(token)));
+        validateBlackListToken(token);
         return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(),
                 userDetails.getAuthorities());
     }
 
-    public void validateToken(String token) {
-        if (isExpired(token)) {
+    private void validateBlackListToken(String token) {
+        if (redisService.isBlackList(getRedisCode(token), token)) {
             throw new ApplicationException(TOKEN_EXPIRED);
         }
     }
