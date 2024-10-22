@@ -2,6 +2,7 @@ package dbdr.security.service;
 
 import dbdr.global.exception.ApplicationError;
 import dbdr.global.exception.ApplicationException;
+import dbdr.global.util.api.JwtUtils;
 import dbdr.security.Role;
 import dbdr.security.dto.BaseUserDetails;
 import io.jsonwebtoken.Claims;
@@ -22,7 +23,7 @@ public class JwtProvider {
     private final BaseUserDetailsService baseUserDetailsService;
 
     public JwtProvider(@Value("${spring.jwt.secret}") String secret,
-        BaseUserDetailsService baseUserDetailsService) {
+                       BaseUserDetailsService baseUserDetailsService) {
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), "HmacSHA256");
         this.baseUserDetailsService = baseUserDetailsService;
     }
@@ -41,26 +42,27 @@ public class JwtProvider {
 
     public String createToken(String username, String role, Long expireTime) {
         return Jwts.builder().claim("username", username).claim("role", role)
-            .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + expireTime))
-            .signWith(secretKey).compact();
+                .setIssuer(JwtUtils.ISSUER)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
+                .setExpiration(new Date(System.currentTimeMillis() + expireTime))
+                .signWith(secretKey).compact();
     }
 
     public Authentication getAuthentication(String token) {
         BaseUserDetails userDetails = baseUserDetailsService.loadUserByUsernameAndRole(
-            getUserName(token), Role.valueOf(getRole(token)));
+                getUserName(token), Role.valueOf(getRole(token)));
         return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(),
-            userDetails.getAuthorities());
+                userDetails.getAuthorities());
     }
 
     public void validateToken(String token) {
-        if(isExpired(token)) {
+        if (isExpired(token)) {
             throw new ApplicationException(ApplicationError.TOKEN_EXPIRED);
         }
     }
 
     private Claims getJwtsBody(String token) {
         return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token)
-            .getBody();
+                .getBody();
     }
 }
