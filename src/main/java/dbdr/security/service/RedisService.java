@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 public class RedisService {
 
     private static final String REFRESH_TOKEN_PREFIX = "refresh-token";
+    private static final String BLACK_LIST_PREFIX = "black-list";
     private final RedisTemplate<String, Object> redisTemplate;
 
     public void saveRefreshToken(String code, String refreshToken) {
@@ -31,5 +32,20 @@ public class RedisService {
 
     private String getRefreshCodeKey(String code) {
         return REFRESH_TOKEN_PREFIX + code;
+    }
+
+    public void saveBlackList(String code, String accessToken) {
+        ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
+        Duration duration = Duration.ofSeconds(JwtUtils.REFRESH_TOKEN_EXPIRATION_TIME);
+        valueOperations.set(getBlackListKey(code), accessToken, duration);
+    }
+
+    public String getBlackList(String code) {
+        ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
+        return (String) valueOperations.get(getBlackListKey(code));
+    }
+
+    private String getBlackListKey(String token) {
+        return BLACK_LIST_PREFIX + token;
     }
 }
