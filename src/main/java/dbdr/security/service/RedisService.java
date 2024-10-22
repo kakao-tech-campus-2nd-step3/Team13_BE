@@ -40,9 +40,13 @@ public class RedisService {
         valueOperations.set(getBlackListKey(code), accessToken, duration);
     }
 
-    public String getBlackList(String code) {
+    public boolean isBlackList(String code, String accessToken) {
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
-        return (String) valueOperations.get(getBlackListKey(code));
+        String token = (String) valueOperations.get(getBlackListKey(code));
+        if (token == null) {
+            return true;
+        }
+        return !token.equals(accessToken);
     }
 
     private String getBlackListKey(String token) {
