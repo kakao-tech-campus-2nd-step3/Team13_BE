@@ -6,8 +6,9 @@ import dbdr.domain.careworker.service.CareworkerService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.net.URI;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,7 +30,7 @@ public class CareworkerController {
     @Operation(summary = "전체 요양보호사 정보를 특정 요양원아이디로 조회")
     @GetMapping
     public ResponseEntity<List<CareworkerResponseDTO>> getAllCareworkers(
-        @RequestParam(value = "institutionId", required = false) Long institutionId) {
+            @RequestParam(value = "institutionId", required = false) Long institutionId) {
         List<CareworkerResponseDTO> careworkerList;
         if (institutionId != null) {
             careworkerList = careworkerService.getCareworkersByInstitution(institutionId);
@@ -50,11 +51,11 @@ public class CareworkerController {
     @Operation(summary = "요양보호사 추가")
     @PostMapping
     public ResponseEntity<CareworkerResponseDTO> createCareworker(
-        @Valid @RequestBody CareworkerRequestDTO careworkerDTO) {
+            @Valid @RequestBody CareworkerRequestDTO careworkerDTO) {
         CareworkerResponseDTO newCareworker = careworkerService.createCareworker(careworkerDTO);
         return ResponseEntity.created(
-                URI.create("/" + appVersion + "/careworker/" + newCareworker.getId()))
-            .body(newCareworker);
+                        URI.create("/" + appVersion + "/careworker/" + newCareworker.getId()))
+                .body(newCareworker);
     }
 
     @Operation(summary = "요양보호사 정보 수정")
@@ -62,7 +63,7 @@ public class CareworkerController {
     public ResponseEntity<CareworkerResponseDTO> updateCareworker(@PathVariable("id") Long id,
         @Valid @RequestBody CareworkerRequestDTO careworkerDTO) {
         CareworkerResponseDTO updatedCareworker = careworkerService.updateCareworker(id,
-            careworkerDTO);
+                careworkerDTO);
         return ResponseEntity.ok(updatedCareworker);
     }
 
