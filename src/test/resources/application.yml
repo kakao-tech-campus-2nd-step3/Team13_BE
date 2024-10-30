@@ -1,0 +1,9 @@
+spring :
+  config :
+    test :
+      institution :
+        loginId : "testInstitution"
+        loginPassword : "passwordInstitution"
+        institutionNumber : "123"
+        institutionName : "돌다리요양원"
+

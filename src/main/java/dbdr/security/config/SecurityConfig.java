@@ -31,6 +31,7 @@ public class SecurityConfig {
     private final JwtProvider jwtProvider;
     private final BaseUserDetailsService baseUserDetailsService;
 
+
     @Bean
     public AuthenticationManager authenticationManager(
         AuthenticationConfiguration authenticationConfiguration) throws Exception {
