@@ -1,5 +1,7 @@
 package dbdr.domain.recipient.dto.response;
 
+import dbdr.domain.careworker.entity.Careworker;
+import dbdr.domain.institution.entity.Institution;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,5 +22,6 @@ public class RecipientResponseDTO {
     private LocalDate startDate;
     private String institution;
     private Long institutionNumber;
+    private Long institutionId;
     private Long careworkerId;
 }

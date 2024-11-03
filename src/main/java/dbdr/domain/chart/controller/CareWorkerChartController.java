@@ -62,7 +62,7 @@ public class CareWorkerChartController {
     @Operation(summary = "차트 아이디로 차트 수정")
     @PutMapping("/{chartId}")
     public ResponseEntity<ApiUtils.ApiResult<ChartDetailResponse>> updateChart(@PathVariable("chartId") Long chartId,
-        @RequestBody ChartDetailRequest request) {
+                                                                               @RequestBody ChartDetailRequest request) {
         // 환자 정보 접근 권한 확인 로직 필요 -> 요양사가 맡은 환자 정보만 수정 가능
         ChartDetailResponse chart = chartService.updateChart(chartId, request);
         return ResponseEntity.ok(ApiUtils.success(chart));

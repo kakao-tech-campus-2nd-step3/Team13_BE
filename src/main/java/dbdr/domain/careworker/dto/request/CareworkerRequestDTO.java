@@ -1,5 +1,7 @@
 package dbdr.domain.careworker.dto.request;
 
+
+import dbdr.domain.institution.entity.Institution;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

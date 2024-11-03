@@ -44,9 +44,9 @@ public class InstitutionAdminController {
     @Operation(summary = "요양원 추가")
     @PostMapping
     public ResponseEntity<InstitutionResponse> addInstitution(
-        @Valid @RequestBody InstitutionRequest institutionRequest) {
+            @Valid @RequestBody InstitutionRequest institutionRequest) {
         InstitutionResponse institutionResponse = institutionService.addInstitution(
-            institutionRequest);
+                institutionRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(institutionResponse);
     }
 

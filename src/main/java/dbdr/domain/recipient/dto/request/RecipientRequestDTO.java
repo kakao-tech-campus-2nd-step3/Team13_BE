@@ -1,5 +1,7 @@
 package dbdr.domain.recipient.dto.request;
 
+import dbdr.domain.careworker.entity.Careworker;
+import dbdr.domain.institution.entity.Institution;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -48,6 +50,10 @@ public class RecipientRequestDTO {
     @Schema(description = "돌봄대상자가 속해있는 요양기관 번호", example = "1234")
     @NotNull(message = "요양기관번호는 필수 항목입니다.")
     private Long institutionNumber;
+
+    @Schema(description = "돌봄대상자가 속해있는 요양원 아이디", example = "1")
+    @NotNull(message = "요양기관 ID는 필수 항목입니다.")
+    private Long institutionId;
 
     @Schema(description = "돌봄대상자의 요양보호사 아이디", example = "1")
     @NotNull(message = "요양보호사 ID는 필수 항목입니다.")

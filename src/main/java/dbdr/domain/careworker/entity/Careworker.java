@@ -6,6 +6,7 @@ import java.time.LocalTime;
 
 import dbdr.domain.core.base.entity.BaseEntity;
 import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
+import dbdr.domain.institution.entity.Institution;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
 import lombok.AccessLevel;
@@ -35,8 +36,9 @@ public class Careworker extends BaseEntity {
     @Column(nullable = false, length = 50)
     private String name;
 
-    @Column
-    private Long institutionId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "institution_id")
+    private Institution institution;
 
     @Column(nullable = true)
     private String lineUserId;
@@ -48,8 +50,8 @@ public class Careworker extends BaseEntity {
     private String email;
 
     @Builder
-    public Careworker(Long institutionId, String name, String email, String phone) {
-        this.institutionId = institutionId;
+    public Careworker(Institution institution, String name, String email, String phone) {
+        this.institution = institution;
         this.name = name;
         this.email = email;
         this.phone = phone;

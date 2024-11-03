@@ -2,6 +2,7 @@ package dbdr.domain.recipient.entity;
 
 import dbdr.domain.core.base.entity.BaseEntity;
 import dbdr.domain.careworker.entity.Careworker;
+import dbdr.domain.institution.entity.Institution;
 import dbdr.domain.recipient.dto.request.RecipientRequestDTO;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
@@ -39,8 +40,9 @@ public class Recipient extends BaseEntity {
     @Column
     private LocalDate startDate;
 
-    @Column
-    private String institution;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "institution_id")
+    private Institution institution;
 
     @Column
     private Long institutionNumber;
@@ -51,14 +53,14 @@ public class Recipient extends BaseEntity {
 
     @Builder
     public Recipient(String name,
-        LocalDate birth,
-        String gender,
-        String careLevel,
-        String careNumber,
-        LocalDate startDate,
-        String institution,
-        Long institutionNumber,
-        Careworker careworker) {
+                     LocalDate birth,
+                     String gender,
+                     String careLevel,
+                     String careNumber,
+                     LocalDate startDate,
+                     Institution institution,
+                     Long institutionNumber,
+                     Careworker careworker) {
         this.name = name;
         this.birth = birth;
         this.gender = gender;
@@ -78,7 +80,7 @@ public class Recipient extends BaseEntity {
         this.careLevel = recipientDTO.getCareLevel();
         this.careNumber = recipientDTO.getCareNumber();
         this.startDate = recipientDTO.getStartDate();
-        this.institution = recipientDTO.getInstitution();
+        // this.institution = recipientDTO.getInstitution(); 요양기관이랑 요양보호사에 대해서는 돌봄대상자가 변경 못한다.
         this.institutionNumber = recipientDTO.getInstitutionNumber();
         //this.careworker = careworker;
     }

@@ -31,6 +31,7 @@ dependencies {
     // 데이터베이스
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'mysql:mysql-connector-java:8.0.33' // MySQL 의존성 추가 (MySQL JDBC 드라이버)
+    runtimeOnly 'com.h2database:h2'
 
     // 보안
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
@@ -63,6 +64,9 @@ dependencies {
     //POI
     implementation 'org.apache.poi:poi-ooxml:5.3.0'
     implementation 'org.apache.commons:commons-compress:1.27.1'
+
+    // Redis
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 }
 
 tasks.named('test') {
