@@ -1,4 +1,4 @@
-package dbdr.global.util.line;
+package dbdr.domain.core.messaging.util;
 
 import java.time.LocalTime;
 import java.util.List;
