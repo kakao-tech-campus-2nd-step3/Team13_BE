@@ -6,7 +6,6 @@ import com.linecorp.bot.client.LineMessagingClient;
 import com.linecorp.bot.model.PushMessage;
 import com.linecorp.bot.model.message.TextMessage;
 
-import dbdr.domain.careworker.service.CareworkerService;
 import dbdr.global.exception.ApplicationError;
 import dbdr.global.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LineMessagingService {
 	private final LineMessagingClient lineMessagingClient;
-	private final CareworkerService careworkerService;
 
 
 	// 사용자에게 메시지를 보내는 메서드
