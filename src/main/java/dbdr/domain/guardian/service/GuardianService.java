@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -73,5 +74,12 @@ public class GuardianService {
     public Guardian findByPhone(String phone) {
         return guardianRepository.findByPhone(phone)
             .orElse(null);
+    }
+
+    @Transactional
+    public void updateLineUserId(String userId, String phoneNumber) {
+        Guardian guardian = findByPhone(phoneNumber);
+        guardian.updateLineUserId(userId);
+        guardianRepository.save(guardian);
     }
 }

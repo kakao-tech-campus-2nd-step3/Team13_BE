@@ -102,36 +102,14 @@ public class LineService {
 		String userName = getUserProfile(userId).getDisplayName();
 
 		if (guardianService.findByPhone(phoneNumber) != null) {
-			handleGuardianPhoneMessage(userId, phoneNumber);
+			guardianService.updateLineUserId(userId, phoneNumber);
+			lineMessagingService.sendMessageToUser(userId, MessageTemplate.GUARDIAN_WELCOME_MESSAGE.format(userName));
 		} else if (careworkerService.findByPhone(phoneNumber) != null) {
-			handleCareworkerPhoneMessage(userId, phoneNumber);
+			careworkerService.updateLineUserId(userId, phoneNumber);
+			lineMessagingService.sendMessageToUser(userId, MessageTemplate.CAREWORKER_WELCOME_MESSAGE.format(userName));
 		} else {
 			sendStrangerFollowMessage(userId, userName);
 		}
-	}
-
-	@Transactional
-	public void handleCareworkerPhoneMessage(String userId, String phoneNumber) {
-		Careworker careworker = careworkerService.findByPhone(phoneNumber);
-		String userName = careworker.getName();
-		careworker.updateLineUserId(userId);
-		careworkerRepository.save(careworker);
-
-		String welcomeMessage = MessageTemplate.CAREWORKER_WELCOME_MESSAGE.format(userName);
-
-		lineMessagingService.sendMessageToUser(userId, welcomeMessage);
-	}
-
-	@Transactional
-	public void handleGuardianPhoneMessage(String userId, String phoneNumber) {
-		Guardian guardian = guardianService.findByPhone(phoneNumber);
-		String userName = guardian.getName();
-		guardian.updateLineUserId(userId);
-		guardianRepository.save(guardian);
-
-		String welcomeMessage = MessageTemplate.GUARDIAN_WELCOME_MESSAGE.format(userName);
-
-		lineMessagingService.sendMessageToUser(userId, welcomeMessage);
 	}
 
 	// UserId를 통해 라인 사용자 프로필 정보 가져오는 메서드

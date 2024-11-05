@@ -44,7 +44,7 @@ public class Careworker extends BaseEntity {
     private String lineUserId;
 
     @Column(nullable = true)
-    private LocalTime alertTime;
+    private LocalTime alertTime = LocalTime.of(17, 0); // 오후 5시로 초기화
 
     @Column(unique = true)
     private String email;

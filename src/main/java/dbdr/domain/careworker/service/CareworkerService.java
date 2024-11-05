@@ -109,4 +109,11 @@ public class CareworkerService {
     public Careworker findByPhone(String phoneNumber) {
         return careworkerRepository.findByPhone(phoneNumber).orElse(null);
     }
+
+    @Transactional
+    public void updateLineUserId(String userId, String phoneNumber) {
+        Careworker careworker = findByPhone(phoneNumber);
+        careworker.updateLineUserId(userId);
+        careworkerRepository.save(careworker);
+    }
 }

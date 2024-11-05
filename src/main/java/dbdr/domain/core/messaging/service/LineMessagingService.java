@@ -14,11 +14,11 @@ import lombok.extern.slf4j.Slf4j;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class LineMessagingService {
+public class LineMessagingService implements MessagingService{
 	private final LineMessagingClient lineMessagingClient;
 
-
 	// 사용자에게 메시지를 보내는 메서드
+	@Override
 	public void sendMessageToUser(String userId, String message) {
 		TextMessage textMessage = new TextMessage(message);
 		PushMessage pushMessage = new PushMessage(userId, textMessage);
@@ -31,7 +31,4 @@ public class LineMessagingService {
 			throw new ApplicationException(ApplicationError.MESSAGE_SEND_FAILED);
 		}
 	}
-
-
-
 }
