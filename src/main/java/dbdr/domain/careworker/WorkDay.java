@@ -1,4 +1,4 @@
-package dbdr.domain.core;
+package dbdr.domain.careworker;
 
 public enum WorkDay {
 	MONDAY(1),

@@ -1,5 +1,6 @@
 package dbdr.domain.guardian.service;
 
+import dbdr.domain.core.alarm.service.AlarmService;
 import dbdr.domain.guardian.entity.Guardian;
 import dbdr.domain.guardian.dto.request.GuardianRequest;
 import dbdr.domain.guardian.dto.response.GuardianResponse;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class GuardianService {
 
     private final GuardianRepository guardianRepository;
+    private final AlarmService alarmService;
 
     public GuardianResponse getGuardianById(Long guardianId) {
         Guardian guardian = findGuardianById(guardianId);
@@ -47,6 +49,7 @@ public class GuardianService {
         ensureUniquePhone(guardianRequest.phone());
         Guardian guardian = new Guardian(guardianRequest.phone(), guardianRequest.name());
         guardian = guardianRepository.save(guardian);
+        alarmService.createGuardianAlarm(guardian);
         return new GuardianResponse(guardian.getPhone(), guardian.getName(), guardian.isActive());
     }
 

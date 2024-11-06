@@ -14,6 +14,7 @@ import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.profile.UserProfileResponse;
 
+import dbdr.domain.core.alarm.service.AlarmService;
 import dbdr.domain.careworker.service.CareworkerService;
 import dbdr.domain.core.messaging.MessageTemplate;
 import dbdr.domain.guardian.service.GuardianService;

@@ -1,4 +1,4 @@
-package dbdr.domain.excel.dto;
+package dbdr.domain.core.excel.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

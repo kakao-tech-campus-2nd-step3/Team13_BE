@@ -4,7 +4,7 @@ import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
 import dbdr.domain.careworker.dto.response.CareworkerResponseDTO;
 import dbdr.domain.careworker.repository.CareworkerRepository;
-import dbdr.domain.core.messaging.service.AlarmService;
+import dbdr.domain.core.alarm.service.AlarmService;
 import dbdr.domain.institution.entity.Institution;
 import dbdr.domain.institution.service.InstitutionService;
 import dbdr.global.exception.ApplicationError;

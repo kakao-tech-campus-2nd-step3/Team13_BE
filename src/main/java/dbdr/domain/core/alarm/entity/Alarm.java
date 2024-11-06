@@ -1,4 +1,4 @@
-package dbdr.domain.core.messaging.entity;
+package dbdr.domain.core.alarm.entity;
 
 import java.time.LocalDateTime;
 
@@ -7,7 +7,6 @@ import org.hibernate.annotations.SQLRestriction;
 
 import dbdr.domain.core.base.entity.BaseEntity;
 import dbdr.domain.core.messaging.MessageChannel;
-import dbdr.domain.core.messaging.MessageTemplate;
 import dbdr.domain.core.messaging.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -15,7 +14,6 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
