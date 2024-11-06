@@ -14,12 +14,8 @@ import com.linecorp.bot.model.event.MessageEvent;
 import com.linecorp.bot.model.event.message.TextMessageContent;
 import com.linecorp.bot.model.profile.UserProfileResponse;
 
-import dbdr.domain.careworker.entity.Careworker;
-import dbdr.domain.careworker.repository.CareworkerRepository;
 import dbdr.domain.careworker.service.CareworkerService;
 import dbdr.domain.core.messaging.MessageTemplate;
-import dbdr.domain.guardian.entity.Guardian;
-import dbdr.domain.guardian.repository.GuardianRepository;
 import dbdr.domain.guardian.service.GuardianService;
 import dbdr.global.exception.ApplicationError;
 import dbdr.global.exception.ApplicationException;
@@ -35,8 +31,6 @@ public class LineService {
 	private final GuardianService guardianService;
 	private final CareworkerService careworkerService;
 	private final LineMessagingService lineMessagingService;
-	private final CareworkerRepository careworkerRepository;
-	private final GuardianRepository guardianRepository;
 
 	// 0. Line Event 처리
 	@Transactional
@@ -44,11 +38,9 @@ public class LineService {
 		try {
 			JsonNode rootNode = objectMapper.readTree(requestBody);
 			JsonNode eventsNode = rootNode.get("events");
-
 			if (eventsNode != null && eventsNode.isArray()) {
 				for (JsonNode eventNode : eventsNode) {
 					String eventType = eventNode.get("type").asText();
-
 					switch (eventType) {
 						case "follow": // 사용자가 라인 채널을 추가하였을 때 발생하는 이벤트
 							FollowEvent followEvent = objectMapper.treeToValue(eventNode, FollowEvent.class);
@@ -85,21 +77,19 @@ public class LineService {
 	public void handleMessageEvent(MessageEvent<TextMessageContent> event) {
 		String userId = event.getSource().getUserId();
 		String messageText = event.getMessage().getText();
-
-		// 전화번호 형식인지 확인
-		Pattern phoneNumber = Pattern.compile("01[0-9]{8,9}");
+		Pattern phoneNumber = Pattern.compile("01[0-9]{8,9}"); // 전화번호 정규식
 		Matcher matcherPhone = phoneNumber.matcher(messageText);
 
 		if (matcherPhone.find()) {
-			handlePhoneNumberMessage(userId, matcherPhone.group());
+			receivePhoneNumber(userId, matcherPhone.group());
 		} else {
 			lineMessagingService.sendMessageToUser(userId, MessageTemplate.ERROR_MESSAGE.getTemplate());
 		}
 	}
 
 	// 사용자가 전화 번호를 입력했을 때 발생하는 이벤트 처리
-	private void handlePhoneNumberMessage(String userId, String phoneNumber) {
-		String userName = getUserProfile(userId).getDisplayName();
+	private void receivePhoneNumber(String userId, String phoneNumber) {
+		String userName = getProfile(userId).getDisplayName();
 
 		if (guardianService.findByPhone(phoneNumber) != null) {
 			guardianService.updateLineUserId(userId, phoneNumber);
@@ -108,12 +98,12 @@ public class LineService {
 			careworkerService.updateLineUserId(userId, phoneNumber);
 			lineMessagingService.sendMessageToUser(userId, MessageTemplate.CAREWORKER_WELCOME_MESSAGE.format(userName));
 		} else {
-			sendStrangerFollowMessage(userId, userName);
+			handleStranger(userId, userName);
 		}
 	}
 
 	// UserId를 통해 라인 사용자 프로필 정보 가져오는 메서드
-	public UserProfileResponse getUserProfile(String userId) {
+	public UserProfileResponse getProfile(String userId) {
 		try {
 			return lineMessagingClient.getProfile(userId).get();
 		} catch (Exception e) {
@@ -123,7 +113,7 @@ public class LineService {
 	}
 
 	// 요양보호사, 보호자가 아닌 사용자에 대한 메시지 전송
-	private void sendStrangerFollowMessage(String userId, String userName) {
+	private void handleStranger(String userId, String userName) {
 		String welcomeMessage = MessageTemplate.STRANGER_FOLLOW_MESSAGE.format(userName);
 		lineMessagingService.sendMessageToUser(userId, welcomeMessage);
 	}

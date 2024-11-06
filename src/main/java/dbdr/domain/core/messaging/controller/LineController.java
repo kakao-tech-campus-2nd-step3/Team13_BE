@@ -15,7 +15,7 @@ public class LineController {
 	private final LineService lineMessagingService;
 
 	@PostMapping
-	public void handleLineEvent(@RequestBody String requestBody) {
+	public void lineEvent(@RequestBody String requestBody) {
 		lineMessagingService.handleLineEvent(requestBody);
 	}
 }

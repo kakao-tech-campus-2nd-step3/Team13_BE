@@ -57,8 +57,9 @@ public class SecurityConfig {
             .authenticationProvider(baseAuthenticationProvider())
             .authorizeHttpRequests((authorize) -> {
                 authorize
-                    // 인증 없이 접근 가능한 엔드포인트 설정
-                    .requestMatchers(HttpMethod.POST, "/test/message").permitAll()
+                    // 요양보호사 추가 API 허용
+                    .requestMatchers(HttpMethod.POST, "/v1/careworker/*").permitAll()                    // 인증 없이 접근 가능한 엔드포인트 설정
+                    .requestMatchers(HttpMethod.POST, "/v1/institution/guardian").permitAll()
                     .requestMatchers(HttpMethod.POST,
                         "/*/auth/login/*",
                         "/*/auth/renew")
