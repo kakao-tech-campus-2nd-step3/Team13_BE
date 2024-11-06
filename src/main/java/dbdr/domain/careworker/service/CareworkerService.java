@@ -4,6 +4,7 @@ import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
 import dbdr.domain.careworker.dto.response.CareworkerResponseDTO;
 import dbdr.domain.careworker.repository.CareworkerRepository;
+import dbdr.domain.core.messaging.service.AlarmService;
 import dbdr.domain.institution.entity.Institution;
 import dbdr.domain.institution.service.InstitutionService;
 import dbdr.global.exception.ApplicationError;
@@ -21,6 +22,7 @@ public class CareworkerService {
 
     private final CareworkerRepository careworkerRepository;
     private final InstitutionService institutionService;
+    private final AlarmService alarmService;
 
     @Transactional(readOnly = true)
     public List<CareworkerResponseDTO> getCareworkersByInstitution(Long institutionId) {
@@ -50,8 +52,9 @@ public class CareworkerService {
         Institution institution = institutionService.getInstitutionById(institutionId);
         Careworker careworker = new Careworker(institution, careworkerRequestDTO.getName(),
                 careworkerRequestDTO.getEmail(), careworkerRequestDTO.getPhone());
-
         careworkerRepository.save(careworker);
+        alarmService.createCareworkerAlarm(careworker);
+
         return toResponseDTO(careworker);
     }
 
