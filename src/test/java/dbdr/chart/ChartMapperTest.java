@@ -1,8 +1,7 @@
 package dbdr.chart;
 
 import static org.assertj.core.api.Assertions.assertThat;
-
-import java.time.LocalDate;
+import static org.mockito.Mockito.when;
 
 import dbdr.domain.chart.dto.ChartMapper;
 import dbdr.domain.chart.dto.request.BodyManagementRequest;
@@ -19,15 +18,24 @@ import dbdr.domain.chart.entity.HealthBloodPressure;
 import dbdr.domain.chart.entity.NursingManagement;
 import dbdr.domain.chart.entity.PhysicalClear;
 import dbdr.domain.chart.entity.PhysicalMeal;
-import dbdr.domain.chart.entity.PhysicalWalk;
+import dbdr.domain.institution.entity.Institution;
 import dbdr.domain.recipient.entity.Recipient;
-
+import dbdr.domain.recipient.service.RecipientService;
+import java.time.LocalDate;
 import org.junit.jupiter.api.Test;
-import org.mapstruct.factory.Mappers;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
+@SpringBootTest
 public class ChartMapperTest {
 
-    private final ChartMapper chartMapper = Mappers.getMapper(ChartMapper.class);
+    @Autowired
+    private ChartMapper chartMapper;
+
+    @MockBean
+    private RecipientService recipientService;
+
 
     @Test
     void testToResponse_chartToChartDetailResponse() {
@@ -45,24 +53,30 @@ public class ChartMapperTest {
     @Test
     void testToEntity_chartDetailRequestToChart() {
         // given
+        Long recipientId = 1L;
+        Institution institution = Institution.builder()
+                .institutionName("HealthCare Institution")
+                .institutionNumber(100L)
+                .build();
         Recipient recipient = Recipient.builder()
-            .name("John Doe")
-            .birth(LocalDate.of(1950, 1, 1))
-            .gender("Male")
-            .careLevel("Level 1")
-            .careNumber("12345678")
-            .startDate(LocalDate.of(2020, 1, 1))
-            .institution("HealthCare Institution")
-            .institutionNumber(100L)
-            .build();
+                .name("John Doe")
+                .birth(LocalDate.of(1950, 1, 1))
+                .gender("Male")
+                .careLevel("Level 1")
+                .careNumber("12345678")
+                .startDate(LocalDate.of(2020, 1, 1))
+                .institution(institution)
+                .institutionNumber(100L)
+                .build();
 
+        when(recipientService.findRecipientById(recipientId)).thenReturn(recipient);
         ChartDetailRequest request = new ChartDetailRequest(
-            "Flu",
-            recipient,
-            new BodyManagementRequest(true, false, "Lunch", "Full", 3, true, false, "Good"),
-            new NursingManagementRequest(120, 80, "36.5", "All good"),
-            new CognitiveManagementRequest(true, "No issues"),
-            new RecoveryTrainingRequest("Physical Therapy", true, "Completed")
+                "Flu",
+                recipientId,
+                new BodyManagementRequest(true, false, "Lunch", "Full", 3, true, false, true, "Good"),
+                new NursingManagementRequest(120, 80, "36.5", true, true, true, "All good"),
+                new CognitiveManagementRequest(true, true, "No issues"),
+                new RecoveryTrainingRequest("Physical Therapy", true, true, true, "Completed")
         );
 
         // when
@@ -75,7 +89,7 @@ public class ChartMapperTest {
         assertThat(chart.getRecipient().getName()).isEqualTo("John Doe");
         assertThat(chart.getNursingManagement()).isNotNull();
         assertThat(chart.getBodyManagement().getPhysicalMeal().getMealType()).isEqualTo(
-            request.bodyManagement().mealType());
+                request.bodyManagement().mealType());
     }
 
     @Test
@@ -83,8 +97,8 @@ public class ChartMapperTest {
         // given
         PhysicalClear physicalClear = new PhysicalClear(true, false);
         PhysicalMeal physicalMeal = new PhysicalMeal("Lunch", "Full");
-        PhysicalWalk physicalWalk = new PhysicalWalk(true, false);
-        BodyManagement bodyManagement = new BodyManagement(physicalMeal, physicalWalk, physicalClear, 3, "Good");
+
+        BodyManagement bodyManagement = new BodyManagement(physicalMeal, physicalClear, 3, "Good", true, true, true);
 
         // when
         BodyManagementResponse response = chartMapper.toResponse(bodyManagement);
@@ -101,7 +115,7 @@ public class ChartMapperTest {
     void testToEntity_bodyManagementRequestToBodyManagement() {
         // given
         BodyManagementRequest request = new BodyManagementRequest(
-                true, false, "Lunch", "Full", 3, true, false, "Good"
+                true, false, "Lunch", "Full", 3, true, false, false, "Good"
         );
 
         // when
@@ -119,7 +133,8 @@ public class ChartMapperTest {
     void testToResponse_nursingManagementToNursingManagementResponse() {
         // given
         HealthBloodPressure healthBloodPressure = new HealthBloodPressure(120, 80);
-        NursingManagement nursingManagement = new NursingManagement(healthBloodPressure, "36.5", "All good");
+        NursingManagement nursingManagement = new NursingManagement(healthBloodPressure, "36.5", true, true, true,
+                "All good");
 
         // when
         NursingManagementResponse response = chartMapper.toResponse(nursingManagement);
@@ -133,7 +148,7 @@ public class ChartMapperTest {
     @Test
     void testToEntity_nursingManagementRequestToNursingManagement() {
         // given
-        NursingManagementRequest request = new NursingManagementRequest(120, 80, "36.5", "All good");
+        NursingManagementRequest request = new NursingManagementRequest(120, 80, "36.5", true, true, true, "All good");
 
         // when
         NursingManagement nursingManagement = chartMapper.toEntity(request);

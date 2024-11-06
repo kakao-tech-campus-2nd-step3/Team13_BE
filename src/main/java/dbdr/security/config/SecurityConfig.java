@@ -47,33 +47,38 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-            .cors(AbstractHttpConfigurer::disable)
-            .httpBasic(AbstractHttpConfigurer::disable)
-            .formLogin(AbstractAuthenticationFilterConfigurer::disable)
-            .sessionManagement(
-                (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .cors(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractAuthenticationFilterConfigurer::disable)
+                .sessionManagement(
+                        (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-            .addFilterBefore(new ExceptionHandlingFilter(), UsernamePasswordAuthenticationFilter.class)
-            .authenticationProvider(baseAuthenticationProvider())
-            .authorizeHttpRequests((authorize) -> {
-                authorize
-                    // 요양보호사 추가 API 허용
-                    .requestMatchers(HttpMethod.POST, "/v1/careworker/*").permitAll()                    // 인증 없이 접근 가능한 엔드포인트 설정
-                    .requestMatchers(HttpMethod.POST, "/v1/institution/guardian").permitAll()
-                    .requestMatchers(HttpMethod.POST,
-                        "/*/auth/login/*",
-                        "/*/auth/renew")
-                    .permitAll()
-                    .anyRequest().authenticated();
-            })
-            .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
-            .exceptionHandling((exception) -> exception
-                .accessDeniedHandler((request, response, accessDeniedException) -> {
-                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "접근 거부");
+                .addFilterBefore(new ExceptionHandlingFilter(), UsernamePasswordAuthenticationFilter.class)
+                .authenticationProvider(baseAuthenticationProvider())
+                .authorizeHttpRequests((authorize) -> {
+                    authorize
+                        .requestMatchers(
+                            "/swagger-ui/**",
+                            "/v3/api-docs/**",
+                            "/swagger-resources/**",
+                            "/webjars/**",
+                            "/favicon.ico",
+                            "/api-docs/**")
+                        .permitAll()
+                            .requestMatchers(HttpMethod.POST,
+                                    "/*/auth/login/*",
+                                    "/*/auth/renew")
+                            .permitAll()
+                            .anyRequest().authenticated();
                 })
-                .authenticationEntryPoint((request, response, authException) -> {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증 실패");
-                }));
+                .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling((exception) -> exception
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.sendError(HttpServletResponse.SC_FORBIDDEN, "접근 거부");
+                        })
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증 실패");
+                        }));
         return http.build();
     }
 

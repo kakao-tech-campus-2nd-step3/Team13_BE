@@ -7,6 +7,8 @@ import dbdr.domain.chart.dto.response.ChartDetailResponse;
 import dbdr.domain.chart.service.ChartService;
 import dbdr.global.util.api.ApiUtils;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -33,9 +35,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class CareWorkerChartController {
     private final ChartService chartService;
 
-    @Operation(summary = "돌봄대상자 아이디로 차트 정보 조회")
+    @Operation(summary = "돌봄대상자 아이디로 차트 정보 조회",
+            security = @SecurityRequirement(name = "JWT"))
     @GetMapping("/recipient")
     public ResponseEntity<ApiUtils.ApiResult<Page<ChartDetailResponse>>> getAllChartByRecipientId(
+            @Parameter(hidden = true)
             @RequestParam(value = "recipient-id", required = false) Long recipientId,
             @PageableDefault(size = DEFAULT_PAGE_SIZE, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         // 환자 정보 접근 권한 확인 로직 필요 -> 요양사가 맡은 환자 정보만 조회 가능
@@ -43,7 +47,8 @@ public class CareWorkerChartController {
         return ResponseEntity.ok(ApiUtils.success(recipients));
     }
 
-    @Operation(summary = "차트 아이디로 차트 정보 조회")
+    @Operation(summary = "차트 아이디로 차트 정보 조회",
+            security = @SecurityRequirement(name = "JWT"))
     @GetMapping("/{chartId}")
     public ResponseEntity<ApiUtils.ApiResult<ChartDetailResponse>> getChartById(@PathVariable("chartId") Long chartId) {
         // 환자 정보 접근 권한 확인 로직 필요 -> 요양사가 맡은 환자 정보만 조회 가능
@@ -51,7 +56,8 @@ public class CareWorkerChartController {
         return ResponseEntity.ok(ApiUtils.success(chart));
     }
 
-    @Operation(summary = "차트 추가")
+    @Operation(summary = "차트 추가",
+            security = @SecurityRequirement(name = "JWT"))
     @PostMapping
     public ResponseEntity<ApiUtils.ApiResult<ChartDetailResponse>> saveChart(@RequestBody ChartDetailRequest request) {
         // 환자 정보 접근 권한 확인 로직 필요 -> 요양사가 맡은 환자 정보만 저장 가능
@@ -59,7 +65,8 @@ public class CareWorkerChartController {
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiUtils.success(chart));
     }
 
-    @Operation(summary = "차트 아이디로 차트 수정")
+    @Operation(summary = "차트 아이디로 차트 수정",
+            security = @SecurityRequirement(name = "JWT"))
     @PutMapping("/{chartId}")
     public ResponseEntity<ApiUtils.ApiResult<ChartDetailResponse>> updateChart(@PathVariable("chartId") Long chartId,
                                                                                @RequestBody ChartDetailRequest request) {
@@ -68,7 +75,8 @@ public class CareWorkerChartController {
         return ResponseEntity.ok(ApiUtils.success(chart));
     }
 
-    @Operation(summary = "차트 아이디로 차트 삭제")
+    @Operation(summary = "차트 아이디로 차트 삭제",
+            security = @SecurityRequirement(name = "JWT"))
     @DeleteMapping("/{chartId}")
     public ResponseEntity<ApiUtils.ApiResult<String>> deleteChart(@PathVariable("chartId") Long chartId) {
         // 환자 정보 접근 권한 확인 로직 필요 -> 요양사가 맡은 환자 정보만 삭제 가능

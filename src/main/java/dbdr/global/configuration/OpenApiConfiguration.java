@@ -106,4 +106,22 @@ public class OpenApiConfiguration {
             .pathsToMatch("/v*/excel/**")
             .build();
     }
+
+    @Bean
+    public GroupedOpenApi authentication() {
+        return GroupedOpenApi.builder()
+            .group("authentication")
+            .displayName("Auth API")
+            .pathsToMatch("/v*/auth/**")
+            .build();
+    }
+
+    @Bean
+    public GroupedOpenApi summarization() {
+        return GroupedOpenApi.builder()
+            .group("summarization")
+            .displayName("Summary API")
+            .pathsToMatch("/v*/summary/**")
+            .build();
+    }
 }

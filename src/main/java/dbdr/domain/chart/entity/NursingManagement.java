@@ -26,6 +26,15 @@ public class NursingManagement extends BaseEntity {
     @Comment("체온")
     private String healthTemperature; // 체온
 
+    @Comment("건강 관리 제공 여부")
+    private boolean isHealthCareProvided; // 건강 관리 제공 여부
+
+    @Comment("간호 관리 제공 여부")
+    private boolean isNursingCareProvided; // 간호 관리 제공 여부
+
+    @Comment("응급 관리 제공 여부")
+    private boolean isEmergencyCareProvided; //  응급 관리 제공 여부
+
     @Comment("특이사항")
     @Column(columnDefinition = "TEXT")
     private String healthNote; // 건강 및 간호관리 특이사항

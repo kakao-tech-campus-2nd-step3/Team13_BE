@@ -10,12 +10,11 @@ import dbdr.domain.recipient.entity.Recipient;
 import dbdr.domain.recipient.repository.RecipientRepository;
 import dbdr.global.exception.ApplicationError;
 import dbdr.global.exception.ApplicationException;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +59,8 @@ public class RecipientService {
     }
 
     @Transactional
-    public RecipientResponseDTO updateRecipient(Long recipientId, RecipientRequestDTO recipientRequestDTO, Long institutionId, Long careworkerId) {
+    public RecipientResponseDTO updateRecipient(Long recipientId, RecipientRequestDTO recipientRequestDTO,
+                                                Long institutionId, Long careworkerId) {
         Recipient recipient = findRecipientById(recipientId);
 
         // 권한 검증
@@ -71,7 +71,7 @@ public class RecipientService {
     }
 
     @Transactional
-    public void deleteRecipient(Long recipientId,  Long institutionId, Long careworkerId) {
+    public void deleteRecipient(Long recipientId, Long institutionId, Long careworkerId) {
         Recipient recipient = findRecipientById(recipientId);
 
         // 권한 검증
@@ -99,7 +99,7 @@ public class RecipientService {
         }
     }
 
-    private Recipient findRecipientById(Long recipientId) {
+    public Recipient findRecipientById(Long recipientId) {
         return recipientRepository.findById(recipientId)
                 .orElseThrow(() -> new ApplicationException(ApplicationError.RECIPIENT_NOT_FOUND));
     }
@@ -126,3 +126,4 @@ public class RecipientService {
         );
     }
 }
+

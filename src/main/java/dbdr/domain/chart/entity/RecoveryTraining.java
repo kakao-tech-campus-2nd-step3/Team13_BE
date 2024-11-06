@@ -26,6 +26,12 @@ public class RecoveryTraining extends BaseEntity {
     @Comment("회복 훈련 완료 여부")
     private boolean recoveryTraining; // 회복훈련 완료 여부
 
+    @Comment("인지훈련 제공 여부")
+    private boolean isCognitiveTrainingProvided; // 인지훈련 제공 여부
+
+    @Comment("물리치료 제공 여부")
+    private boolean isPhysicalTherapyProvided; // 물리치료 제공 여부
+
     @Comment("회복 훈련 특이사항")
     @Column(columnDefinition = "TEXT")
     private String recoveryNote; // 회복훈련 특이사항

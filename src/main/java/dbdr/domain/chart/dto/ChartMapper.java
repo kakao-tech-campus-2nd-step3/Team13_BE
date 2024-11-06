@@ -15,68 +15,74 @@ import dbdr.domain.chart.entity.Chart;
 import dbdr.domain.chart.entity.CognitiveManagement;
 import dbdr.domain.chart.entity.NursingManagement;
 import dbdr.domain.chart.entity.RecoveryTraining;
+import dbdr.domain.recipient.entity.Recipient;
+import dbdr.domain.recipient.service.RecipientService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
+import org.springframework.beans.factory.annotation.Autowired;
 
 @Mapper(componentModel = "spring")
-public interface ChartMapper {
+public abstract class ChartMapper {
+    @Autowired
+    private RecipientService recipientService;
+
     @Mappings({
             @Mapping(source = "bodyManagement", target = "bodyManagement"),
             @Mapping(target = "chartId", source = "id")})
-    ChartDetailResponse toResponse(Chart chart);
+    public abstract ChartDetailResponse toResponse(Chart chart);
 
     @Mappings({
-        @Mapping(target = "bodyManagement", source = "bodyManagement"),
-        @Mapping(target = "nursingManagement", source = "nursingManagement"),
-        @Mapping(target = "cognitiveManagement", source = "cognitiveManagement"),
-        @Mapping(target = "recoveryTraining", source = "recoveryTraining"),
-        @Mapping(target = "conditionDisease", source = "conditionDisease"),
-        @Mapping(target = "recipient", source = "recipient")
+            @Mapping(target = "bodyManagement", source = "bodyManagement"),
+            @Mapping(target = "nursingManagement", source = "nursingManagement"),
+            @Mapping(target = "cognitiveManagement", source = "cognitiveManagement"),
+            @Mapping(target = "recoveryTraining", source = "recoveryTraining"),
+            @Mapping(target = "conditionDisease", source = "conditionDisease"),
+            @Mapping(target = "recipient", source = "recipientId")
     })
-    Chart toEntity(ChartDetailRequest request);
+    public abstract Chart toEntity(ChartDetailRequest request);
+
+    protected Recipient mapRecipient(Long recipientId) {
+        return recipientService.findRecipientById(recipientId);
+    }
 
     // BodyManagement 매핑
     @Mappings({
-        @Mapping(target = "wash", source = "physicalClear.wash"),
-        @Mapping(target = "bath", source = "physicalClear.bath"),
-        @Mapping(target = "mealType", source = "physicalMeal.mealType"),
-        @Mapping(target = "intakeAmount", source = "physicalMeal.intakeAmount"),
-        @Mapping(target = "has_walked", source = "physicalWalk.hasWalked"),
-        @Mapping(target = "has_companion", source = "physicalWalk.hasCompanion"),
+            @Mapping(target = "wash", source = "physicalClear.wash"),
+            @Mapping(target = "bath", source = "physicalClear.bath"),
+            @Mapping(target = "mealType", source = "physicalMeal.mealType"),
+            @Mapping(target = "intakeAmount", source = "physicalMeal.intakeAmount")
     })
-    BodyManagementResponse toResponse(BodyManagement bodyManagement);
+    public abstract BodyManagementResponse toResponse(BodyManagement bodyManagement);
 
     @Mappings({
             @Mapping(target = "physicalClear.wash", source = "wash"),
             @Mapping(target = "physicalClear.bath", source = "bath"),
             @Mapping(target = "physicalMeal.mealType", source = "mealType"),
-            @Mapping(target = "physicalMeal.intakeAmount", source = "intakeAmount"),
-            @Mapping(target = "physicalWalk.hasWalked", source = "has_walked"),
-            @Mapping(target = "physicalWalk.hasCompanion", source = "has_companion")
+            @Mapping(target = "physicalMeal.intakeAmount", source = "intakeAmount")
     })
-    BodyManagement toEntity(BodyManagementRequest request);
+    public abstract BodyManagement toEntity(BodyManagementRequest request);
 
     // NursingManagement 매핑
     @Mappings({
             @Mapping(target = "systolic", source = "healthBloodPressure.systolic"),
             @Mapping(target = "diastolic", source = "healthBloodPressure.diastolic")
     })
-    NursingManagementResponse toResponse(NursingManagement nursingManagement);
+    public abstract NursingManagementResponse toResponse(NursingManagement nursingManagement);
 
     @Mappings({
             @Mapping(target = "healthBloodPressure.systolic", source = "systolic"),
             @Mapping(target = "healthBloodPressure.diastolic", source = "diastolic")
     })
-    NursingManagement toEntity(NursingManagementRequest request);
+    public abstract NursingManagement toEntity(NursingManagementRequest request);
 
     // CognitiveManagement 매핑
-    CognitiveManagementResponse toResponse(CognitiveManagement cognitiveManagement);
+    public abstract CognitiveManagementResponse toResponse(CognitiveManagement cognitiveManagement);
 
-    CognitiveManagement toEntity(CognitiveManagementRequest request);
+    public abstract CognitiveManagement toEntity(CognitiveManagementRequest request);
 
     // RecoveryTraining 매핑
-    RecoveryTrainingResponse toResponse(RecoveryTraining recoveryTraining);
+    public abstract RecoveryTrainingResponse toResponse(RecoveryTraining recoveryTraining);
 
-    RecoveryTraining toEntity(RecoveryTrainingRequest request);
+    public abstract RecoveryTraining toEntity(RecoveryTrainingRequest request);
 }

@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "로그인", description = "로그인하기")
+@Tag(name = "로그인, 로그아웃", description = "로그인과 로그아웃, 토큰 리프레시")
 @RestController
 @RequestMapping("/${spring.app.version}/auth")
 public class LoginController {

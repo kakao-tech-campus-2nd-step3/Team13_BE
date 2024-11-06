@@ -1,9 +1,24 @@
-spring :
-  config :
-    test :
-      institution :
-        loginId : "testInstitution"
-        loginPassword : "passwordInstitution"
-        institutionNumber : "123"
-        institutionName : "돌다리요양원"
+spring:
+  config:
+    test:
+      institution:
+        loginId: "testInstitution"
+        loginPassword: "passwordInstitution"
+        institutionNumber: "123"
+        institutionName: "돌다리요양원"
+  jwt:
+    secret: test
+    authheader: header
+  app:
+    version: v1
+
+  data:
+    redis:
+      port: 1000
+      host: "host"
+
+line:
+  bot:
+    channel-token: "TEST"
+
 

@@ -4,10 +4,9 @@ import dbdr.domain.institution.dto.request.InstitutionRequest;
 import dbdr.domain.institution.dto.response.InstitutionResponse;
 import dbdr.domain.institution.entity.Institution;
 import dbdr.domain.institution.repository.InstitutionRepository;
-import java.util.List;
-
 import dbdr.global.exception.ApplicationError;
 import dbdr.global.exception.ApplicationException;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -28,10 +27,10 @@ public class InstitutionService {
                 institution.getInstitutionName());
     }
 
-    public InstitutionResponse updateInstitution(Long id, InstitutionRequest institutionRequest) {
+    public InstitutionResponse updateInstitution(Long institutionId, InstitutionRequest institutionRequest) {
         ensureUniqueInstitutionNumber(institutionRequest.institutionNumber());
 
-        Institution institution = getInstitution(id);
+        Institution institution = getInstitutionById(institutionId);
         institution.updateInstitution(institutionRequest.institutionNumber(), institutionRequest.institutionName());
         institutionRepository.save(institution);
         return new InstitutionResponse(institutionRequest.institutionNumber(),
@@ -54,8 +53,8 @@ public class InstitutionService {
                 institution.getInstitutionName());
     }
 
-    public void deleteInstitutionById(Long id) {
-        Institution institution = getInstitution(id);
+    public void deleteInstitutionById(Long institutionId) {
+        Institution institution = getInstitutionById(institutionId);
         institution.deactivate();
         institutionRepository.delete(institution);
     }
@@ -64,10 +63,5 @@ public class InstitutionService {
         if (institutionRepository.existsByInstitutionNumber(institutionNumber)) {
             throw new ApplicationException(ApplicationError.DUPLICATE_INSTITUTION_NUMBER);
         }
-    }
-
-    private Institution getInstitution(Long id) {
-        return institutionRepository.findById(id)
-                .orElseThrow(() -> new ApplicationException(ApplicationError.INSTITUTION_NOT_FOUND));
     }
 }
