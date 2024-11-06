@@ -8,6 +8,8 @@ import java.time.temporal.TemporalAdjusters;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.nimbusds.jose.crypto.impl.AAD;
+
 import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.core.messaging.MessageChannel;
 import dbdr.domain.core.messaging.MessageTemplate;
@@ -27,13 +29,13 @@ public class AlarmService {
 
 	@Transactional
 	public void createCareworkerAlarm(Careworker careworker) {
-		Alarm alarm = Alarm.builder()
-			.alertTime(LocalDateTime.now().with(LocalTime.of(17, 0))) // 오늘 17:00으로 설정
-			.message(MessageTemplate.CAREWORKER_ALARM_MESSAGE.getTemplate())
-			.phone(careworker.getPhone())
-			.role(Role.CAREWORKER)
-			.roleId(careworker.getId())
-			.build();
+		Alarm alarm = new Alarm(
+			LocalDateTime.now().with(LocalTime.of(17, 0)), // 오늘 17:00으로 설정
+			MessageTemplate.CAREWORKER_ALARM_MESSAGE.getTemplate(),
+			careworker.getPhone(),
+			Role.CAREWORKER,
+			careworker.getId()
+		);
 
 		alarmRepository.save(alarm);
 	}
@@ -42,26 +44,22 @@ public class AlarmService {
 	public void createCareworkerNextWorkingdayAlarm(Careworker careworker) {
 		LocalDateTime currentDateTime = LocalDateTime.now();
 		DayOfWeek currentDay = currentDateTime.getDayOfWeek();
-
-		// 다음 근무일 계산
-		DayOfWeek nextWorkDay = careworker.getNextWorkingDay(currentDay);
-
+		Alarm currentAlarm = getAlarmByPhone(careworker.getPhone());
+		DayOfWeek nextWorkDay = careworker.getNextWorkingDay(currentDay); // 다음 근무일 계산
 		if (nextWorkDay != null) {
-			// 다음 근무일의 알람 시간 설정 (해당 날짜의 alertTime 사용)
 			LocalDateTime nextAlertTime = LocalDateTime.of(
 				currentDateTime.with(TemporalAdjusters.next(nextWorkDay)).toLocalDate(),
 				careworker.getAlertTime()
 			);
-
-			// 다음 근무일 알람 생성 및 저장
-			Alarm alarm = Alarm.builder()
-				.alertTime(nextAlertTime)
-				.message(String.format(MessageTemplate.CAREWORKER_ALARM_MESSAGE.getTemplate(), careworker.getName()))
-				.phone(careworker.getPhone())
-				.role(Role.CAREWORKER)
-				.roleId(careworker.getId())
-				.build();
-
+			Alarm alarm = new Alarm(
+				nextAlertTime,
+				currentAlarm.getChannel(),
+				currentAlarm.getChannelId(),
+				MessageTemplate.CAREWORKER_ALARM_MESSAGE.getTemplate(),
+				careworker.getPhone(),
+				Role.CAREWORKER,
+				careworker.getId()
+			);
 			alarmRepository.save(alarm);
 		} else {
 			log.warn("{} 요양보호사의 다음 근무일이 지정되지 않았습니다.", careworker.getName());
@@ -69,10 +67,14 @@ public class AlarmService {
 	}
 
 	@Transactional(readOnly = true)
-	public Alarm getAlarmByPhoneAndAlertTime(String phone, LocalDateTime localDateTime) {
-		return alarmRepository.findByPhoneAndAlertTime(phone, localDateTime).orElse(null);
+	public Alarm getAlarmByPhoneAndAlertTime(String phone, LocalDateTime alertTime) {
+		return alarmRepository.findByPhoneAndAlertTime(phone, alertTime).orElse(null);
 	}
 
+	@Transactional(readOnly = true)
+	public Alarm getAlarmByPhone(String phone) {
+		return alarmRepository.findByPhone(phone).orElse(null);
+	}
 
 	@Transactional
 	public void sendAlarmToSqs(Alarm alarm, String lineUserId, String name) {

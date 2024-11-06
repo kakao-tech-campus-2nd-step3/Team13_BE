@@ -28,7 +28,9 @@ public class LineMessagingScheduler {
 
 	@Scheduled(cron = "0 0/1 * * * ?")
 	public void sendChartUpdate() {
-		LocalTime currentTime = LocalTime.now().withSecond(0).withNano(0);  // 초와 나노초를 제거하고 분 단위로 비교
+		// 초와 나노초를 제거하고 분 단위로 비교하기 위해 현재 시간을 가져옴
+		LocalTime currentTime = LocalTime.now().withSecond(0).withNano(0);
+		LocalDateTime currentDateTime = LocalDateTime.now().withSecond(0).withNano(0);
 
 		// DB에서 알림 시간을 설정한 사용자들을 조회합니다.
 		List<Guardian> guardians = guardianService.findByAlertTime(currentTime);
@@ -48,13 +50,14 @@ public class LineMessagingScheduler {
 
 		// 요양보호사에게 알람 메시지를 SQS로 전송합니다.
 		for (Careworker careworker : careworkers) {
-			log.info("알림 보낼 요양보호사 : {}", careworker.getName());
 			String phone = careworker.getPhone();
-			LocalDateTime alertTime = LocalDateTime.of(LocalDate.now(), currentTime);
-			Alarm alarm = alarmService.getAlarmByPhoneAndAlertTime(phone, alertTime);
+			log.info("알람 시간 : {}", currentDateTime);
+			Alarm alarm = alarmService.getAlarmByPhoneAndAlertTime(phone, currentDateTime);
+			log.info("알림 : {}", alarm);
 			String name = careworker.getName();
 			if (alarm != null && alarm.getChannel().equals(MessageChannel.LINE) && !alarm.isSend()) {
 				String lineUserId = alarm.getChannelId();
+				log.info("알림 보낼 요양보호사 : {}", name);
 				alarmService.sendAlarmToSqs(alarm, lineUserId, name);
 				alarmService.createCareworkerNextWorkingdayAlarm(careworker);
 			}

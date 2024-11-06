@@ -56,7 +56,6 @@ public class Alarm extends BaseEntity {
 	@Column(nullable = false)
 	private Long roleId;
 
-	@Builder
 	public Alarm(LocalDateTime alertTime, String message, String phone, Role role, Long roleId) {
 		this.alertTime = alertTime;
 		this.message = message;
@@ -65,15 +64,13 @@ public class Alarm extends BaseEntity {
 		this.roleId = roleId;
 	}
 
-	public Alarm markAsSentAndCreateNext() {
-		this.isSend = true;
-
-		return Alarm.builder()
-			.alertTime(this.alertTime.plusDays(1)) // 다음 날 같은 시간으로 설정
-			.message(MessageTemplate.NO_CHART_MESSAGE.getTemplate())
-			.phone(this.phone)
-			.role(this.role)
-			.roleId(this.roleId)
-			.build();
+	public Alarm(LocalDateTime alertTime, MessageChannel channel, String channelId, String message, String phone, Role role, Long roleId) {
+		this.alertTime = alertTime;
+		this.channel = channel;
+		this.channelId = channelId;
+		this.message = message;
+		this.phone = phone;
+		this.role = role;
+		this.roleId = roleId;
 	}
 }
