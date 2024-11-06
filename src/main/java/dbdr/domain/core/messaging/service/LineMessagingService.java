@@ -16,10 +16,24 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LineMessagingService implements MessagingService{
 	private final LineMessagingClient lineMessagingClient;
+	private final CallSqsService callSqsService;
 
 	// 사용자에게 메시지를 보내는 메서드
 	@Override
 	public void sendMessageToUser(String userId, String message) {
+		TextMessage textMessage = new TextMessage(message);
+		PushMessage pushMessage = new PushMessage(userId, textMessage);
+
+		try {
+			lineMessagingClient.pushMessage(pushMessage).get();
+			log.info("Message sent successfully to user: {}", userId);
+		} catch (Exception e) {
+			log.error("Failed to send message to user: {}", userId, e);
+			throw new ApplicationException(ApplicationError.MESSAGE_SEND_FAILED);
+		}
+	}
+
+	public void pushAlarmMessage(String userId, String message) {
 		TextMessage textMessage = new TextMessage(message);
 		PushMessage pushMessage = new PushMessage(userId, textMessage);
 

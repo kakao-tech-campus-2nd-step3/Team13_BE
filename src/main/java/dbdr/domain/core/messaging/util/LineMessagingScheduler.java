@@ -12,8 +12,15 @@ import com.linecorp.bot.model.message.TextMessage;
 
 import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.careworker.repository.CareworkerRepository;
+import dbdr.domain.careworker.service.CareworkerService;
+import dbdr.domain.core.messaging.MessageChannel;
+import dbdr.domain.core.messaging.entity.Alarm;
+import dbdr.domain.core.messaging.service.AlarmService;
+import dbdr.domain.core.messaging.service.CallSqsService;
+import dbdr.domain.core.messaging.service.LineMessagingService;
 import dbdr.domain.guardian.entity.Guardian;
 import dbdr.domain.guardian.repository.GuardianRepository;
+import dbdr.domain.guardian.service.GuardianService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -22,43 +29,35 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class LineMessagingScheduler {
 	private final LineMessagingClient lineMessagingClient;
-	private final GuardianRepository guardianRepository;
-	private final CareworkerRepository careworkerRepository;
+	private final GuardianService guardianService;
+	private final CareworkerService	careworkerService;
+	private final AlarmService alarmService;
+	private final LineMessagingService lineMessagingService;
 
 	@Scheduled(cron = "0 0/5 * * * ?")
 	public void sendChartUpdate() {
 		LocalTime currentTime = LocalTime.now().withSecond(0).withNano(0);  // 초와 나노초를 제거하고 분 단위로 비교
 
 		// DB에서 알림 시간을 설정한 사용자들을 조회합니다.
-		List<Guardian> guardians = guardianRepository.findByAlertTime(currentTime);
-		List<Careworker> careworkers = careworkerRepository.findByAlertTime(currentTime);
+		List<Guardian> guardians = guardianService.findByAlertTime(currentTime);
+		List<Careworker> careworkers = careworkerService.findByAlertTime(currentTime);
 
-		// 각 사용자에게 차트 내용을 보냅니다.
+		// 보호자에게 알람 메시지를 SQS로 전송합니다.
 		for (Guardian guardian : guardians) {
-			String userId = guardian.getLineUserId();
-			String chartMessage = "오늘의 차트 내용: ...";  // 차트 정보를 DB에서 가져와서 메시지 생성
-
-			PushMessage pushMessage = new PushMessage(userId, new TextMessage(chartMessage));
-
-			try {
-				lineMessagingClient.pushMessage(pushMessage).get();
-				log.info("Message sent to user: {}", userId);
-			} catch (Exception e) {
-				log.error("Failed to send message to user: {}", userId, e);
+			String phone = guardian.getPhone();
+			Alarm alarm = alarmService.getAlarmByPhone(phone);
+			if (alarm != null && alarm.getChannel().equals(MessageChannel.LINE)) {
+				alarmService.sendAlarmToSqs(alarm, alarm.getChannelId());
 			}
 		}
 
+		// 요양보호사에게 알람 메시지를 SQS로 전송합니다.
 		for (Careworker careworker : careworkers) {
-			String userId = careworker.getLineUserId();
-			String chartMessage = "오늘의 차트 내용: ...";  // 차트 정보를 DB에서 가져와서 메시지 생성
-
-			PushMessage pushMessage = new PushMessage(userId, new TextMessage(chartMessage));
-
-			try {
-				lineMessagingClient.pushMessage(pushMessage).get();
-				log.info("Message sent to user: {}", userId);
-			} catch (Exception e) {
-				log.error("Failed to send message to user: {}", userId, e);
+			String phone = careworker.getPhone();
+			Alarm alarm = alarmService.getAlarmByPhone(phone);
+			if (alarm != null && alarm.getChannel().equals(MessageChannel.LINE)) {
+				String lineUserId = alarm.getChannelId();
+				alarmService.sendAlarmToSqs(alarm, lineUserId);
 			}
 		}
 	}

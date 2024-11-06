@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -105,8 +106,8 @@ public class CareworkerService {
                 careworker.getName(), careworker.getEmail(), careworker.getPhone());
     }
 
-    public Careworker findByLineUserId(String userId) {
-        return careworkerRepository.findByLineUserId(userId).orElse(null);
+    public List<Careworker> findByAlertTime(LocalTime currentTime) {
+        return careworkerRepository.findByAlertTime(currentTime);
     }
 
     public Careworker findByPhone(String phoneNumber) {

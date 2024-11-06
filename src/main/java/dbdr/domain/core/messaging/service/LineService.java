@@ -83,7 +83,7 @@ public class LineService {
 		if (matcherPhone.find()) {
 			receivePhoneNumber(userId, matcherPhone.group());
 		} else {
-			lineMessagingService.sendMessageToUser(userId, MessageTemplate.ERROR_MESSAGE.getTemplate());
+			lineMessagingService.sendMessageToUser(userId, MessageTemplate.INVALID_PHONE_INPUT_MESSAGE.getTemplate());
 		}
 	}
 
@@ -98,7 +98,8 @@ public class LineService {
 			careworkerService.updateLineUserId(userId, phoneNumber);
 			lineMessagingService.sendMessageToUser(userId, MessageTemplate.CAREWORKER_WELCOME_MESSAGE.format(userName));
 		} else {
-			handleStranger(userId, userName);
+			// 보호자나 요양보호사가 아닌 경우
+			lineMessagingService.sendMessageToUser(userId, MessageTemplate.STRANGER_FOLLOW_MESSAGE.format(userName));
 		}
 	}
 
@@ -110,11 +111,5 @@ public class LineService {
 			log.error("Failed to get user profile: {}", userId, e);
 			throw new ApplicationException(ApplicationError.FAILED_TO_GET_USER_PROFILE);
 		}
-	}
-
-	// 요양보호사, 보호자가 아닌 사용자에 대한 메시지 전송
-	private void handleStranger(String userId, String userName) {
-		String welcomeMessage = MessageTemplate.STRANGER_FOLLOW_MESSAGE.format(userName);
-		lineMessagingService.sendMessageToUser(userId, welcomeMessage);
 	}
 }

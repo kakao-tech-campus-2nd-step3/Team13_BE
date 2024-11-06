@@ -8,6 +8,7 @@ import dbdr.global.exception.ApplicationError;
 import dbdr.global.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 
+import java.time.LocalTime;
 import java.util.List;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,4 +83,8 @@ public class GuardianService {
         guardian.updateLineUserId(userId);
         guardianRepository.save(guardian);
     }
+
+	public List<Guardian> findByAlertTime(LocalTime currentTime) {
+        return guardianRepository.findByAlertTime(currentTime);
+	}
 }
