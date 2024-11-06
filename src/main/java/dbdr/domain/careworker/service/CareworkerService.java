@@ -120,4 +120,6 @@ public class CareworkerService {
         careworker.updateLineUserId(userId);
         careworkerRepository.save(careworker);
     }
+
+
 }

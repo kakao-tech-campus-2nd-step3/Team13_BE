@@ -1,25 +1,19 @@
 package dbdr.domain.core.messaging.util;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.linecorp.bot.client.LineMessagingClient;
-import com.linecorp.bot.model.PushMessage;
-import com.linecorp.bot.model.message.TextMessage;
-
 import dbdr.domain.careworker.entity.Careworker;
-import dbdr.domain.careworker.repository.CareworkerRepository;
 import dbdr.domain.careworker.service.CareworkerService;
 import dbdr.domain.core.messaging.MessageChannel;
 import dbdr.domain.core.messaging.entity.Alarm;
 import dbdr.domain.core.messaging.service.AlarmService;
-import dbdr.domain.core.messaging.service.CallSqsService;
-import dbdr.domain.core.messaging.service.LineMessagingService;
 import dbdr.domain.guardian.entity.Guardian;
-import dbdr.domain.guardian.repository.GuardianRepository;
 import dbdr.domain.guardian.service.GuardianService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -42,8 +36,10 @@ public class LineMessagingScheduler {
 
 		// 보호자에게 알람 메시지를 SQS로 전송합니다.
 		for (Guardian guardian : guardians) {
+			log.info("알림 보낼 보호자 : {}", guardian.getName());
 			String phone = guardian.getPhone();
-			Alarm alarm = alarmService.getAlarmByPhone(phone);
+			LocalDateTime alertTime = LocalDateTime.of(LocalDate.now(), currentTime);
+			Alarm alarm = alarmService.getAlarmByPhoneAndAlertTime(phone, alertTime);
 			String name = guardian.getName();
 			if (alarm != null && alarm.getChannel().equals(MessageChannel.LINE)) {
 				alarmService.sendAlarmToSqs(alarm, alarm.getChannelId(), name);
@@ -54,11 +50,13 @@ public class LineMessagingScheduler {
 		for (Careworker careworker : careworkers) {
 			log.info("알림 보낼 요양보호사 : {}", careworker.getName());
 			String phone = careworker.getPhone();
-			Alarm alarm = alarmService.getAlarmByPhone(phone);
+			LocalDateTime alertTime = LocalDateTime.of(LocalDate.now(), currentTime);
+			Alarm alarm = alarmService.getAlarmByPhoneAndAlertTime(phone, alertTime);
 			String name = careworker.getName();
-			if (alarm != null && alarm.getChannel().equals(MessageChannel.LINE)) {
+			if (alarm != null && alarm.getChannel().equals(MessageChannel.LINE) && !alarm.isSend()) {
 				String lineUserId = alarm.getChannelId();
 				alarmService.sendAlarmToSqs(alarm, lineUserId, name);
+				alarmService.createCareworkerNextWorkingdayAlarm(careworker);
 			}
 		}
 	}

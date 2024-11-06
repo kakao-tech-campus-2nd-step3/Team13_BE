@@ -39,7 +39,7 @@ public class LineMessagingService implements MessagingService{
 
 		try {
 			lineMessagingClient.pushMessage(pushMessage).get();
-			log.info("Message sent successfully to user: {}", userId);
+			log.info("Message sent successfully to user: {}", lineMessagingClient.getProfile(userId).get().getDisplayName());
 		} catch (Exception e) {
 			log.error("Failed to send message to user: {}", userId, e);
 			throw new ApplicationException(ApplicationError.MESSAGE_SEND_FAILED);

@@ -1,7 +1,9 @@
 package dbdr.domain.core.messaging.service;
 
+import java.time.DayOfWeek;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.temporal.TemporalAdjusters;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,7 +16,9 @@ import dbdr.domain.core.messaging.dto.SqsMessageDto;
 import dbdr.domain.core.messaging.entity.Alarm;
 import dbdr.domain.core.messaging.repository.AlarmRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AlarmService {
@@ -34,9 +38,39 @@ public class AlarmService {
 		alarmRepository.save(alarm);
 	}
 
+	@Transactional
+	public void createCareworkerNextWorkingdayAlarm(Careworker careworker) {
+		LocalDateTime currentDateTime = LocalDateTime.now();
+		DayOfWeek currentDay = currentDateTime.getDayOfWeek();
+
+		// 다음 근무일 계산
+		DayOfWeek nextWorkDay = careworker.getNextWorkingDay(currentDay);
+
+		if (nextWorkDay != null) {
+			// 다음 근무일의 알람 시간 설정 (해당 날짜의 alertTime 사용)
+			LocalDateTime nextAlertTime = LocalDateTime.of(
+				currentDateTime.with(TemporalAdjusters.next(nextWorkDay)).toLocalDate(),
+				careworker.getAlertTime()
+			);
+
+			// 다음 근무일 알람 생성 및 저장
+			Alarm alarm = Alarm.builder()
+				.alertTime(nextAlertTime)
+				.message(String.format(MessageTemplate.CAREWORKER_ALARM_MESSAGE.getTemplate(), careworker.getName()))
+				.phone(careworker.getPhone())
+				.role(Role.CAREWORKER)
+				.roleId(careworker.getId())
+				.build();
+
+			alarmRepository.save(alarm);
+		} else {
+			log.warn("{} 요양보호사의 다음 근무일이 지정되지 않았습니다.", careworker.getName());
+		}
+	}
+
 	@Transactional(readOnly = true)
-	public Alarm getAlarmByPhone(String phone) {
-		return alarmRepository.findByPhone(phone).orElse(null);
+	public Alarm getAlarmByPhoneAndAlertTime(String phone, LocalDateTime localDateTime) {
+		return alarmRepository.findByPhoneAndAlertTime(phone, localDateTime).orElse(null);
 	}
 
 

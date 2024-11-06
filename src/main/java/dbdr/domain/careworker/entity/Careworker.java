@@ -1,7 +1,6 @@
 package dbdr.domain.careworker.entity;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 import dbdr.domain.core.base.entity.BaseEntity;
@@ -40,6 +39,9 @@ public class Careworker extends BaseEntity {
     @JoinColumn(name = "institution_id")
     private Institution institution;
 
+    @Column(nullable = false)
+    private int workDays; // 비트 플래그로 요일 저장
+
     @Column(nullable = true)
     private String lineUserId;
 
@@ -71,5 +73,26 @@ public class Careworker extends BaseEntity {
 
     public void updateAlertTime(LocalTime alertTime) {
         this.alertTime = alertTime;
+    }
+
+    // 요일 설정 및 조회 메서드
+    public void addWorkDay(DayOfWeek day) {
+        this.workDays |= day.getValue();
+    }
+
+    // 다음 근무일 찾기
+    public DayOfWeek getNextWorkingDay(DayOfWeek currentDay) {
+        for (int i = 1; i <= 7; i++) { // 최대 7일을 순환하여 다음 근무일 찾기
+            DayOfWeek nextDay = currentDay.plus(i);
+            if (isWorkingOn(nextDay)) {
+                return nextDay;
+            }
+        }
+        return null;
+    }
+
+    // 근무일인지 확인하기
+    public boolean isWorkingOn(DayOfWeek day) {
+        return (this.workDays & (1 << (day.getValue() - 1))) != 0;
     }
 }
