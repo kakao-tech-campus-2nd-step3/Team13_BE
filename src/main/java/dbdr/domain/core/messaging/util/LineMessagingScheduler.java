@@ -28,13 +28,11 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 @Slf4j
 public class LineMessagingScheduler {
-	private final LineMessagingClient lineMessagingClient;
 	private final GuardianService guardianService;
 	private final CareworkerService	careworkerService;
 	private final AlarmService alarmService;
-	private final LineMessagingService lineMessagingService;
 
-	@Scheduled(cron = "0 0/5 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?")
 	public void sendChartUpdate() {
 		LocalTime currentTime = LocalTime.now().withSecond(0).withNano(0);  // 초와 나노초를 제거하고 분 단위로 비교
 
@@ -46,18 +44,21 @@ public class LineMessagingScheduler {
 		for (Guardian guardian : guardians) {
 			String phone = guardian.getPhone();
 			Alarm alarm = alarmService.getAlarmByPhone(phone);
+			String name = guardian.getName();
 			if (alarm != null && alarm.getChannel().equals(MessageChannel.LINE)) {
-				alarmService.sendAlarmToSqs(alarm, alarm.getChannelId());
+				alarmService.sendAlarmToSqs(alarm, alarm.getChannelId(), name);
 			}
 		}
 
 		// 요양보호사에게 알람 메시지를 SQS로 전송합니다.
 		for (Careworker careworker : careworkers) {
+			log.info("알림 보낼 요양보호사 : {}", careworker.getName());
 			String phone = careworker.getPhone();
 			Alarm alarm = alarmService.getAlarmByPhone(phone);
+			String name = careworker.getName();
 			if (alarm != null && alarm.getChannel().equals(MessageChannel.LINE)) {
 				String lineUserId = alarm.getChannelId();
-				alarmService.sendAlarmToSqs(alarm, lineUserId);
+				alarmService.sendAlarmToSqs(alarm, lineUserId, name);
 			}
 		}
 	}

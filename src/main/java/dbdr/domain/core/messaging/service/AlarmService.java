@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import dbdr.domain.careworker.entity.Careworker;
+import dbdr.domain.core.messaging.MessageChannel;
 import dbdr.domain.core.messaging.MessageTemplate;
 import dbdr.domain.core.messaging.Role;
 import dbdr.domain.core.messaging.dto.SqsMessageDto;
@@ -40,10 +41,20 @@ public class AlarmService {
 
 
 	@Transactional
-	public void sendAlarmToSqs(Alarm alarm, String lineUserId) {
-		String message = alarm.getMessage();
-		callSqsService.sendMessage(new SqsMessageDto(lineUserId, message));
+	public void sendAlarmToSqs(Alarm alarm, String lineUserId, String name) {
+		String alarmMessage = String.format(alarm.getMessage(), name);
+		callSqsService.sendMessage(new SqsMessageDto(lineUserId, alarmMessage));
 		alarm.setSend(true); // 메시지 전송 상태 업데이트
 		alarmRepository.save(alarm);
+	}
+
+	@Transactional
+	public void updateNewLineUser(String phone, String lineUserId) {
+		Alarm alarm = alarmRepository.findByPhone(phone).orElse(null);
+		if (alarm != null) {
+			alarm.setChannel(MessageChannel.LINE);
+			alarm.setChannelId(lineUserId);
+			alarmRepository.save(alarm);
+		}
 	}
 }
