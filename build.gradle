@@ -71,6 +71,9 @@ dependencies {
     // SQS
     implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.1")
     implementation 'io.awspring.cloud:spring-cloud-aws-starter-sqs'
+
+    // CoolSMS
+    implementation 'net.nurigo:sdk:4.3.0'
 }
 
 tasks.named('test') {
