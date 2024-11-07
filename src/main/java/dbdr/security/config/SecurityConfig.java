@@ -66,6 +66,8 @@ public class SecurityConfig {
                         "/favicon.ico",
                         "/api-docs/**")
                     .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/sms/send-sms/**")
+                    .permitAll()
                     .requestMatchers(HttpMethod.POST, "/v1/institution/*")
                     .permitAll()
                     // LINE 웹훅 엔드포인트에 대해 인증 없이 접근 허용
