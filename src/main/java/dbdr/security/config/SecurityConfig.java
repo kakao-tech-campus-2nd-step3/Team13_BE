@@ -66,6 +66,10 @@ public class SecurityConfig {
                         "/favicon.ico",
                         "/api-docs/**")
                     .permitAll()
+                    .requestMatchers(HttpMethod.GET, "/s3/generate-presigned-url")
+                    .permitAll()
+                    .requestMatchers(HttpMethod.POST, "/s3/test-upload")
+                    .permitAll()
                     .requestMatchers(HttpMethod.GET, "/sms/send-sms/**")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "/v1/institution/*")
