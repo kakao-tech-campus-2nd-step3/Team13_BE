@@ -43,9 +43,8 @@ public class S3Service {
 	}
 
 	@Transactional
-	public void saveImageUrlToDatabase(URL imageUrl, String objectKey) {
-		// imageUrl과 objectKey를 DB에 저장
-		ocrService.saveOrUpdateOcrData(imageUrl, objectKey, null);
+	public void saveImageUrlToDatabase(String objectKey) {
+		ocrService.createOcrDate(objectKey);
 	}
 
 	// test : Presigned URL을 이용해 S3에 파일 업로드 테스트 메서드

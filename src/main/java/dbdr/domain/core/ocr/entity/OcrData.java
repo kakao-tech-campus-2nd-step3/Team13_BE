@@ -23,9 +23,6 @@ import lombok.Setter;
 @SQLRestriction("is_active = true")
 public class OcrData extends BaseEntity {
 	@Column(nullable = false, unique = true)
-	private String url;
-
-	@Column(nullable = false, unique = true)
 	private String objectKey;
 
 	@Lob

@@ -30,19 +30,20 @@ public class OcrService {
 	private String secretKey;
 
 	// OCR 요청 메서드
-	public Mono<String> performOcr(URL imageUrl, String objectKey, boolean isTable) {
-		return sendOcrRequest(imageUrl, isTable)
+	@Transactional
+	public Mono<String> performOcr(URL imageUrl, String objectKey) {
+		return sendOcrRequest(imageUrl)
 			.flatMap(response -> {
-				String extractedText = isTable ? extractTableText(response) : extractPlainText(response);
-				saveOrUpdateOcrData(imageUrl, objectKey, extractedText);
+				String extractedText = extractTableText(response);
+				updateOcrData(objectKey, extractedText);
 				return Mono.just(extractedText);
 			})
 			.doOnError(error -> log.error("OCR 요청 실패: {}", error.getMessage()))
 			.onErrorResume(WebClientResponseException.class, ex -> Mono.error(new RuntimeException("클로바 OCR 요청 실패: " + ex.getMessage())));
 	}
 
-	// 클로바 OCR API에 요청을 보내는 메서드
-	private Mono<String> sendOcrRequest(URL imageUrl, boolean isTable) {
+	// 클로바 OCR API에 요청을 보내는 메서드 (TABLE 타입으로 고정)
+	private Mono<String> sendOcrRequest(URL imageUrl) {
 		return webClient.post()
 			.uri(apiUrl)
 			.header("X-OCR-SECRET", secretKey)
@@ -55,7 +56,7 @@ public class OcrService {
 						"format", "jpg",
 						"name", "sample",
 						"url", imageUrl.toString(),
-						"type", isTable ? "TABLE" : "DOCUMENT" // TABLE 또는 DOCUMENT 설정
+						"type", "TABLE" // 항상 TABLE 타입으로 설정
 					)
 				}
 			))
@@ -85,42 +86,21 @@ public class OcrService {
 		return tableText.toString().trim();
 	}
 
-	// JSON 응답에서 일반 텍스트를 추출하는 메서드
-	private String extractPlainText(String response) {
-		StringBuilder plainTextResult = new StringBuilder();
-		try {
-			ObjectMapper objectMapper = new ObjectMapper();
-			JsonNode root = objectMapper.readTree(response);
-			JsonNode fields = root.path("images").get(0).path("fields");
-
-			for (JsonNode field : fields) {
-				String inferText = field.path("inferText").asText();
-				plainTextResult.append(inferText).append(" ");
-			}
-		} catch (Exception e) {
-			log.error("일반 텍스트 추출 중 오류 발생: {}", e.getMessage());
-		}
-		return plainTextResult.toString().trim();
+	// OCR 데이터 저장
+	@Transactional
+	public void createOcrDate(String objectKey) {
+		OcrData ocrData = new OcrData();
+		ocrData.setObjectKey(objectKey);
+		ocrRepository.save(ocrData);
+		log.info("새로운 OCR 데이터 저장: {}", ocrData);
 	}
 
-	// OCR 데이터 저장 또는 업데이트 메서드
+	// OCR 데이터 업데이트
 	@Transactional
-	public void saveOrUpdateOcrData(URL imageUrl, String objectKey, String ocrResult) {
+	public void updateOcrData(String objectKey, String ocrResult) {
 		OcrData ocrData = ocrRepository.findByObjectKey(objectKey);
-
-		if (ocrData != null) {
-			// 기존 데이터가 있으면 ocrResult 업데이트
-			ocrData.setOcrResult(ocrResult);
-			log.info("기존 OCR 데이터 업데이트: {}", ocrData);
-		} else {
-			// 새로운 데이터를 생성
-			ocrData = new OcrData();
-			ocrData.setUrl(imageUrl.toString());
-			ocrData.setObjectKey(objectKey);
-			ocrData.setOcrResult(ocrResult);
-			log.info("새로운 OCR 데이터 저장: {}", ocrData);
-		}
-
+		ocrData.setOcrResult(ocrResult);
 		ocrRepository.save(ocrData);
+		log.info("기존 OCR 데이터 업데이트: {}", ocrData);
 	}
 }

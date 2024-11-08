@@ -38,8 +38,8 @@ public class S3Controller {
 			// S3에서 이미지 URL 가져오기
 			URL imageUrl = s3Service.getS3FileUrl(objectKey);
 			// DB에 URL과 objectKey 저장
-			s3Service.saveImageUrlToDatabase(imageUrl, objectKey);
-			return ResponseEntity.ok(imageUrl.toString());
+			s3Service.saveImageUrlToDatabase(objectKey);
+			return ResponseEntity.ok("이미지 URL 저장 완료하였습니다.");
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이미지 URL 저장 중 오류가 발생했습니다.");
 		}
