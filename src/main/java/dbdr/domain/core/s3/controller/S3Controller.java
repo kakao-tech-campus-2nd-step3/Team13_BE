@@ -1,5 +1,7 @@
 package dbdr.domain.core.s3.controller;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,6 +24,20 @@ public class S3Controller {
 	public String generatePresignedUrl(@RequestParam String objectKey) {
 		URL presignedUrl = s3Service.generatePresignedUrl(objectKey);
 		return presignedUrl.toString();
+	}
+
+	// 프론트엔드 쪽에서 이미지 업로드 완료 후 키 값을 주면 DB에 저장하는 API
+	@PostMapping("/save-image-url")
+	public ResponseEntity<String> saveImageUrl(@RequestParam String objectKey) {
+		try {
+			// S3에서 이미지 URL 가져오기
+			URL imageUrl = s3Service.getS3FileUrl(objectKey);
+			// DB에 URL과 objectKey 저장
+			s3Service.saveImageUrlToDatabase(imageUrl, objectKey);
+			return ResponseEntity.ok(imageUrl.toString());
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("이미지 URL 저장 중 오류가 발생했습니다.");
+		}
 	}
 
 	// test : Presigned URL을 이용한 파일 업로드 테스트 API

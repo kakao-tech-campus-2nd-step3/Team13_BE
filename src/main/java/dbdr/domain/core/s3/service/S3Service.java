@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.GeneratePresignedUrlRequest;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -13,29 +14,38 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
 
+import dbdr.domain.core.ocr.service.OcrService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
+@RequiredArgsConstructor
 public class S3Service {
 	private final AmazonS3 amazonS3;
 	@Value("${cloud.aws.s3.bucket-name}")
 	private String bucketName;
-
-	public S3Service(AmazonS3 amazonS3) {
-		this.amazonS3 = amazonS3;
-	}
+	private final OcrService ocrService;
 
 	// Presigned URL 생성 메서드
+	@Transactional
 	public URL generatePresignedUrl(String objectKey) {
-		// 만료 시간을 2분(120초)로 고정
-		Date expiration = new Date(System.currentTimeMillis() + 120 * 1000);
-
-		// Presigned URL 요청 생성
+		Date expiration = new Date(System.currentTimeMillis() + 1200 * 1000); // 만료 시간 2분 설정
 		GeneratePresignedUrlRequest generatePresignedUrlRequest =
 			new GeneratePresignedUrlRequest(bucketName, objectKey)
 				.withMethod(HttpMethod.PUT)
 				.withExpiration(expiration);
-
-		// Presigned URL 생성
 		return amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
+	}
+
+	public URL getS3FileUrl(String objectKey) {
+		return amazonS3.getUrl(bucketName, objectKey); // objectKey를 통해 S3에서 이미지 URL 가져오기
+	}
+
+	@Transactional
+	public void saveImageUrlToDatabase(URL imageUrl, String objectKey) {
+		// imageUrl과 objectKey를 DB에 저장
+		ocrService.saveOcrData(imageUrl, objectKey);
 	}
 
 	// test : Presigned URL을 이용해 S3에 파일 업로드 테스트 메서드
