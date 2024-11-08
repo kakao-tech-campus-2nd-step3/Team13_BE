@@ -30,11 +30,11 @@ public class S3Service {
 	// Presigned URL 생성 메서드
 	@Transactional
 	public URL generatePresignedUrl(String objectKey) {
-		Date expiration = new Date(System.currentTimeMillis() + 12000 * 1000); // 만료 시간 2분 설정
+		Date expirationDate = new Date(System.currentTimeMillis() + 120 * 1000); // 만료 시간 2분 설정 (2분동안만 URL을 사용하여 파일 업로드 가능)
 		GeneratePresignedUrlRequest generatePresignedUrlRequest =
 			new GeneratePresignedUrlRequest(bucketName, objectKey)
 				.withMethod(HttpMethod.PUT)
-				.withExpiration(expiration);
+				.withExpiration(expirationDate);
 		return amazonS3.generatePresignedUrl(generatePresignedUrlRequest);
 	}
 

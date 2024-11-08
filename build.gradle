@@ -80,7 +80,6 @@ dependencies {
 
     // Naver Clova OCR API
     implementation 'org.springframework.boot:spring-boot-starter-webflux' // WebClient 사용을 위한 라이브러리
-    implementation "io.netty:netty-resolver-dns-native-macos:4.1.75.Final" // Netty 버전에 맞게 설정
 }
 
 tasks.named('test') {
