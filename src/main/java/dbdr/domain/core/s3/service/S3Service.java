@@ -30,7 +30,7 @@ public class S3Service {
 	// Presigned URL 생성 메서드
 	@Transactional
 	public URL generatePresignedUrl(String objectKey) {
-		Date expiration = new Date(System.currentTimeMillis() + 1200 * 1000); // 만료 시간 2분 설정
+		Date expiration = new Date(System.currentTimeMillis() + 12000 * 1000); // 만료 시간 2분 설정
 		GeneratePresignedUrlRequest generatePresignedUrlRequest =
 			new GeneratePresignedUrlRequest(bucketName, objectKey)
 				.withMethod(HttpMethod.PUT)
@@ -45,7 +45,7 @@ public class S3Service {
 	@Transactional
 	public void saveImageUrlToDatabase(URL imageUrl, String objectKey) {
 		// imageUrl과 objectKey를 DB에 저장
-		ocrService.saveOcrData(imageUrl, objectKey);
+		ocrService.saveOcrData(imageUrl, objectKey, null);
 	}
 
 	// test : Presigned URL을 이용해 S3에 파일 업로드 테스트 메서드

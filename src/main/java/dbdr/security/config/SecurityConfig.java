@@ -68,6 +68,8 @@ public class SecurityConfig {
                     .permitAll()
                     .requestMatchers(HttpMethod.GET, "/s3/generate-presigned-url")
                     .permitAll()
+                    .requestMatchers(HttpMethod.GET, "perform-ocr")
+                    .permitAll()
                     .requestMatchers(HttpMethod.POST, "/s3/test-upload")
                     .permitAll()
                     .requestMatchers(HttpMethod.POST, "/s3/save-image-url")
