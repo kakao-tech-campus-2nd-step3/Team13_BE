@@ -29,6 +29,6 @@ public class OcrData extends BaseEntity {
 	private String objectKey;
 
 	@Lob
-	@Column(nullable = true)
+	@Column(nullable = true, columnDefinition = "TEXT") // 명시적으로 TEXT로 설정
 	private String ocrResult;
 }

@@ -23,16 +23,19 @@ public class OcrController {
 	/**
 	 * OCR 텍스트 추출 API
 	 * @param objectKey S3에 저장된 이미지의 objectKey
+	 * @param isTable 표 추출 모드 여부 (true: 표 추출, false: 일반 텍스트 추출)
 	 * @return OCR 결과 텍스트
 	 */
 	@GetMapping("/perform-ocr")
-	public Mono<ResponseEntity<String>> performOcr(@RequestParam String objectKey) {
+	public Mono<ResponseEntity<String>> performOcr(
+		@RequestParam String objectKey,
+		@RequestParam(defaultValue = "false") boolean isTable) {
 		try {
 			// S3에서 이미지 URL 가져오기
 			URL imageUrl = s3Service.getS3FileUrl(objectKey);
 
 			// 클로바 OCR API 호출하여 텍스트 추출
-			return ocrService.performOcr(imageUrl, objectKey)
+			return ocrService.performOcr(imageUrl, objectKey, isTable)
 				.map(result -> ResponseEntity.ok(result)) // 성공 시 OCR 결과 반환
 				.onErrorResume(e -> {
 					log.error("OCR 실패: {}", e.getMessage());
