@@ -46,7 +46,7 @@ public class Careworker extends BaseEntity {
     private String lineUserId;
 
     @Column(nullable = true)
-    private LocalTime alertTime = LocalTime.of(17, 0); // 오후 5시로 초기화
+    private LocalTime alertTime = LocalTime.of(17, 0); // default: 오후 5시
 
     @Column(unique = true)
     private String email;
@@ -57,7 +57,7 @@ public class Careworker extends BaseEntity {
         this.name = name;
         this.email = email;
         this.phone = phone;
-        this.alertTime = LocalTime.of(17, 0); // 오후 5시로 초기화
+        this.alertTime = LocalTime.of(17, 0);
     }
 
     public void updateCareworker(CareworkerRequestDTO careworkerDTO) {
@@ -75,14 +75,14 @@ public class Careworker extends BaseEntity {
         this.alertTime = alertTime;
     }
 
-    // 요일 설정 및 조회 메서드
+    // 근무일 추가하기
     public void addWorkDay(DayOfWeek day) {
         this.workDays |= day.getValue();
     }
 
-    // 다음 근무일 찾기
+    // 가장 가까운 다음 근무일 찾기
     public DayOfWeek getNextWorkingDay(DayOfWeek currentDay) {
-        for (int i = 1; i <= 7; i++) { // 최대 7일을 순환하여 다음 근무일 찾기
+        for (int i = 1; i <= 7; i++) {
             DayOfWeek nextDay = currentDay.plus(i);
             if (isWorkingOn(nextDay)) {
                 return nextDay;
@@ -91,7 +91,7 @@ public class Careworker extends BaseEntity {
         return null;
     }
 
-    // 근무일인지 확인하기
+    // 해당 요일이 근무일인지 확인하기
     public boolean isWorkingOn(DayOfWeek day) {
         return (this.workDays & (1 << (day.getValue() - 1))) != 0;
     }

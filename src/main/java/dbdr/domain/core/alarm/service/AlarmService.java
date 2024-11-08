@@ -27,6 +27,7 @@ public class AlarmService {
 	private final AlarmRepository alarmRepository;
 	private final CallSqsService callSqsService;
 
+	// 알림 생성
 	@Transactional
 	public void createCareworkerAlarm(Careworker careworker) {
 		Alarm alarm = new Alarm(
