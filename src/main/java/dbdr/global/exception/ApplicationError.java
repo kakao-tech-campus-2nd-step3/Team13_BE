@@ -54,7 +54,10 @@ public enum ApplicationError {
 
     //엑셀 파일
     FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드 중 오류가 발생했습니다."),
-    FILE_DOWNLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 다운로드 중 오류가 발생했습니다.");
+    FILE_DOWNLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 다운로드 중 오류가 발생했습니다."),
+    EMPTY_FILE(HttpStatus.BAD_REQUEST, "파일이 비어 있습니다."),
+    FILE_SIZE_EXCEEDED(HttpStatus.BAD_REQUEST, "파일 크기는 5MB를 초과할 수 없습니다."),
+    INVALID_FILE(HttpStatus.BAD_REQUEST, "유효하지 않은 파일입니다. 엑셀 파일 (.xlsx)만 업로드 가능합니다.");
 
     private final HttpStatus status;
     private final String message;

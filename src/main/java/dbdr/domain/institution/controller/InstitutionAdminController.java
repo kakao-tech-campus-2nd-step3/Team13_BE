@@ -3,6 +3,7 @@ package dbdr.domain.institution.controller;
 import dbdr.domain.institution.dto.request.InstitutionRequest;
 import dbdr.domain.institution.dto.response.InstitutionResponse;
 import dbdr.domain.institution.service.InstitutionService;
+import dbdr.global.util.api.ApiUtils;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -29,39 +30,39 @@ public class InstitutionAdminController {
 
     @Operation(summary = "전체 요양원 정보 조회")
     @GetMapping
-    public ResponseEntity<List<InstitutionResponse>> showAllInstitution() {
+    public ResponseEntity<ApiUtils.ApiResult<List<InstitutionResponse>>> showAllInstitution() {
         List<InstitutionResponse> institutionResponseList = institutionService.getAllInstitution();
-        return ResponseEntity.ok(institutionResponseList);
+        return ResponseEntity.ok(ApiUtils.success(institutionResponseList));
     }
 
     @Operation(summary = "요양원 하나의 정보 조회")
     @GetMapping("/{institutionId}")
-    public ResponseEntity<InstitutionResponse> showOneInstitution(@PathVariable("institutionId") Long institutionId) {
+    public ResponseEntity<ApiUtils.ApiResult<InstitutionResponse>> showOneInstitution(@PathVariable("institutionId") Long institutionId) {
         InstitutionResponse institutionResponse = institutionService.getInstitutionResponseById(institutionId);
-        return ResponseEntity.ok(institutionResponse);
+        return ResponseEntity.ok(ApiUtils.success(institutionResponse));
     }
 
     @Operation(summary = "요양원 추가")
     @PostMapping
-    public ResponseEntity<InstitutionResponse> addInstitution(
+    public ResponseEntity<ApiUtils.ApiResult<InstitutionResponse>> addInstitution(
             @Valid @RequestBody InstitutionRequest institutionRequest) {
         InstitutionResponse institutionResponse = institutionService.addInstitution(
                 institutionRequest);
-        return ResponseEntity.status(HttpStatus.CREATED).body(institutionResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(ApiUtils.success(institutionResponse));
     }
 
     @Operation(summary = "요양원 정보 수정")
     @PutMapping("/{institutionId}")
-    public ResponseEntity<InstitutionResponse> updateInstitution(@PathVariable("institutionId") Long institutionId,
+    public ResponseEntity<ApiUtils.ApiResult<InstitutionResponse>> updateInstitution(@PathVariable("institutionId") Long institutionId,
                                                                  @Valid @RequestBody InstitutionRequest institutionRequest) {
         InstitutionResponse institutionResponse = institutionService.updateInstitution(institutionId,
                 institutionRequest);
-        return ResponseEntity.ok(institutionResponse);
+        return ResponseEntity.ok(ApiUtils.success(institutionResponse));
     }
 
     @Operation(summary = "요양원 삭제")
     @DeleteMapping("/{institutionId}")
-    public ResponseEntity<Void> deleteInstitution(@PathVariable("institutionId") Long institutionId) {
+    public ResponseEntity<ApiUtils.ApiResult<String>> deleteInstitution(@PathVariable("institutionId") Long institutionId) {
         institutionService.deleteInstitutionById(institutionId);
         return ResponseEntity.noContent().build();
     }

@@ -1,6 +1,8 @@
 package dbdr.domain.guardian.service;
 
 import dbdr.domain.core.alarm.service.AlarmService;
+import dbdr.domain.guardian.dto.request.GuardianAlertTimeRequest;
+import dbdr.domain.guardian.dto.response.GuardianMyPageResponse;
 import dbdr.domain.guardian.entity.Guardian;
 import dbdr.domain.guardian.dto.request.GuardianRequest;
 import dbdr.domain.guardian.dto.response.GuardianResponse;
@@ -24,6 +26,22 @@ public class GuardianService {
     public GuardianResponse getGuardianById(Long guardianId) {
         Guardian guardian = findGuardianById(guardianId);
         return new GuardianResponse(guardian.getPhone(), guardian.getName(), guardian.isActive());
+    }
+
+    public GuardianMyPageResponse getMyPageGuardianInfo(Long guardianId) {
+        Guardian guardian = findGuardianById(guardianId);
+        return new GuardianMyPageResponse(guardian.getName(), guardian.getPhone(),
+            guardian.getLoginId(), guardian.getAlertTime());
+    }
+
+    public GuardianMyPageResponse updateAlertTime(Long guardianId,
+        GuardianAlertTimeRequest request) {
+        ensureUniquePhone(request.phone());
+        Guardian guardian = findGuardianById(guardianId);
+        guardian.updateAlertTime(request.name(), request.phone(), request.alertTime());
+        guardianRepository.save(guardian);
+        return new GuardianMyPageResponse(guardian.getName(), guardian.getPhone(),
+            guardian.getLoginId(), guardian.getAlertTime());
     }
 
     public GuardianResponse updateGuardianById(Long guardianId,

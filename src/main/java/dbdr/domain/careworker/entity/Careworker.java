@@ -2,16 +2,14 @@ package dbdr.domain.careworker.entity;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.Set;
 
 import dbdr.domain.core.base.entity.BaseEntity;
 import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
 import dbdr.domain.institution.entity.Institution;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Pattern;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -39,6 +37,11 @@ public class Careworker extends BaseEntity {
     @JoinColumn(name = "institution_id")
     private Institution institution;
 
+    // 근무일을 요일로 설정
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Enumerated(EnumType.STRING)
+    private Set<DayOfWeek> workingDays;
+
     @Column(nullable = false)
     private int workDays; // 비트 플래그로 요일 저장
 
@@ -46,7 +49,7 @@ public class Careworker extends BaseEntity {
     private String lineUserId;
 
     @Column(nullable = true)
-    private LocalTime alertTime = LocalTime.of(17, 0); // default: 오후 5시
+    private LocalTime alertTime;
 
     @Column(unique = true)
     private String email;
@@ -61,7 +64,6 @@ public class Careworker extends BaseEntity {
     }
 
     public void updateCareworker(CareworkerRequestDTO careworkerDTO) {
-        //this.institutionId = careworkerDTO.getInstitutionId();
         this.name = careworkerDTO.getName();
         this.email = careworkerDTO.getEmail();
         this.phone = careworkerDTO.getPhone();
@@ -69,6 +71,10 @@ public class Careworker extends BaseEntity {
 
     public void updateLineUserId(String lineUserId) {
         this.lineUserId = lineUserId;
+    }
+
+    public void updateWorkingDays(Set<DayOfWeek> workingDays) {
+        this.workingDays = workingDays;
     }
 
     public void updateAlertTime(LocalTime alertTime) {
@@ -95,4 +101,9 @@ public class Careworker extends BaseEntity {
     public boolean isWorkingOn(DayOfWeek day) {
         return (this.workDays & (1 << (day.getValue() - 1))) != 0;
     }
+
+    public void updateInstitution(Institution institution) {
+        this.institution = institution;
+    }
+
 }

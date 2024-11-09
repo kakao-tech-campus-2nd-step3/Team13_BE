@@ -1,5 +1,6 @@
 package dbdr.domain.guardian.entity;
 
+import dbdr.domain.institution.entity.Institution;
 import dbdr.domain.recipient.entity.Recipient;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
@@ -45,19 +46,25 @@ public class Guardian extends BaseEntity {
     private LocalTime alertTime = LocalTime.of(18, 0); // 오후 6시로 초기화
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recipient_id")
-    private Recipient recipient;
+    @JoinColumn(name = "institution_id")
+    private Institution institution;
 
     @Builder
     public Guardian(String phone, String name) {
         this.phone = phone;
         this.name = name;
-        this.alertTime = LocalTime.of(9, 0); // 오전 9시로 초기화
+        this.alertTime = LocalTime.of(18, 0); // 오후 6시로 초기화
     }
 
     public void updateGuardian(String phone, String name) {
         this.phone = phone;
         this.name = name;
+    }
+
+    public void updateAlertTime(String name, String phone, LocalTime alertTime) {
+        this.phone = phone;
+        this.name = name;
+        this.alertTime = alertTime;
     }
 
     public void updateLineUserId(String lineUserId) {

@@ -20,11 +20,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "[요양원관리자] 보호자 (Guardian)", description = "보호자 정보 조회, 추가, 수정, 삭제")
+@Tag(name = "[관리자] 보호자 (Guardian)", description = "보호자 정보 조회, 추가, 수정, 삭제")
 @RestController
-@RequestMapping("/${spring.app.version}/institution/guardian")
+@RequestMapping("/${spring.app.version}/admin/guardian")
 @RequiredArgsConstructor
-public class GuardianInstitutionController {
+public class GuardianAdminController {
 
     private final GuardianService guardianService;
 

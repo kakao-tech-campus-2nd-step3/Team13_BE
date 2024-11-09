@@ -21,4 +21,7 @@ line:
   bot:
     channel-token: "TEST"
 
-
+openai:
+  api-key: "aaaaaa"
+  model: "aa"
+  chat-completions: "aaa"

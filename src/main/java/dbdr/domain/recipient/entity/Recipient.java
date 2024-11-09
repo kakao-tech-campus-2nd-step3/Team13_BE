@@ -2,6 +2,7 @@ package dbdr.domain.recipient.entity;
 
 import dbdr.domain.core.base.entity.BaseEntity;
 import dbdr.domain.careworker.entity.Careworker;
+import dbdr.domain.guardian.entity.Guardian;
 import dbdr.domain.institution.entity.Institution;
 import dbdr.domain.recipient.dto.request.RecipientRequestDTO;
 import jakarta.persistence.*;
@@ -51,6 +52,11 @@ public class Recipient extends BaseEntity {
     @JoinColumn(name = "careworker_id")
     private Careworker careworker;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "guardian_id")
+    private Guardian guardian;
+
+
     @Builder
     public Recipient(String name,
                      LocalDate birth,
@@ -60,7 +66,8 @@ public class Recipient extends BaseEntity {
                      LocalDate startDate,
                      Institution institution,
                      Long institutionNumber,
-                     Careworker careworker) {
+                     Careworker careworker,
+                     Guardian guardian) {
         this.name = name;
         this.birth = birth;
         this.gender = gender;
@@ -69,6 +76,33 @@ public class Recipient extends BaseEntity {
         this.startDate = startDate;
         this.institution = institution;
         this.institutionNumber = institutionNumber;
+        this.careworker = careworker;
+        this.guardian = guardian;
+    }
+
+
+    public Recipient(RecipientRequestDTO dto, Careworker careworker) {
+        this.name = dto.getName();
+        this.birth = dto.getBirth();
+        this.gender = dto.getGender();
+        this.careLevel = dto.getCareLevel();
+        this.careNumber = dto.getCareNumber();
+        this.startDate = dto.getStartDate();
+        this.institution = careworker.getInstitution();
+        this.institutionNumber = careworker.getInstitution().getInstitutionNumber();
+        this.careworker = careworker;
+    }
+
+
+    public Recipient(RecipientRequestDTO dto, Institution institution, Careworker careworker) {
+        this.name = dto.getName();
+        this.birth = dto.getBirth();
+        this.gender = dto.getGender();
+        this.careLevel = dto.getCareLevel();
+        this.careNumber = dto.getCareNumber();
+        this.startDate = dto.getStartDate();
+        this.institution = institution;
+        this.institutionNumber = institution.getInstitutionNumber();
         this.careworker = careworker;
     }
 
@@ -80,9 +114,19 @@ public class Recipient extends BaseEntity {
         this.careLevel = recipientDTO.getCareLevel();
         this.careNumber = recipientDTO.getCareNumber();
         this.startDate = recipientDTO.getStartDate();
-        // this.institution = recipientDTO.getInstitution(); 요양기관이랑 요양보호사에 대해서는 돌봄대상자가 변경 못한다.
-        this.institutionNumber = recipientDTO.getInstitutionNumber();
-        //this.careworker = careworker;
     }
+
+    public void updateRecipientForInstitution(Careworker careworker) {
+        this.careworker = careworker;
+    }//요양원용
+
+    public void updateRecipientForAdmin(RecipientRequestDTO recipientDTO, Institution institution, Careworker careworker) {
+        this.institution = institution;
+        this.institutionNumber = recipientDTO.getInstitutionNumber();
+        this.careworker = careworker;
+    } //관리자용
+
+
+
 
 }

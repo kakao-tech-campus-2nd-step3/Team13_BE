@@ -1,4 +1,4 @@
-package dbdr.domain.careworker.dto.response;
+package dbdr.domain.excel.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CareworkerResponseDTO {
+public class ExcelGuardianResponseDto {
 
     private Long id;
-    private Long institutionId;
     private String name;
-    private String email;
     private String phone;
+    private Long institution;
+
 }

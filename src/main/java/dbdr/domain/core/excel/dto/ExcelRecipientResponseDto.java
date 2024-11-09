@@ -1,4 +1,4 @@
-package dbdr.domain.recipient.dto.response;
+package dbdr.domain.excel.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecipientResponseDTO {
+public class ExcelRecipientResponseDto {
 
     private Long id;
     private String name;
@@ -18,9 +18,7 @@ public class RecipientResponseDTO {
     private String careLevel;
     private String careNumber;
     private LocalDate startDate;
-    private String institution;
-    private Long institutionNumber;
-    private Long institutionId;
-    private Long careworkerId;
-    private Long guardianId;
+    private Long institution;
+    private Long careworker;
+    private Long guardian;
 }

@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 @JsonNaming(SnakeCaseStrategy.class)
 public record ChartDataRequest(
-    String cognitiveManagement,
-    String bodyManagement,
-    String recoveryTraining,
     String conditionDisease,
-    String nursingManagement) {
+    String bodyManagement,
+    String nursingManagement,
+    String cognitiveManagement,
+    String recoveryTraining) {
 
 }

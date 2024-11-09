@@ -1,13 +1,13 @@
 package dbdr.openai.controller;
 
-import dbdr.openai.dto.response.SummaryResponse;
-import dbdr.openai.service.SummarizationService;
+import dbdr.global.util.api.ApiUtils;
+import dbdr.openai.dto.response.SummaryAndTagResponse;
+import dbdr.openai.service.SummaryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -18,18 +18,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/${spring.app.version}/summary")
 public class SummaryController {
 
-    private final SummarizationService summarizationService;
+    private final SummaryService summaryService;
 
-    @Operation(summary = "해당 날짜와 돌봄대상자 id로 요약을 해준다.", description = "시작 날짜만 필수이고, 끝 날짜는 필수가 아니다. 끝나는 날짜를 넣지 않으면 자동으로 하루치만 요약한다.")
-    @PostMapping
-    public ResponseEntity<SummaryResponse> getSummary(@RequestParam("recipientId") Long recipientId,
-        @RequestParam("startDate")
-        LocalDateTime startDate,
-        @RequestParam(name = "endDate", required = false) LocalDateTime endDate) {
-        if(endDate == null){
-            endDate = startDate;
-        }
-        return ResponseEntity.ok(
-            summarizationService.getTextAndGetSummary(recipientId, startDate, endDate));
+    @Operation(summary = "요약한 값과 태그를 DB에서 불러온다.", description = "차트 아이디로 요약 데이터와 요약태그를 불러온다.")
+    @GetMapping
+    public ResponseEntity<ApiUtils.ApiResult<SummaryAndTagResponse>> getSummaryAndTag(@RequestParam("chartId") Long chartId) {
+        return ResponseEntity.ok(ApiUtils.success(summaryService.getSummaryAndTag(chartId)));
     }
 }
