@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,7 +41,7 @@ public class AdminController {
     }
 
     @Operation(summary = "서버관리자 추가")
-    @GetMapping("/add")
+    @PostMapping("/add")
     public ResponseEntity<Void> addAdmin(@RequestBody AdminCreateRequest adminCreateRequest){
         adminService.addAdmin(adminCreateRequest);
         return ResponseEntity.ok().build();

@@ -31,7 +31,7 @@ public class AdminService {
     public void addAdmin(AdminCreateRequest adminCreateRequest) {
         Admin admin = Admin.builder()
                 .loginId(adminCreateRequest.loginId())
-                .loginPassword(adminCreateRequest.loginPassword())
+                .loginPassword(passwordEncoder.encode(adminCreateRequest.loginPassword()))
                 .build();
         addAdmin(admin);
     }

@@ -28,11 +28,10 @@ public class BaseAuthenticationProvider implements AuthenticationProvider {
 
         log.info("unAuthUser : 검사시작 {}", unAuthUser.getUserLoginId());
         //비밀번호 일치 확인
-
         if (!passwordEncoder.matches(unAuthUser.getPassword(), authUser.getPassword())) {
-            log.debug("접근한 사용자 패스워드 : {}", unAuthUser.getPassword());
-            log.debug("저장된 패스워드 : {}", authUser.getPassword());
-            log.debug("비밀번호가 불일치합니다. : {}",passwordEncoder.matches(unAuthUser.getPassword(), authUser.getPassword()));
+            log.info("접근한 사용자 패스워드 : {}", unAuthUser.getPassword());
+            log.info("저장된 패스워드 : {}", authUser.getPassword());
+            log.info("비밀번호가 불일치합니다. : {}",passwordEncoder.matches(unAuthUser.getPassword(), authUser.getPassword()));
             throw new ApplicationException(ApplicationError.PASSWORD_NOT_MATCH);
         }
         log.debug("비밀번호 일치");

@@ -64,6 +64,8 @@ public class BaseUserDetailsService {
     private BaseUserDetails getAdminDetails(String username) {
         Admin admin = adminRepository.findByLoginId(username)
             .orElseThrow(() -> new ApplicationException(ApplicationError.ADMIN_NOT_FOUND));
+        log.info("관리자 userId : {}", admin.getLoginId());
+        log.info("관리자 password : {}", admin.getLoginPassword());
         return securityRegister(admin.getId(), admin.getLoginId(), admin.getLoginPassword(), Role.ADMIN);
     }
 
@@ -90,6 +92,7 @@ public class BaseUserDetailsService {
     private BaseUserDetails securityRegister(Long id,String username, String password,Role role,Long instituionId){
         BaseUserDetails baseUserDetails = securityRegister(id,username,password,role);
         baseUserDetails.setInstitutionId(instituionId);
+        log.info("security register : {}", baseUserDetails.getUserLoginId());
         return baseUserDetails;
     }
 

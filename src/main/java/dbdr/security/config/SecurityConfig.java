@@ -57,6 +57,8 @@ public class SecurityConfig {
                 .authenticationProvider(baseAuthenticationProvider())
                 .authorizeHttpRequests((authorize) -> {
                     authorize
+                        .requestMatchers("/v1/admin/**")
+                        .permitAll()
                         .requestMatchers(
                             "/swagger-ui/**",
                             "/v3/api-docs/**",

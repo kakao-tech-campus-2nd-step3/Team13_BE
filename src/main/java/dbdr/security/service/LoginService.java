@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,10 +20,13 @@ public class LoginService {
     private final AuthenticationManagerBuilder authenticationManagerBuilder;
 
     private final dbdr.security.service.JwtProvider jwtProvider;
+    private final PasswordEncoder passwordEncoder;
 
-    public LoginService(AuthenticationManagerBuilder authenticationManagerBuilder, dbdr.security.service.JwtProvider jwtProvider) {
+    public LoginService(AuthenticationManagerBuilder authenticationManagerBuilder, dbdr.security.service.JwtProvider jwtProvider,
+        PasswordEncoder passwordEncoder) {
         this.authenticationManagerBuilder = authenticationManagerBuilder;
         this.jwtProvider = jwtProvider;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Transactional
