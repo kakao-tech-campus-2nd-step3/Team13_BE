@@ -42,6 +42,9 @@ public class Careworker extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private Set<DayOfWeek> workingDays;
 
+    @Column(nullable = false)
+    private int workDays; // 비트 플래그로 요일 저장
+
     @Column(nullable = true)
     private String lineUserId;
 
@@ -57,7 +60,7 @@ public class Careworker extends BaseEntity {
         this.name = name;
         this.email = email;
         this.phone = phone;
-        this.alertTime = LocalTime.of(17, 0); // 오후 5시로 초기화
+        this.alertTime = LocalTime.of(17, 0);
     }
 
     public void updateCareworker(CareworkerRequestDTO careworkerDTO) {
@@ -76,6 +79,27 @@ public class Careworker extends BaseEntity {
 
     public void updateAlertTime(LocalTime alertTime) {
         this.alertTime = alertTime;
+    }
+
+    // 근무일 추가하기
+    public void addWorkDay(DayOfWeek day) {
+        this.workDays |= day.getValue();
+    }
+
+    // 가장 가까운 다음 근무일 찾기
+    public DayOfWeek getNextWorkingDay(DayOfWeek currentDay) {
+        for (int i = 1; i <= 7; i++) {
+            DayOfWeek nextDay = currentDay.plus(i);
+            if (isWorkingOn(nextDay)) {
+                return nextDay;
+            }
+        }
+        return null;
+    }
+
+    // 해당 요일이 근무일인지 확인하기
+    public boolean isWorkingOn(DayOfWeek day) {
+        return (this.workDays & (1 << (day.getValue() - 1))) != 0;
     }
 
     public void updateInstitution(Institution institution) {

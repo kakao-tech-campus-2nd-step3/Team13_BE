@@ -6,6 +6,7 @@ import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
 import dbdr.domain.careworker.dto.response.CareworkerResponseDTO;
 import dbdr.domain.careworker.repository.CareworkerRepository;
+import dbdr.domain.core.alarm.service.AlarmService;
 import dbdr.domain.institution.entity.Institution;
 import dbdr.domain.institution.service.InstitutionService;
 import dbdr.global.exception.ApplicationError;
@@ -14,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalTime;
 import java.util.List;
 
 
@@ -23,6 +25,7 @@ public class CareworkerService {
 
     private final CareworkerRepository careworkerRepository;
     private final InstitutionService institutionService;
+    private final AlarmService alarmService;
 
     @Transactional(readOnly = true)
     public List<CareworkerResponseDTO> getCareworkersByInstitution(Long institutionId) {
@@ -73,8 +76,9 @@ public class CareworkerService {
         Institution institution = institutionService.getInstitutionById(institutionId);
         Careworker careworker = new Careworker(institution, careworkerRequestDTO.getName(),
                 careworkerRequestDTO.getEmail(), careworkerRequestDTO.getPhone());
-
         careworkerRepository.save(careworker);
+        alarmService.createCareworkerAlarm(careworker);
+
         return toResponseDTO(careworker);
     }
 
@@ -168,12 +172,19 @@ public class CareworkerService {
                 careworker.getName(), careworker.getEmail(), careworker.getPhone());
     }
 
-    public Careworker findByLineUserId(String userId) {
-        return careworkerRepository.findByLineUserId(userId).orElse(null);
+    public List<Careworker> findByAlertTime(LocalTime currentTime) {
+        return careworkerRepository.findByAlertTime(currentTime);
     }
 
     public Careworker findByPhone(String phoneNumber) {
         return careworkerRepository.findByPhone(phoneNumber).orElse(null);
+    }
+
+    @Transactional
+    public void updateLineUserId(String userId, String phoneNumber) {
+        Careworker careworker = findByPhone(phoneNumber);
+        careworker.updateLineUserId(userId);
+        careworkerRepository.save(careworker);
     }
 
     private CareworkerMyPageResponseDTO toMyPageResponseDTO(Careworker careworker) {

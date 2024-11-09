@@ -61,12 +61,16 @@ dependencies {
     implementation 'org.mapstruct:mapstruct:1.4.2.Final'
     annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
 
-    //POI
+    // POI
     implementation 'org.apache.poi:poi-ooxml:5.3.0'
     implementation 'org.apache.commons:commons-compress:1.27.1'
 
     // Redis
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // Amazon SQS
+    implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.1")
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-sqs'
 }
 
 tasks.named('test') {
