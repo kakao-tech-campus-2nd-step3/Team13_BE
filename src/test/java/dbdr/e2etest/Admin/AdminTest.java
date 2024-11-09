@@ -1,13 +1,11 @@
 package dbdr.e2etest.Admin;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import dbdr.domain.admin.entity.Admin;
 import dbdr.security.model.Role;
-import dbdr.testhelper.DefaultEntity;
 import dbdr.testhelper.TestHelper;
 import dbdr.testhelper.TestHelperFactory;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,5 +44,6 @@ public class AdminTest {
         assertThat(response.getBody()).contains("ad","ad2");
 
     }
+
 
 }

@@ -10,6 +10,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,6 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/${spring.app.version}/admin")
 @RequiredArgsConstructor
+@Slf4j
 public class AdminController {
 
     private final AdminService adminService;
@@ -43,6 +45,8 @@ public class AdminController {
     @Operation(summary = "서버관리자 추가")
     @PostMapping("/add")
     public ResponseEntity<Void> addAdmin(@RequestBody AdminCreateRequest adminCreateRequest){
+
+        log.info("어드민 생성 시작, {} {}", adminCreateRequest.loginId(), adminCreateRequest.loginPassword());
         adminService.addAdmin(adminCreateRequest);
         return ResponseEntity.ok().build();
     }
