@@ -46,7 +46,8 @@ public class RecipientAdminController {
     @PutMapping("/{recipientId}")
     public ResponseEntity<ApiUtils.ApiResult<RecipientResponse>> updateRecipient(
             @PathVariable("recipientId") Long recipientId,
-            @Valid @RequestBody RecipientRequest recipientDTO) {
+            @Valid @RequestBody RecipientRequest recipientDTO
+    ) {
         RecipientResponse updatedRecipient = recipientService.updateRecipientForAdmin(recipientId, recipientDTO);
         return ResponseEntity.ok(ApiUtils.success(updatedRecipient));
     }
