@@ -10,8 +10,8 @@ spring:
 
     data:
       redis:
-        port: 1000
-        host: "host"
+        port: 6379
+        host: localhost
 
 line:
   bot:

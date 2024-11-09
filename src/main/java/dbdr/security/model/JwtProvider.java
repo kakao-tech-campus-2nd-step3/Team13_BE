@@ -36,7 +36,7 @@ public class JwtProvider {
     private final RedisService redisService;
 
     public JwtProvider(@Value("${spring.jwt.secret}") String secret,
-                       BaseUserDetailsService baseUserDetailsService, RedisService redisService) {
+        BaseUserDetailsService baseUserDetailsService, RedisService redisService) {
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), HMAC_ALGORITHM);
         this.baseUserDetailsService = baseUserDetailsService;
         this.redisService = redisService;
@@ -69,57 +69,50 @@ public class JwtProvider {
 
     public TokenDTO createAllToken(String username, String role) {
         TokenDTO token = TokenDTO.builder()
-                .refreshToken(createToken(username, role, REFRESH_TOKEN_EXPIRATION_TIME))
-                .accessToken(createToken(username, role, ACCESS_TOKEN_EXPIRATION_TIME))
-                .build();
+            .refreshToken(createToken(username, role, REFRESH_TOKEN_EXPIRATION_TIME))
+            .accessToken(createToken(username, role, ACCESS_TOKEN_EXPIRATION_TIME))
+            .build();
         redisService.saveRefreshToken(role + username, token.refreshToken());
         return token;
     }
 
     private String createToken(String username, String role, Long expireTime) {
         return Jwts.builder().claim("username", username).claim("role", role)
-                .setIssuer(JwtUtils.ISSUER)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + expireTime))
-                .signWith(secretKey).compact();
+            .setIssuer(JwtUtils.ISSUER)
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + expireTime * 1000))
+            .signWith(secretKey).compact();
     }
 
     public Authentication getAuthentication(String token) {
         BaseUserDetails userDetails = baseUserDetailsService.loadUserByUsernameAndRole(getUserName(token),
-                Role.valueOf(getRole(token)));
+            Role.valueOf(getRole(token)));
         validateBlackListToken(token);
         return new UsernamePasswordAuthenticationToken(userDetails, userDetails.getPassword(),
-                userDetails.getAuthorities());
+            userDetails.getAuthorities());
     }
 
     private void validateBlackListToken(String token) {
-        //TODO : test환경에서 redis 잠시 끄기
-        /*
         if (redisService.isBlackList(getRedisCode(token), token)) {
             throw new ApplicationException(TOKEN_EXPIRED);
         }
 
-         */
     }
 
     public TokenDTO renewTokens(String refreshToken) {
-        /*
         if (!isValidRedisRefreshToken(getRedisCode(refreshToken), refreshToken)) {
             redisService.deleteRefreshToken(getRedisCode(refreshToken));
             throw new ApplicationException(REFRESH_TOKEN_EXPIRED);
         }
 
-         */
         return createAllToken(getUserName(refreshToken), getRole(refreshToken));
     }
 
     public void deleteRefreshToken(String accessToken) {
-        /*
         String redisCode = getRedisCode(accessToken);
         redisService.deleteRefreshToken(redisCode);
         redisService.saveBlackList(redisCode, accessToken);
 
-         */
     }
 
     private Boolean isValidRedisRefreshToken(String code, String refreshToken) {
@@ -136,6 +129,6 @@ public class JwtProvider {
 
     private Claims getJwtsBody(String token) {
         return Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token)
-                .getBody();
+            .getBody();
     }
 }

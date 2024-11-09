@@ -33,7 +33,7 @@ public class AdminService {
                 .loginId(adminCreateRequest.loginId())
                 .loginPassword(passwordEncoder.encode(adminCreateRequest.loginPassword()))
                 .build();
-        addAdmin(admin);
+        adminRepository.save(admin);
     }
 
     @Transactional(readOnly = true)

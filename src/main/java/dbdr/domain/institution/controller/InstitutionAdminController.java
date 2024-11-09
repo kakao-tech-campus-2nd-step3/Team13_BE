@@ -4,6 +4,8 @@ import dbdr.domain.institution.dto.request.InstitutionRequest;
 import dbdr.domain.institution.dto.response.InstitutionResponse;
 import dbdr.domain.institution.service.InstitutionService;
 import dbdr.global.util.api.ApiUtils;
+import dbdr.security.model.DbdrAuth;
+import dbdr.security.model.Role;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -37,6 +39,7 @@ public class InstitutionAdminController {
 
     @Operation(summary = "요양원 하나의 정보 조회")
     @GetMapping("/{institutionId}")
+    @DbdrAuth(targetRole = Role.ADMIN)
     public ResponseEntity<ApiUtils.ApiResult<InstitutionResponse>> showOneInstitution(@PathVariable("institutionId") Long institutionId) {
         InstitutionResponse institutionResponse = institutionService.getInstitutionResponseById(institutionId);
         return ResponseEntity.ok(ApiUtils.success(institutionResponse));
@@ -44,6 +47,7 @@ public class InstitutionAdminController {
 
     @Operation(summary = "요양원 추가")
     @PostMapping
+    @DbdrAuth(targetRole = Role.ADMIN)
     public ResponseEntity<ApiUtils.ApiResult<InstitutionResponse>> addInstitution(
             @Valid @RequestBody InstitutionRequest institutionRequest) {
         InstitutionResponse institutionResponse = institutionService.addInstitution(
@@ -53,6 +57,7 @@ public class InstitutionAdminController {
 
     @Operation(summary = "요양원 정보 수정")
     @PutMapping("/{institutionId}")
+    @DbdrAuth(targetRole = Role.ADMIN)
     public ResponseEntity<ApiUtils.ApiResult<InstitutionResponse>> updateInstitution(@PathVariable("institutionId") Long institutionId,
                                                                  @Valid @RequestBody InstitutionRequest institutionRequest) {
         InstitutionResponse institutionResponse = institutionService.updateInstitution(institutionId,
@@ -62,6 +67,7 @@ public class InstitutionAdminController {
 
     @Operation(summary = "요양원 삭제")
     @DeleteMapping("/{institutionId}")
+    @DbdrAuth(targetRole = Role.ADMIN)
     public ResponseEntity<ApiUtils.ApiResult<String>> deleteInstitution(@PathVariable("institutionId") Long institutionId) {
         institutionService.deleteInstitutionById(institutionId);
         return ResponseEntity.noContent().build();
