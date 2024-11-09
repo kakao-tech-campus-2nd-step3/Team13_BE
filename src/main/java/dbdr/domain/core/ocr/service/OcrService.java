@@ -70,18 +70,19 @@ public class OcrService {
 		try {
 			ObjectMapper objectMapper = new ObjectMapper();
 			JsonNode root = objectMapper.readTree(response);
-			JsonNode tables = root.path("images").get(0).path("tables");
+			JsonNode fields = root.path("images").get(0).path("fields");
 
-			for (JsonNode table : tables) {
-				JsonNode cells = table.path("cells");
-				for (JsonNode cell : cells) {
-					String inferText = cell.path("inferText").asText();
-					tableText.append(inferText).append(" | "); // 셀 구분을 위해 '|' 추가
-				}
-				tableText.append("\n"); // 행 구분을 위해 줄바꿈 추가
+			if (fields.isMissingNode() || fields.isEmpty()) {
+				log.warn("OCR 응답에 'fields' 데이터가 없습니다.");
+				return "데이터가 없습니다.";
+			}
+
+			for (JsonNode field : fields) {
+				String inferText = field.path("inferText").asText();
+				tableText.append(inferText).append(" "); // 텍스트 조각을 공백으로 구분하여 추가
 			}
 		} catch (Exception e) {
-			log.error("표 데이터 추출 중 오류 발생: {}", e.getMessage());
+			log.error("데이터 추출 중 오류 발생: {}", e.getMessage());
 		}
 		return tableText.toString().trim();
 	}
