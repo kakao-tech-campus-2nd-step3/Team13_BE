@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +20,7 @@ public class GuardianService {
 
     private final GuardianRepository guardianRepository;
 
+    @Transactional(readOnly = true)
     public GuardianResponse getGuardianById(Long guardianId) {
         Guardian guardian = findGuardianById(guardianId);
         return new GuardianResponse(guardian.getPhone(), guardian.getName(), guardian.isActive());
@@ -40,8 +42,11 @@ public class GuardianService {
             guardian.getLoginId(), guardian.getAlertTime());
     }
 
-    public GuardianResponse updateGuardianById(Long guardianId,
-        GuardianRequest guardianRequest) {
+    @Transactional
+    public GuardianResponse updateGuardianById(
+            Long guardianId,
+            GuardianRequest guardianRequest
+    ) {
         ensureUniquePhone(guardianRequest.phone());
 
         Guardian guardian = findGuardianById(guardianId);
@@ -51,6 +56,7 @@ public class GuardianService {
             guardian.isActive());
     }
 
+    @Transactional(readOnly = true)
     public List<GuardianResponse> getAllGuardian() {
         List<Guardian> guardianList = guardianRepository.findAll();
         return guardianList.stream()
@@ -59,23 +65,19 @@ public class GuardianService {
             .toList();
     }
 
+    @Transactional
     public GuardianResponse addGuardian(GuardianRequest guardianRequest) {
         ensureUniquePhone(guardianRequest.phone());
-        /*
         Guardian guardian = Guardian.builder().phone(guardianRequest.phone())
             .name(guardianRequest.name())
             .loginId(guardianRequest.phone())
             .loginPassword(guardianRequest.loginPassword())
-            .recipient(null)
             .build();
         guardian = guardianRepository.save(guardian);
         return new GuardianResponse(guardian.getPhone(), guardian.getName(), guardian.isActive());
-
-         */
-        return null;
-        //TODO
     }
 
+    @Transactional
     public void deleteGuardianById(Long guardianId) {
         Guardian guardian = findGuardianById(guardianId);
         guardian.deactivate();
