@@ -73,9 +73,15 @@ public class CareworkerService {
         ensureUniqueEmail(careworkerRequestDTO.getEmail());
         ensureUniquePhone(careworkerRequestDTO.getPhone());
 
+        Institution institution = institutionService.getInstitutionById(institutionId);
+        Careworker careworker = new Careworker(institution, careworkerRequestDTO.getName(),
+                careworkerRequestDTO.getEmail(), careworkerRequestDTO.getPhone());
         Careworker careworker = careworkerMapper.toEntity(careworkerRequestDTO);
 
         careworkerRepository.save(careworker);
+        alarmService.createCareworkerAlarm(careworker);
+
+        return toResponseDTO(careworker);
         alarmService.createCareworkerAlarm(careworker);
 
         return careworkerMapper.toResponse(careworker);
@@ -183,12 +189,23 @@ public class CareworkerService {
 
     public List<Careworker> findByAlertTime(LocalTime currentTime) {
         return careworkerRepository.findByAlertTime(currentTime);
+    public List<Careworker> findByAlertTime(LocalTime currentTime) {
+        return careworkerRepository.findByAlertTime(currentTime);
     }
 
     public Careworker findByPhone(String phoneNumber) {
         return careworkerRepository.findByPhone(phoneNumber).orElse(null);
     }
 
+    @Transactional
+    public void updateLineUserId(String userId, String phoneNumber) {
+        Careworker careworker = findByPhone(phoneNumber);
+        careworker.updateLineUserId(userId);
+        careworkerRepository.save(careworker);
+    }
+
+    private CareworkerMyPageResponseDTO toMyPageResponseDTO(Careworker careworker) {
+        return new CareworkerMyPageResponseDTO(
     private CareworkerMyPageResponse toMyPageResponseDTO(Careworker careworker) {
         return new CareworkerMyPageResponse(
                 careworker.getName(),

@@ -27,6 +27,7 @@ public class AlarmService {
 	private final AlarmRepository alarmRepository;
 	private final CallSqsService callSqsService;
 
+	// 알림 생성
 	@Transactional
 	public void createCareworkerAlarm(Careworker careworker) {
 		Alarm alarm = new Alarm(
@@ -69,7 +70,7 @@ public class AlarmService {
 	@Transactional
 	public void createGuardianAlarm(Guardian guardian) {
 		Alarm alarm = new Alarm(
-			LocalDateTime.now().with(LocalTime.of(9, 0)), // 오늘 09:00으로 설정
+			LocalDateTime.now().with(LocalTime.of(9, 0)),
 			MessageTemplate.NO_CHART_MESSAGE.getTemplate(),
 			guardian.getPhone(),
 			Role.GUARDIAN,

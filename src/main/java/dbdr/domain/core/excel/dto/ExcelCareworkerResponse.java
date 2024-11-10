@@ -9,9 +9,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ExcelCareworkerResponse {
 
-    private Long id;
-    private Long institution;
-    private String name;
-    private String email;
-    private String phone;
+	private Long id;
+	private Long institution;
+	private String name;
+	private String email;
+	private String phone;
 }

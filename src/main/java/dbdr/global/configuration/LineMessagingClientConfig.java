@@ -11,6 +11,7 @@ public class LineMessagingClientConfig {
 	@Value("${line.bot.channel-token}")
 	private String channelToken;
 
+
 	@Bean
 	public LineMessagingClient lineMessagingClient() {
 		return LineMessagingClient.builder(channelToken).build();
