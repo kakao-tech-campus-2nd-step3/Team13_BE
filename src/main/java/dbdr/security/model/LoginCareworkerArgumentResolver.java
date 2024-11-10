@@ -3,6 +3,7 @@ package dbdr.security.model;
 import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.careworker.repository.CareworkerRepository;
 import dbdr.global.exception.ApplicationError;
+import dbdr.global.exception.ApplicationException;
 import dbdr.security.LoginCareworker;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
@@ -33,7 +34,7 @@ public class LoginCareworkerArgumentResolver implements HandlerMethodArgumentRes
                 .getAuthentication().getPrincipal();
         return careworkerRepository.findById(baseUserDetails.getId())
                 .orElseThrow(
-                        () -> new ApplicationExㅎception(ApplicationError.USER_NOT_FOUND));
+                        () -> new ApplicationException(ApplicationError.USER_NOT_FOUND));
 
     }
 }
