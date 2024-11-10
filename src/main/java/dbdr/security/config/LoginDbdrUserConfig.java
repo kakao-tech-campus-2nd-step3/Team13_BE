@@ -1,8 +1,8 @@
 package dbdr.security.config;
 
-import dbdr.security.service.LoginCareworkerArgumentResolver;
-import dbdr.security.service.LoginGuardianArgumentResolver;
-import dbdr.security.service.LoginInstitutionArgumentResolver;
+import dbdr.security.model.LoginCareworkerArgumentResolver;
+import dbdr.security.model.LoginGuardianArgumentResolver;
+import dbdr.security.model.LoginInstitutionArgumentResolver;
 import java.util.List;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;

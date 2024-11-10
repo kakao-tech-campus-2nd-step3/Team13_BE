@@ -12,6 +12,8 @@ public interface GuardianRepository extends JpaRepository<Guardian, Long> {
 
     boolean existsByPhone(String phone);
 
+    boolean existsByPhoneAndIdNot(String phone, Long id);
+
     Optional<Guardian> findByLineUserId(String userId);
 
     List<Guardian> findByAlertTime(LocalTime currentTime);

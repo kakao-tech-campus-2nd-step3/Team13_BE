@@ -4,10 +4,20 @@ import java.time.DayOfWeek;
 import java.time.LocalTime;
 
 import dbdr.domain.core.base.entity.BaseEntity;
-import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
 import dbdr.domain.institution.entity.Institution;
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.Pattern;
+import java.time.DayOfWeek;
+import java.time.LocalTime;
+import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -22,9 +32,6 @@ import org.hibernate.annotations.SQLRestriction;
 @SQLDelete(sql = "UPDATE careworkers SET is_active = false WHERE id = ?")
 @SQLRestriction("is_active = true")
 public class Careworker extends BaseEntity {
-
-    @Column(unique = true)
-    private String loginId;
 
     private String loginPassword;
 
@@ -42,6 +49,11 @@ public class Careworker extends BaseEntity {
     @Column(nullable = false)
     private int workDays; // 비트 플래그로 요일 저장
 
+	// 근무일을 요일로 설정
+	@ElementCollection(fetch = FetchType.LAZY)
+	@Enumerated(EnumType.STRING)
+	private Set<DayOfWeek> workingDays;
+
     @Column(nullable = true)
     private String lineUserId;
 
@@ -52,28 +64,37 @@ public class Careworker extends BaseEntity {
     private String email;
 
     @Builder
-    public Careworker(Institution institution, String name, String email, String phone) {
-        this.institution = institution;
-        this.name = name;
-        this.email = email;
+    public Careworker(String loginPassword, String phone, String name, Institution institution,
+                      String email) {
+        this.loginPassword = loginPassword;
         this.phone = phone;
+        this.name = name;
+        this.institution = institution;
+        this.email = email;
         this.alertTime = LocalTime.of(17, 0); // 오후 5시로 초기화
     }
 
-    public void updateCareworker(CareworkerRequestDTO careworkerDTO) {
-        //this.institutionId = careworkerDTO.getInstitutionId();
-        this.name = careworkerDTO.getName();
-        this.email = careworkerDTO.getEmail();
-        this.phone = careworkerDTO.getPhone();
+    public void updateCareworker(Careworker careworker) {
+        this.name = careworker.getName();
+        this.email = careworker.getEmail();
+        this.phone = careworker.getPhone();
     }
 
     public void updateLineUserId(String lineUserId) {
         this.lineUserId = lineUserId;
     }
 
+    public void updateWorkingDays(Set<DayOfWeek> workingDays) {
+        this.workingDays = workingDays;
+    }
+
     public void updateAlertTime(LocalTime alertTime) {
         this.alertTime = alertTime;
     }
+
+	public void updateInstitution(Institution institution) {
+		this.institution = institution;
+	}
 
     // 요일 설정 및 조회 메서드
     public void addWorkDay(DayOfWeek day) {

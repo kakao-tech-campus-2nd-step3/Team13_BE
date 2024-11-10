@@ -5,7 +5,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 public record ChartDetailRequest(
         @Schema(description = "상태", example = "오늘은 상태가 매우 좋으셨다.")
         String conditionDisease,
-        @Schema(description = "돌봄대상자", example = "{\"id\":\"1\"}")
+        @Schema(description = "돌봄대상자", example = "1")
         Long recipientId,
         @Schema(description = "신체활동", example = "{\"wash\": true,\"bath\": true,\"mealType\": \"채식\","
                 + "\"intakeAmount\": \"3회\",\"physicalRestroom\": 6,\"has_walked\": false,"

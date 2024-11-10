@@ -10,7 +10,13 @@ public record InstitutionRequest(
     Long institutionNumber,
     @Schema(description = "기관 이름", example = "사랑돌봄요양기관")
     @NotBlank(message = "기관 이름은 필수 항목입니다.")
-    String institutionName
+    String institutionName,
+    @Schema(description = "기관 로그인 Id",example = "love1234")
+    @NotBlank(message = "기관 로그인 Id는 필수 항목입니다.")
+    String institutionLoginId,
+    @Schema(description = "기관 로그인 비밀번호",example = "12345678")
+    @NotBlank(message = "기관 로그인 비밀번호는 필수 항목입니다.")
+    String institutionLoginPassword
 ) {
 
 }

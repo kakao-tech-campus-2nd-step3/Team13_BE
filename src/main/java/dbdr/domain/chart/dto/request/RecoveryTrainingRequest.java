@@ -8,9 +8,9 @@ public record RecoveryTrainingRequest(
         @Schema(description = "회복훈련 완료 여부", example = "true")
         boolean recoveryTraining, // 회복훈련 완료 여부
         @Schema(description = "인지훈련 제공 여부", example = "true")
-        boolean isCognitiveTrainingProvided, // 인지훈련 제공 여부
+        boolean cognitiveTrainingProvided, // 인지훈련 제공 여부
         @Schema(description = "물리치료 제공 여부", example = "true")
-        boolean isPhysicalTherapyProvided, // 물리치료 제공 여부
+        boolean physicalTherapyProvided, // 물리치료 제공 여부
         @Schema(description = "회복훈련 특이사항", example = "없음")
         String recoveryNote // 회복훈련 특이사항
 ) {
