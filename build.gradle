@@ -80,6 +80,9 @@ dependencies {
 
     // Naver Clova OCR API
     implementation 'org.springframework.boot:spring-boot-starter-webflux' // WebClient 사용을 위한 라이브러리
+
+    // Health check
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 tasks.named('test') {
