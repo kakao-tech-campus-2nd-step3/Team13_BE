@@ -75,13 +75,9 @@ public class CareworkerService {
 
         Careworker careworker = careworkerMapper.toEntity(careworkerRequestDTO);
 
-        Institution institution = institutionService.getInstitutionById(institutionId);
-        Careworker careworker = new Careworker(institution, careworkerRequestDTO.getName(),
-                careworkerRequestDTO.getEmail(), careworkerRequestDTO.getPhone());
         careworkerRepository.save(careworker);
         alarmService.createCareworkerAlarm(careworker);
 
-        return toResponseDTO(careworker);
         return careworkerMapper.toResponse(careworker);
     }
 

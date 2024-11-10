@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 // 요양사 권한 필요
-@Tag(name = "[요양관리사] 차트 관리", description = "요양관리사의 차트 조회, 추가, 수정, 삭제")
+@Tag(name = "[요양보호사] 차트 관리", description = "요양보호사의 차트 조회, 추가, 수정, 삭제")
 @RestController
 @RequestMapping("/${spring.app.version}/careworker/chart")
 @RequiredArgsConstructor

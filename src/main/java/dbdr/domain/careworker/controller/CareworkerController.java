@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-@Tag(name = "요양보호사 마이페이지", description = "요양보호사 본인의 정보 조회 및 수정")
+@Tag(name = "[요양보호사] 마이페이지", description = "요양보호사 본인의 정보 조회 및 수정")
 @RestController
 @RequestMapping("/${spring.app.version}/careworker")
 @RequiredArgsConstructor
