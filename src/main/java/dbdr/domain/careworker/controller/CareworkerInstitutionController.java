@@ -7,6 +7,7 @@ import dbdr.domain.institution.entity.Institution;
 import dbdr.global.util.api.ApiUtils;
 import dbdr.security.LoginInstitution;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -28,7 +29,7 @@ public class CareworkerInstitutionController {
     @Operation(summary = "특정 요양원아이디로 전체 요양보호사 정보 조회", security = @SecurityRequirement(name = "JWT"))
     @GetMapping("/institution")
     public ResponseEntity<ApiUtils.ApiResult<List<CareworkerResponse>>> getAllCareworkers(
-            @LoginInstitution Institution institution) {
+            @Parameter(hidden = true) @LoginInstitution Institution institution) {
         List<CareworkerResponse> institutions = careworkerService.getCareworkersByInstitution(institution.getId());
         return ResponseEntity.ok(ApiUtils.success(institutions)) ;
     }
@@ -37,7 +38,7 @@ public class CareworkerInstitutionController {
     @GetMapping("/{careworkerId}")
     public ResponseEntity<ApiUtils.ApiResult<CareworkerResponse>> getCareworkerById(
             @PathVariable("careworkerId") Long careworkerId,
-            @LoginInstitution Institution institution) {
+            @Parameter(hidden = true) @LoginInstitution Institution institution) {
         CareworkerResponse careworker = careworkerService.getCareworkerByInstitution(careworkerId, institution.getId());
         return ResponseEntity.ok(ApiUtils.success(careworker)) ;
     }
@@ -46,7 +47,7 @@ public class CareworkerInstitutionController {
     @Operation(summary = "요양보호사 추가", security = @SecurityRequirement(name = "JWT"))
     @PostMapping
     public ResponseEntity<ApiUtils.ApiResult<CareworkerResponse>> createCareworker(
-            @LoginInstitution Institution institution,
+            @Parameter(hidden = true) @LoginInstitution Institution institution,
             @Valid @RequestBody CareworkerRequest careworkerDTO) {
         CareworkerResponse newCareworker = careworkerService.createCareworker(careworkerDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiUtils.success(newCareworker));
@@ -58,7 +59,7 @@ public class CareworkerInstitutionController {
     @PutMapping("/{careworkerId}")
     public ResponseEntity<ApiUtils.ApiResult<CareworkerResponse>> updateCareworker(
             @PathVariable Long careworkerId,
-            @LoginInstitution Institution institution,
+            @Parameter(hidden = true) @LoginInstitution Institution institution,
             @RequestBody CareworkerRequest careworkerDTO) {
         CareworkerResponse updatedCareworker = careworkerService.updateCareworker(careworkerId, careworkerDTO);
         return ResponseEntity.ok(ApiUtils.success(updatedCareworker));
@@ -68,7 +69,7 @@ public class CareworkerInstitutionController {
     @DeleteMapping("/{careworkerId}")
     public ResponseEntity<ApiUtils.ApiResult<String>> deleteCareworker(
             @PathVariable Long careworkerId,
-            @LoginInstitution Institution institution) {
+            @Parameter(hidden = true) @LoginInstitution Institution institution) {
         careworkerService.deleteCareworker(careworkerId, institution.getId());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
