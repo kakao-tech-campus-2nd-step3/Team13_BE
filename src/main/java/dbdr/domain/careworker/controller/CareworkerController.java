@@ -6,6 +6,8 @@ import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.careworker.service.CareworkerService;
 import dbdr.global.util.api.ApiUtils;
 import dbdr.security.LoginCareworker;
+import dbdr.security.model.DbdrAuth;
+import dbdr.security.model.Role;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -21,8 +23,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-
-
 @Tag(name = "요양보호사 마이페이지", description = "요양보호사 본인의 정보 조회 및 수정")
 @RestController
 @RequestMapping("/${spring.app.version}/careworker")
@@ -34,6 +34,7 @@ public class CareworkerController {
 
     @Operation(summary = "요양보호사 본인의 정보 조회", security = @SecurityRequirement(name = "JWT"))
     @GetMapping
+    @DbdrAuth(targetRole = Role.CAREWORKER)
     public ResponseEntity<ApiUtils.ApiResult<CareworkerMyPageResponse>> showCareworkerInfo(
             @Parameter(hidden = true) @LoginCareworker Careworker careworker) {
         log.info("Careworker Name: {}", careworker.getName());
@@ -46,7 +47,8 @@ public class CareworkerController {
     public ResponseEntity<ApiUtils.ApiResult<CareworkerMyPageResponse>> updateCareworkerInfo(
             @Parameter(hidden = true) @LoginCareworker Careworker careworker,
             @Valid @RequestBody CareworkerUpdateRequest careworkerRequest) {
-        CareworkerMyPageResponse updatedResponse = careworkerService.updateWorkingDaysAndAlertTime(careworker.getId(), careworkerRequest);
+        CareworkerMyPageResponse updatedResponse = careworkerService.updateWorkingDaysAndAlertTime(careworker.getId(),
+                careworkerRequest);
         return ResponseEntity.ok(ApiUtils.success(updatedResponse));
     }
 }
