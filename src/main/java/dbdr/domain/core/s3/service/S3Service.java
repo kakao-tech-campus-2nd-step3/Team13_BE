@@ -30,7 +30,7 @@ public class S3Service {
 	// Presigned URL 생성 메서드
 	@Transactional
 	public URL generatePresignedUrl(String objectKey) {
-		Date expirationDate = new Date(System.currentTimeMillis() + 120 * 1000); // 만료 시간 2분 설정 (2분동안만 URL을 사용하여 파일 업로드 가능)
+		Date expirationDate = new Date(System.currentTimeMillis() + 5 * 60 * 1000); // 만료 시간 5분 설정 (2분동안만 URL을 사용하여 파일 업로드 가능)
 		GeneratePresignedUrlRequest generatePresignedUrlRequest =
 			new GeneratePresignedUrlRequest(bucketName, objectKey)
 				.withMethod(HttpMethod.PUT)

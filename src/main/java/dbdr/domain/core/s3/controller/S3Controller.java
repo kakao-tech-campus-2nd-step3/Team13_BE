@@ -15,10 +15,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 
-@Tag(name = "S3 / Presgined URL", description = "이미지 업로드를 위한 Presigned URL 생성 및 이미지 URL 저장하는 API")
+@Tag(name = "[프론트엔드] Presgined URL", description = "이미지 업로드를 위한 Presigned URL 생성 및 이미지 URL 저장하는 API")
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/s3")
+@RequestMapping("/v1/s3/chart")
 public class S3Controller {
 	private final S3Service s3Service;
 
