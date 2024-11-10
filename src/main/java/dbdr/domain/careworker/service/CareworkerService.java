@@ -194,8 +194,8 @@ public class CareworkerService {
                 careworker.getName(),
                 careworker.getPhone(),
                 careworker.getInstitution().getInstitutionName(),
-                careworker.getWorkingDays(),
-                careworker.getAlertTime()
+                careworker.getAlertTime(),
+                careworker.getWorkingDays()
         );
     }
 

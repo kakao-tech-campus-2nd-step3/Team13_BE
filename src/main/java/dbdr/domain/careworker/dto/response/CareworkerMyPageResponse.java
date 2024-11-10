@@ -13,6 +13,6 @@ public class CareworkerMyPageResponse {
     private String name;
     private String phone;
     private String institutionName;
-    private Set<DayOfWeek> workingDays;
     private LocalTime alertTime;
+    private Set<DayOfWeek> workingDays;
 }

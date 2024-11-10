@@ -17,6 +17,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Pattern;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.EnumSet;
 import java.util.Set;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -49,11 +50,6 @@ public class Careworker extends BaseEntity {
     @Column(nullable = false)
     private int workDays; // 비트 플래그로 요일 저장
 
-	// 근무일을 요일로 설정
-	@ElementCollection(fetch = FetchType.LAZY)
-	@Enumerated(EnumType.STRING)
-	private Set<DayOfWeek> workingDays;
-
     @Column(nullable = true)
     private String lineUserId;
 
@@ -85,9 +81,21 @@ public class Careworker extends BaseEntity {
     }
 
     public void updateWorkingDays(Set<DayOfWeek> workingDays) {
-        this.workingDays = workingDays;
+        this.workDays = 0; // 초기화하여 기존 값을 제거합니다.
+        for (DayOfWeek day : workingDays) {
+            this.workDays |= (1 << (day.getValue() - 1)); // 각 요일을 비트 플래그로 추가합니다.
+        }
     }
 
+    public Set<DayOfWeek> getWorkingDays() {
+        Set<DayOfWeek> workingDays = EnumSet.noneOf(DayOfWeek.class);
+        for (DayOfWeek day : DayOfWeek.values()) {
+            if ((this.workDays & (1 << (day.getValue() - 1))) != 0) {
+                workingDays.add(day);
+            }
+        }
+        return workingDays;
+    }
     public void updateAlertTime(LocalTime alertTime) {
         this.alertTime = alertTime;
     }

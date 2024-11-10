@@ -7,6 +7,7 @@ import dbdr.domain.careworker.entity.Careworker;
 import dbdr.global.util.api.ApiUtils;
 import dbdr.security.LoginCareworker;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -28,7 +29,7 @@ public class RecipientCareworkerController {
     @Operation(summary = "담당 돌봄대상자 전체 조회 ", security = @SecurityRequirement(name = "JWT"))
     @GetMapping
     public ResponseEntity<ApiUtils.ApiResult<List<RecipientResponse>>> getAllRecipients(
-            @LoginCareworker Careworker careworker) {
+        @Parameter(hidden = true) @LoginCareworker Careworker careworker) {
         List<RecipientResponse> recipients = recipientService.getRecipientsByCareworker(careworker.getId());
         return ResponseEntity.ok(ApiUtils.success(recipients));
     }
@@ -37,7 +38,7 @@ public class RecipientCareworkerController {
     @GetMapping("/{recipientId}")
     public ResponseEntity<ApiUtils.ApiResult<RecipientResponse>> getRecipientById(
             @PathVariable("recipientId") Long recipientId,
-            @LoginCareworker Careworker careworker) {
+            @Parameter(hidden = true) @LoginCareworker Careworker careworker) {
         RecipientResponse recipient = recipientService.getRecipientByCareworker(recipientId, careworker.getId());
         return ResponseEntity.ok(ApiUtils.success(recipient));
     }
@@ -46,7 +47,7 @@ public class RecipientCareworkerController {
     @PostMapping
     public ResponseEntity<ApiUtils.ApiResult<RecipientResponse>> createRecipient(
             @Valid @RequestBody RecipientRequest recipientDTO,
-            @LoginCareworker Careworker careworker) {
+            @Parameter(hidden = true) @LoginCareworker Careworker careworker) {
         RecipientResponse newRecipient = recipientService.createRecipientForCareworker(recipientDTO, careworker.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiUtils.success(newRecipient));
     }
@@ -55,7 +56,7 @@ public class RecipientCareworkerController {
     @PutMapping("/{recipientId}")
     public ResponseEntity<ApiUtils.ApiResult<RecipientResponse>> updateRecipient(
             @PathVariable("recipientId") Long recipientId,
-            @LoginCareworker Careworker careworker,
+            @Parameter(hidden = true) @LoginCareworker Careworker careworker,
             @Valid @RequestBody RecipientRequest recipientDTO) {
         RecipientResponse updatedRecipient = recipientService.updateRecipientForCareworker(recipientId, recipientDTO, careworker.getId());
         return ResponseEntity.ok(ApiUtils.success(updatedRecipient));
@@ -65,7 +66,7 @@ public class RecipientCareworkerController {
     @DeleteMapping("/{recipientId}")
     public ResponseEntity<ApiUtils.ApiResult<String>> deleteRecipient(
             @PathVariable("recipientId") Long recipientId,
-            @LoginCareworker Careworker careworker) {
+            @Parameter(hidden = true) @LoginCareworker Careworker careworker) {
         recipientService.deleteRecipientForCareworker(recipientId, careworker.getId());
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }

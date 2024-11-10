@@ -64,15 +64,6 @@ public class OpenApiConfiguration {
     }
 
     @Bean
-    public GroupedOpenApi recipientApi() {
-        return GroupedOpenApi.builder()
-            .group("recipient")
-            .displayName("Recipient API")
-            .pathsToMatch("/v*/recipient/**")
-            .build();
-    }
-
-    @Bean
     public GroupedOpenApi guardianApi() {
         return GroupedOpenApi.builder()
             .group("guardian")
@@ -114,15 +105,6 @@ public class OpenApiConfiguration {
             .group("authentication")
             .displayName("Auth API")
             .pathsToMatch("/v*/auth/**")
-            .build();
-    }
-
-    @Bean
-    public GroupedOpenApi summarization() {
-        return GroupedOpenApi.builder()
-            .group("summarization")
-            .displayName("Summary API")
-            .pathsToMatch("/v*/summary/**")
             .build();
     }
 }

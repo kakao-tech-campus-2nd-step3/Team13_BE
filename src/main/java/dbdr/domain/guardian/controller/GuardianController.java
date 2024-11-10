@@ -20,7 +20,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "보호자 (Guardian)", description = "보호자 정보 조회, 수정")
+@Tag(name = "[보호자]", description = "보호자 정보 조회, 수정")
 @RestController
 @RequestMapping("/${spring.app.version}/guardian")
 @RequiredArgsConstructor

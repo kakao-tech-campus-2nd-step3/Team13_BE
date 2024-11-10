@@ -16,8 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-@Tag(name = "엑셀-요양보호사,보호자,돌봄대상자", description = "엑셀 다운로드와 업로드")
-@RestController
+@Tag(name = "엑셀 양식 다운로드 및 업로드", description = "요양 관리사, 보호자, 돌봄 대상자 정보를 엑셀 파일을 통해 대량으로 업로ㅇ할 수 있습니다.")@RestController
 @RequestMapping("/${spring.app.version}/excel")
 @RequiredArgsConstructor
 public class ExcelController {
