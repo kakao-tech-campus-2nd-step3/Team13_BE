@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 // 보호자 권한 필요
-@Tag(name = "보호자 (Guardian) 차트", description = "보호자 차트 조회")
+@Tag(name = "[보호자] 차트 조회", description = "보호자 차트 조회")
 @RestController
 @RequestMapping("/${spring.app.version}/guardian/chart")
 @RequiredArgsConstructor
