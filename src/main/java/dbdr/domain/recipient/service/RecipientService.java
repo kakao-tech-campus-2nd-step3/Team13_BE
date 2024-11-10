@@ -2,8 +2,8 @@ package dbdr.domain.recipient.service;
 
 import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.institution.entity.Institution;
-import dbdr.domain.recipient.dto.request.RecipientRequestDTO;
-import dbdr.domain.recipient.dto.response.RecipientResponseDTO;
+import dbdr.domain.recipient.dto.request.RecipientRequest;
+import dbdr.domain.recipient.dto.response.RecipientResponse;
 import dbdr.domain.recipient.entity.Recipient;
 import dbdr.domain.recipient.repository.RecipientRepository;
 import dbdr.domain.careworker.service.CareworkerService;
@@ -25,23 +25,23 @@ public class RecipientService {
     private final InstitutionService institutionService;
 
     // 전체 돌봄대상자 목록 조회 (관리자용)
-    public List<RecipientResponseDTO> getAllRecipients() {
+    public List<RecipientResponse> getAllRecipients() {
         return recipientRepository.findAll()
                 .stream()
-                .map(this::toResponseDTO)
+                .map(this::toResponse)
                 .toList();
     }
 
     // 특정 돌봄대상자 조회 (관리자용)
     @Transactional(readOnly = true)
-    public RecipientResponseDTO getRecipientById(Long recipientId) {
+    public RecipientResponse getRecipientById(Long recipientId) {
         Recipient recipient = findRecipientById(recipientId);
-        return toResponseDTO(recipient);
+        return toResponse(recipient);
     }
 
     //관리자용
     @Transactional
-    public RecipientResponseDTO createRecipient(RecipientRequestDTO recipientDTO) {
+    public RecipientResponse createRecipient(RecipientRequest recipientDTO) {
         ensureUniqueCareNumber(recipientDTO.getCareNumber());
         Careworker careworker = careworkerService.getCareworkerById(recipientDTO.getCareworkerId());
         Institution institution = institutionService.getInstitutionById(recipientDTO.getInstitutionId());
@@ -53,12 +53,12 @@ public class RecipientService {
 
         Recipient recipient = new Recipient(recipientDTO, institution, careworker);
         recipientRepository.save(recipient);
-        return toResponseDTO(recipient);
+        return toResponse(recipient);
     }
 
     //관리자용
     @Transactional
-    public RecipientResponseDTO updateRecipientForAdmin(Long recipientId, RecipientRequestDTO recipientDTO) {
+    public RecipientResponse updateRecipientForAdmin(Long recipientId, RecipientRequest recipientDTO) {
         Recipient recipient = findRecipientById(recipientId);
         Institution institution = institutionService.getInstitutionById(recipientDTO.getInstitutionId());
         if (institution == null) {
@@ -78,7 +78,7 @@ public class RecipientService {
         recipient.updateRecipient(recipientDTO);
         recipient.updateRecipientForAdmin(recipientDTO, institution, careworker);
 
-        return toResponseDTO(recipient);
+        return toResponse(recipient);
     }
 
 
@@ -92,55 +92,55 @@ public class RecipientService {
 
     //보호자용
     @Transactional(readOnly = true)
-    public List<RecipientResponseDTO> getAllRecipientsForGuardian(Long guardianId) {
+    public List<RecipientResponse> getAllRecipientsForGuardian(Long guardianId) {
         return recipientRepository.findAllByGuardianId(guardianId)
                 .stream()
-                .map(this::toResponseDTO)
+                .map(this::toResponse)
                 .toList();
     }
     //보호자용
     @Transactional(readOnly = true)
-    public RecipientResponseDTO getRecipientForGuardian(Long guardianId, Long recipientId) {
+    public RecipientResponse getRecipientForGuardian(Long guardianId, Long recipientId) {
         return recipientRepository.findByIdAndGuardianId(recipientId, guardianId)
-                .map(this::toResponseDTO)
+                .map(this::toResponse)
                 .orElseThrow(() -> new ApplicationException(ApplicationError.RECIPIENT_NOT_FOUND));
     }
 
     //전체 돌봄대상자 목록 조회 (요양보호사용)
     @Transactional(readOnly = true)
-    public List<RecipientResponseDTO> getRecipientsByCareworker(Long careworkerId) {
+    public List<RecipientResponse> getRecipientsByCareworker(Long careworkerId) {
         return recipientRepository.findByCareworkerId(careworkerId)
                 .stream()
-                .map(this::toResponseDTO)
+                .map(this::toResponse)
                 .toList();
     }
 
 
     //전체 돌봄대상자 목록 조회 (요양원용)
-    public List<RecipientResponseDTO> getRecipientsByInstitution(Long institutionId) {
+    public List<RecipientResponse> getRecipientsByInstitution(Long institutionId) {
         return recipientRepository.findByInstitutionId(institutionId)
                 .stream()
-                .map(this::toResponseDTO)
+                .map(this::toResponse)
                 .toList();
     }
 
     //요양보호사가 담당하는 특정 돌봄대상자 정보 조회
     @Transactional(readOnly = true)
-    public RecipientResponseDTO getRecipientByCareworker(Long recipientId, Long careworkerId) {
+    public RecipientResponse getRecipientByCareworker(Long recipientId, Long careworkerId) {
         Recipient recipient = findRecipientByIdAndCareworker(recipientId, careworkerId);
-        return toResponseDTO(recipient);
+        return toResponse(recipient);
     }
 
     //요양원이 관리하는 특정 돌봄대상자 정보 조회
     @Transactional(readOnly = true)
-    public RecipientResponseDTO getRecipientByInstitution(Long recipientId, Long institutionId) {
+    public RecipientResponse getRecipientByInstitution(Long recipientId, Long institutionId) {
         Recipient recipient = findRecipientByIdAndInstitution(recipientId, institutionId);
-        return toResponseDTO(recipient);
+        return toResponse(recipient);
     }
 
     //요양보호사가 새로운 돌봄대상자를 추가
     @Transactional
-    public RecipientResponseDTO createRecipientForCareworker(RecipientRequestDTO recipientDTO, Long careworkerId) {
+    public RecipientResponse createRecipientForCareworker(RecipientRequest recipientDTO, Long careworkerId) {
         ensureUniqueCareNumber(recipientDTO.getCareNumber());
         Careworker careworker = careworkerService.getCareworkerById(careworkerId);
 
@@ -150,12 +150,12 @@ public class RecipientService {
 
         Recipient recipient = new Recipient(recipientDTO, careworker);
         recipientRepository.save(recipient);
-        return toResponseDTO(recipient);
+        return toResponse(recipient);
     }
 
     //요양원이 새로운 돌봄대상자(요양보호사 배정 필수)를 추가
     @Transactional
-    public RecipientResponseDTO createRecipientForInstitution(RecipientRequestDTO recipientDTO, Long institutionId) {
+    public RecipientResponse createRecipientForInstitution(RecipientRequest recipientDTO, Long institutionId) {
         ensureUniqueCareNumber(recipientDTO.getCareNumber());
         Institution institution = institutionService.getInstitutionById(institutionId);
         Careworker careworker = careworkerService.getCareworkerById(recipientDTO.getCareworkerId());
@@ -166,12 +166,12 @@ public class RecipientService {
 
         Recipient recipient = new Recipient(recipientDTO, institution, careworker);
         recipientRepository.save(recipient);
-        return toResponseDTO(recipient);
+        return toResponse(recipient);
     }
 
     //요양보호사가 담당하는 돌봄대상자 정보 수정
     @Transactional
-    public RecipientResponseDTO updateRecipientForCareworker(Long recipientId, RecipientRequestDTO recipientDTO, Long careworkerId) {
+    public RecipientResponse updateRecipientForCareworker(Long recipientId, RecipientRequest recipientDTO, Long careworkerId) {
         Careworker careworker = careworkerService.getCareworkerById(careworkerId);
         Recipient recipient = findRecipientByIdAndCareworker(recipientId, careworkerId);
 
@@ -180,12 +180,12 @@ public class RecipientService {
         }
 
         recipient.updateRecipient(recipientDTO);
-        return toResponseDTO(recipient);
+        return toResponse(recipient);
     }
 
     // 요양원에 속한 돌봄대상자 정보 수정
     @Transactional
-    public RecipientResponseDTO updateRecipientForInstitution(Long recipientId, RecipientRequestDTO recipientDTO, Long institutionId) {
+    public RecipientResponse updateRecipientForInstitution(Long recipientId, RecipientRequest recipientDTO, Long institutionId) {
         Recipient recipient = findRecipientByIdAndInstitution(recipientId, institutionId);
         Careworker careworker = careworkerService.getCareworkerById(recipientDTO.getCareworkerId());
 
@@ -198,7 +198,7 @@ public class RecipientService {
         recipient.updateRecipient(recipientDTO);
         recipient.updateRecipientForInstitution(careworker);
 
-        return toResponseDTO(recipient);
+        return toResponse(recipient);
     }
 
     //요양보호사가 담당하는 돌봄대상자 삭제
@@ -239,8 +239,8 @@ public class RecipientService {
         }
     }
 
-    private RecipientResponseDTO toResponseDTO(Recipient recipient) {
-        return new RecipientResponseDTO(
+    private RecipientResponse toResponse(Recipient recipient) {
+        return new RecipientResponse(
                 recipient.getId(),
                 recipient.getName(),
                 recipient.getBirth(),

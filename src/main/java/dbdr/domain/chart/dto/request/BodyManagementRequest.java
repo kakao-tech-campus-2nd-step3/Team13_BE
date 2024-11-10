@@ -14,11 +14,11 @@ public record BodyManagementRequest(
         @Schema(description = "화장실 횟수", example = "6")
         String physicalRestroom, // 화장실 횟수
         @Schema(description = "산책", example = "false")
-        boolean has_walked, // 산책
+        boolean hasWalked, // 산책
         @Schema(description = "체위 변경 유무", example = "false")
-        boolean isPositionChangeRequired, // 체위 변경 유무
+        boolean positionChangeRequired, // 체위 변경 유무
         @Schema(description = "이동 도움 유무", example = "false")
-        boolean isMobilityAssistance, // 이동 도움 유무
+        boolean mobilityAssistance, // 이동 도움 유무
         @Schema(description = "특이사항 입력", example = "평소보다 컨디션이 좋으셨다.")
         String physicalNote // 특이사항 입력
 ) {

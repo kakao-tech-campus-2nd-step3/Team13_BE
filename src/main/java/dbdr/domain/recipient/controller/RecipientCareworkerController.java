@@ -1,7 +1,7 @@
 package dbdr.domain.recipient.controller;
 
-import dbdr.domain.recipient.dto.request.RecipientRequestDTO;
-import dbdr.domain.recipient.dto.response.RecipientResponseDTO;
+import dbdr.domain.recipient.dto.request.RecipientRequest;
+import dbdr.domain.recipient.dto.response.RecipientResponse;
 import dbdr.domain.recipient.service.RecipientService;
 import dbdr.domain.careworker.entity.Careworker;
 import dbdr.global.util.api.ApiUtils;
@@ -27,37 +27,37 @@ public class RecipientCareworkerController {
 
     @Operation(summary = "담당 돌봄대상자 전체 조회 ", security = @SecurityRequirement(name = "JWT"))
     @GetMapping
-    public ResponseEntity<ApiUtils.ApiResult<List<RecipientResponseDTO>>> getAllRecipients(
+    public ResponseEntity<ApiUtils.ApiResult<List<RecipientResponse>>> getAllRecipients(
             @LoginCareworker Careworker careworker) {
-        List<RecipientResponseDTO> recipients = recipientService.getRecipientsByCareworker(careworker.getId());
+        List<RecipientResponse> recipients = recipientService.getRecipientsByCareworker(careworker.getId());
         return ResponseEntity.ok(ApiUtils.success(recipients));
     }
 
     @Operation(summary = "담당 돌봄대상자 정보 조회", security = @SecurityRequirement(name = "JWT"))
     @GetMapping("/{recipientId}")
-    public ResponseEntity<ApiUtils.ApiResult<RecipientResponseDTO>> getRecipientById(
+    public ResponseEntity<ApiUtils.ApiResult<RecipientResponse>> getRecipientById(
             @PathVariable("recipientId") Long recipientId,
             @LoginCareworker Careworker careworker) {
-        RecipientResponseDTO recipient = recipientService.getRecipientByCareworker(recipientId, careworker.getId());
+        RecipientResponse recipient = recipientService.getRecipientByCareworker(recipientId, careworker.getId());
         return ResponseEntity.ok(ApiUtils.success(recipient));
     }
 
     @Operation(summary = "담당 돌봄대상자 추가", security = @SecurityRequirement(name = "JWT"))
     @PostMapping
-    public ResponseEntity<ApiUtils.ApiResult<RecipientResponseDTO>> createRecipient(
-            @Valid @RequestBody RecipientRequestDTO recipientDTO,
+    public ResponseEntity<ApiUtils.ApiResult<RecipientResponse>> createRecipient(
+            @Valid @RequestBody RecipientRequest recipientDTO,
             @LoginCareworker Careworker careworker) {
-        RecipientResponseDTO newRecipient = recipientService.createRecipientForCareworker(recipientDTO, careworker.getId());
+        RecipientResponse newRecipient = recipientService.createRecipientForCareworker(recipientDTO, careworker.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiUtils.success(newRecipient));
     }
 
     @Operation(summary = "담당 돌봄대상자 정보 수정", security = @SecurityRequirement(name = "JWT"))
     @PutMapping("/{recipientId}")
-    public ResponseEntity<ApiUtils.ApiResult<RecipientResponseDTO>> updateRecipient(
+    public ResponseEntity<ApiUtils.ApiResult<RecipientResponse>> updateRecipient(
             @PathVariable("recipientId") Long recipientId,
             @LoginCareworker Careworker careworker,
-            @Valid @RequestBody RecipientRequestDTO recipientDTO) {
-        RecipientResponseDTO updatedRecipient = recipientService.updateRecipientForCareworker(recipientId, recipientDTO, careworker.getId());
+            @Valid @RequestBody RecipientRequest recipientDTO) {
+        RecipientResponse updatedRecipient = recipientService.updateRecipientForCareworker(recipientId, recipientDTO, careworker.getId());
         return ResponseEntity.ok(ApiUtils.success(updatedRecipient));
     }
 

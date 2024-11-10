@@ -1,7 +1,7 @@
 package dbdr.openai.controller;
 
 import dbdr.global.util.api.ApiUtils;
-import dbdr.openai.dto.response.SummaryAndTagResponse;
+import dbdr.openai.dto.response.SummaryApiFinalResponse;
 import dbdr.openai.service.SummaryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -22,7 +22,7 @@ public class SummaryController {
 
     @Operation(summary = "요약한 값과 태그를 DB에서 불러온다.", description = "차트 아이디로 요약 데이터와 요약태그를 불러온다.")
     @GetMapping
-    public ResponseEntity<ApiUtils.ApiResult<SummaryAndTagResponse>> getSummaryAndTag(@RequestParam("chartId") Long chartId) {
-        return ResponseEntity.ok(ApiUtils.success(summaryService.getSummaryAndTag(chartId)));
+    public ResponseEntity<ApiUtils.ApiResult<SummaryApiFinalResponse>> getSummary(@RequestParam("chartId") Long chartId) {
+        return ResponseEntity.ok(ApiUtils.success(summaryService.getFinalSummary(chartId)));
     }
 }

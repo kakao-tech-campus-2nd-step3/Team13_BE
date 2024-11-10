@@ -20,4 +20,8 @@ public interface CareworkerRepository extends JpaRepository<Careworker, Long> {
     boolean existsByEmail(String email);
 
     boolean existsByPhone(String phone);
+
+	boolean existsByPhoneAndIdNot(String phone, Long id);
+
+    boolean existsByEmailAndIdNot(String phone, Long id);
 }

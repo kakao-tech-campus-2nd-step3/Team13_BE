@@ -1,7 +1,7 @@
 package dbdr.domain.recipient.controller;
 
-import dbdr.domain.recipient.dto.request.RecipientRequestDTO;
-import dbdr.domain.recipient.dto.response.RecipientResponseDTO;
+import dbdr.domain.recipient.dto.request.RecipientRequest;
+import dbdr.domain.recipient.dto.response.RecipientResponse;
 import dbdr.domain.recipient.service.RecipientService;
 import dbdr.global.util.api.ApiUtils;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,31 +23,32 @@ public class RecipientAdminController {
 
     @Operation(summary = "전체 돌봄대상자 조회 ")
     @GetMapping
-    public ResponseEntity<ApiUtils.ApiResult<List<RecipientResponseDTO>>> getAllRecipients() {
-        List<RecipientResponseDTO> recipients = recipientService.getAllRecipients();
+    public ResponseEntity<ApiUtils.ApiResult<List<RecipientResponse>>> getAllRecipients() {
+        List<RecipientResponse> recipients = recipientService.getAllRecipients();
         return ResponseEntity.ok(ApiUtils.success(recipients));
     }
 
     @Operation(summary = "돌봄대상자 정보 조회")
     @GetMapping("/{recipientId}")
-    public ResponseEntity<ApiUtils.ApiResult<RecipientResponseDTO>> getRecipientById(@PathVariable("recipientId") Long recipientId) {
-        RecipientResponseDTO recipient = recipientService.getRecipientById(recipientId);
+    public ResponseEntity<ApiUtils.ApiResult<RecipientResponse>> getRecipientById(@PathVariable("recipientId") Long recipientId) {
+        RecipientResponse recipient = recipientService.getRecipientById(recipientId);
         return ResponseEntity.ok(ApiUtils.success(recipient));
     }
 
     @Operation(summary = "돌봄대상자 추가")
     @PostMapping
-    public ResponseEntity<ApiUtils.ApiResult<RecipientResponseDTO>> createRecipient(@Valid @RequestBody RecipientRequestDTO recipientDTO) {
-        RecipientResponseDTO newRecipient = recipientService.createRecipient(recipientDTO);
+    public ResponseEntity<ApiUtils.ApiResult<RecipientResponse>> createRecipient(@Valid @RequestBody RecipientRequest recipientDTO) {
+        RecipientResponse newRecipient = recipientService.createRecipient(recipientDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiUtils.success(newRecipient));
     }
 
     @Operation(summary = "돌봄대상자 정보 수정")
     @PutMapping("/{recipientId}")
-    public ResponseEntity<ApiUtils.ApiResult<RecipientResponseDTO>> updateRecipient(
+    public ResponseEntity<ApiUtils.ApiResult<RecipientResponse>> updateRecipient(
             @PathVariable("recipientId") Long recipientId,
-            @Valid @RequestBody RecipientRequestDTO recipientDTO) {
-        RecipientResponseDTO updatedRecipient = recipientService.updateRecipientForAdmin(recipientId, recipientDTO);
+            @Valid @RequestBody RecipientRequest recipientDTO
+    ) {
+        RecipientResponse updatedRecipient = recipientService.updateRecipientForAdmin(recipientId, recipientDTO);
         return ResponseEntity.ok(ApiUtils.success(updatedRecipient));
     }
 

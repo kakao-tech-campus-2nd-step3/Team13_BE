@@ -1,21 +1,14 @@
 spring:
-  config:
-    test:
-      institution:
-        loginId: "testInstitution"
-        loginPassword: "passwordInstitution"
-        institutionNumber: "123"
-        institutionName: "돌다리요양원"
   jwt:
-    secret: test
+    secret: testasdfasdfasefasdcasfasefawefqwefqwefasdfwefqwdfaseffasdfa
     authheader: header
   app:
     version: v1
 
   data:
     redis:
-      port: 1000
-      host: "host"
+      host: localhost
+      port: 6379
 
 line:
   bot:

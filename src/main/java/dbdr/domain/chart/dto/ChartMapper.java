@@ -57,7 +57,8 @@ public abstract class ChartMapper {
             @Mapping(target = "wash", source = "physicalClear.wash"),
             @Mapping(target = "bath", source = "physicalClear.bath"),
             @Mapping(target = "mealType", source = "physicalMeal.mealType"),
-            @Mapping(target = "intakeAmount", source = "physicalMeal.intakeAmount")
+            @Mapping(target = "intakeAmount", source = "physicalMeal.intakeAmount"),
+            @Mapping(target = "physicalRestroom", source = "physicalRestroom")
     })
     public abstract BodyManagementResponse toResponse(BodyManagement bodyManagement);
 

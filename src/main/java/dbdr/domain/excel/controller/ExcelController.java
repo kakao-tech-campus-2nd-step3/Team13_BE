@@ -1,8 +1,8 @@
 package dbdr.domain.excel.controller;
 
-import dbdr.domain.excel.dto.CareworkerFileUploadResponseDto;
-import dbdr.domain.excel.dto.GuardianFileUploadResponseDto;
-import dbdr.domain.excel.dto.RecipientFileUploadResponseDto;
+import dbdr.domain.excel.dto.CareworkerFileUploadResponse;
+import dbdr.domain.excel.dto.GuardianFileUploadResponse;
+import dbdr.domain.excel.dto.RecipientFileUploadResponse;
 import dbdr.domain.excel.service.ExcelDownloadService;
 import dbdr.domain.excel.service.ExcelUploadService;
 import dbdr.domain.institution.entity.Institution;
@@ -72,31 +72,31 @@ public class ExcelController {
 
     @Operation(summary = "요양관리사 엑셀 업로드")
     @PostMapping("/careworker/upload")
-    public ResponseEntity<CareworkerFileUploadResponseDto> uploadCareworkerData(
+    public ResponseEntity<CareworkerFileUploadResponse> uploadCareworkerData(
             @LoginInstitution Institution institution,
             @RequestParam("file") MultipartFile file) {
         validateFile(file);
-        CareworkerFileUploadResponseDto result = excelUploadService.uploadCareworkerExcel(file, institution.getId());
+        CareworkerFileUploadResponse result = excelUploadService.uploadCareworkerExcel(file, institution.getId());
         return ResponseEntity.ok(result);
     }
 
     @Operation(summary = "보호자 엑셀 업로드")
     @PostMapping("/guardian/upload")
-    public ResponseEntity<GuardianFileUploadResponseDto> uploadGuardianData(
+    public ResponseEntity<GuardianFileUploadResponse> uploadGuardianData(
             @LoginInstitution Institution institution,
             @RequestParam("file") MultipartFile file) {
         validateFile(file);
-        GuardianFileUploadResponseDto result = excelUploadService.uploadGuardianExcel(file, institution.getId());
+        GuardianFileUploadResponse result = excelUploadService.uploadGuardianExcel(file, institution.getId());
         return ResponseEntity.ok(result);
     }
 
     @Operation(summary = "돌봄대상자 엑셀 업로드")
     @PostMapping("/recipient/upload")
-    public ResponseEntity<RecipientFileUploadResponseDto> uploadRecipientData(
+    public ResponseEntity<RecipientFileUploadResponse> uploadRecipientData(
             @LoginInstitution Institution institution,
             @RequestParam("file") MultipartFile file) {
         validateFile(file);
-        RecipientFileUploadResponseDto result = excelUploadService.uploadRecipientExcel(file, institution.getId());
+        RecipientFileUploadResponse result = excelUploadService.uploadRecipientExcel(file, institution.getId());
         return ResponseEntity.ok(result);
     }
 }

@@ -1,7 +1,7 @@
 package dbdr.domain.careworker.controller;
 
-import dbdr.domain.careworker.dto.request.CareworkerUpdateRequestDTO;
-import dbdr.domain.careworker.dto.response.CareworkerMyPageResponseDTO;
+import dbdr.domain.careworker.dto.request.CareworkerUpdateRequest;
+import dbdr.domain.careworker.dto.response.CareworkerMyPageResponse;
 import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.careworker.service.CareworkerService;
 import dbdr.global.util.api.ApiUtils;
@@ -34,19 +34,19 @@ public class CareworkerController {
 
     @Operation(summary = "요양보호사 본인의 정보 조회", security = @SecurityRequirement(name = "JWT"))
     @GetMapping
-    public ResponseEntity<ApiUtils.ApiResult<CareworkerMyPageResponseDTO>> showCareworkerInfo(
+    public ResponseEntity<ApiUtils.ApiResult<CareworkerMyPageResponse>> showCareworkerInfo(
             @Parameter(hidden = true) @LoginCareworker Careworker careworker) {
         log.info("Careworker Name: {}", careworker.getName());
-        CareworkerMyPageResponseDTO response = careworkerService.getMyPageInfo(careworker.getId());
+        CareworkerMyPageResponse response = careworkerService.getMyPageInfo(careworker.getId());
         return ResponseEntity.ok(ApiUtils.success(response));
     }
 
     @Operation(summary = "요양보호사 본인의 근무일과 알림 시간 수정", security = @SecurityRequirement(name = "JWT"))
     @PutMapping
-    public ResponseEntity<ApiUtils.ApiResult<CareworkerMyPageResponseDTO>> updateCareworkerInfo(
+    public ResponseEntity<ApiUtils.ApiResult<CareworkerMyPageResponse>> updateCareworkerInfo(
             @Parameter(hidden = true) @LoginCareworker Careworker careworker,
-            @Valid @RequestBody CareworkerUpdateRequestDTO careworkerRequest) {
-        CareworkerMyPageResponseDTO updatedResponse = careworkerService.updateWorkingDaysAndAlertTime(careworker.getId(), careworkerRequest);
+            @Valid @RequestBody CareworkerUpdateRequest careworkerRequest) {
+        CareworkerMyPageResponse updatedResponse = careworkerService.updateWorkingDaysAndAlertTime(careworker.getId(), careworkerRequest);
         return ResponseEntity.ok(ApiUtils.success(updatedResponse));
     }
 }

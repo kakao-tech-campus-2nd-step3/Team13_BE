@@ -32,6 +32,7 @@ public class InstitutionAdminController {
 
     @Operation(summary = "전체 요양원 정보 조회")
     @GetMapping
+    @DbdrAuth(targetRole = Role.ADMIN)
     public ResponseEntity<ApiUtils.ApiResult<List<InstitutionResponse>>> showAllInstitution() {
         List<InstitutionResponse> institutionResponseList = institutionService.getAllInstitution();
         return ResponseEntity.ok(ApiUtils.success(institutionResponseList));

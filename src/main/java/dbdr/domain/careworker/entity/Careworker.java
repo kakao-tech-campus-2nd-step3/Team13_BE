@@ -1,15 +1,24 @@
 package dbdr.domain.careworker.entity;
 
+import dbdr.domain.core.base.entity.BaseEntity;
+import dbdr.domain.institution.entity.Institution;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Pattern;
 import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.Set;
-
-import dbdr.domain.core.base.entity.BaseEntity;
-import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
-import dbdr.domain.institution.entity.Institution;
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Pattern;
-import lombok.*;
+import lombok.AccessLevel;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -20,9 +29,6 @@ import org.hibernate.annotations.SQLRestriction;
 @SQLDelete(sql = "UPDATE careworkers SET is_active = false WHERE id = ?")
 @SQLRestriction("is_active = true")
 public class Careworker extends BaseEntity {
-
-    @Column(unique = true)
-    private String loginId;
 
     private String loginPassword;
 
@@ -51,19 +57,29 @@ public class Careworker extends BaseEntity {
     @Column(unique = true)
     private String email;
 
+//    @Builder
+//    public Careworker(Institution institution, String name, String email, String phone) {
+//        this.institution = institution;
+//        this.name = name;
+//        this.email = email;
+//        this.phone = phone;
+//        this.alertTime = LocalTime.of(17, 0); // 오후 5시로 초기화
+//    }
+
     @Builder
-    public Careworker(Institution institution, String name, String email, String phone) {
-        this.institution = institution;
-        this.name = name;
-        this.email = email;
+    public Careworker(String loginPassword, String phone, String name, Institution institution,
+                      String email) {
+        this.loginPassword = loginPassword;
         this.phone = phone;
-        this.alertTime = LocalTime.of(17, 0); // 오후 5시로 초기화
+        this.name = name;
+        this.institution = institution;
+        this.email = email;
     }
 
-    public void updateCareworker(CareworkerRequestDTO careworkerDTO) {
-        this.name = careworkerDTO.getName();
-        this.email = careworkerDTO.getEmail();
-        this.phone = careworkerDTO.getPhone();
+    public void updateCareworker(Careworker careworker) {
+        this.name = careworker.getName();
+        this.email = careworker.getEmail();
+        this.phone = careworker.getPhone();
     }
 
     public void updateLineUserId(String lineUserId) {

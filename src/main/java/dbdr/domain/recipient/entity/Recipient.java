@@ -4,7 +4,7 @@ import dbdr.domain.core.base.entity.BaseEntity;
 import dbdr.domain.careworker.entity.Careworker;
 import dbdr.domain.guardian.entity.Guardian;
 import dbdr.domain.institution.entity.Institution;
-import dbdr.domain.recipient.dto.request.RecipientRequestDTO;
+import dbdr.domain.recipient.dto.request.RecipientRequest;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -81,7 +81,7 @@ public class Recipient extends BaseEntity {
     }
 
 
-    public Recipient(RecipientRequestDTO dto, Careworker careworker) {
+    public Recipient(RecipientRequest dto, Careworker careworker) {
         this.name = dto.getName();
         this.birth = dto.getBirth();
         this.gender = dto.getGender();
@@ -94,7 +94,7 @@ public class Recipient extends BaseEntity {
     }
 
 
-    public Recipient(RecipientRequestDTO dto, Institution institution, Careworker careworker) {
+    public Recipient(RecipientRequest dto, Institution institution, Careworker careworker) {
         this.name = dto.getName();
         this.birth = dto.getBirth();
         this.gender = dto.getGender();
@@ -107,7 +107,7 @@ public class Recipient extends BaseEntity {
     }
 
 
-    public void updateRecipient(RecipientRequestDTO recipientDTO) {
+    public void updateRecipient(RecipientRequest recipientDTO) {
         this.name = recipientDTO.getName();
         this.birth = recipientDTO.getBirth();
         this.gender = recipientDTO.getGender();
@@ -120,7 +120,7 @@ public class Recipient extends BaseEntity {
         this.careworker = careworker;
     }//요양원용
 
-    public void updateRecipientForAdmin(RecipientRequestDTO recipientDTO, Institution institution, Careworker careworker) {
+    public void updateRecipientForAdmin(RecipientRequest recipientDTO, Institution institution, Careworker careworker) {
         this.institution = institution;
         this.institutionNumber = recipientDTO.getInstitutionNumber();
         this.careworker = careworker;

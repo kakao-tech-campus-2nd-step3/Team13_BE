@@ -1,6 +1,23 @@
 package dbdr.e2etest.Institution;
 
-/*
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+import dbdr.domain.admin.entity.Admin;
+import dbdr.domain.institution.dto.request.InstitutionRequest;
+import dbdr.domain.institution.dto.response.InstitutionResponse;
+import dbdr.global.util.api.ApiUtils.ApiResult;
+import dbdr.security.model.Role;
+import dbdr.testhelper.TestHelper;
+import dbdr.testhelper.TestHelperFactory;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.core.ParameterizedTypeReference;
+
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 public class InstitutionTest {
 
@@ -12,41 +29,32 @@ public class InstitutionTest {
 
     TestHelper testHelper;
 
-    @BeforeEach
-    public void setUp() {
-        Admin admin = Admin.builder().loginId("testadmin").loginPassword("adminpassword").build();
-        testHelperFactory.addAdmin(admin);
-        testHelper = testHelperFactory.create(port);
-    }
 
     @Test
     @DisplayName("신규 요양원 등록")
     public void addInstitutionTest() {
+
         //given
+        Admin admin = Admin.builder().loginId("testadmin").loginPassword("adminpassword").build();
+        testHelperFactory.addAdmin(admin);
+        testHelper = testHelperFactory.create(port);
 
-        Institution institution = Institution.builder().institutionName("김치덮밥요양원")
-            .institutionNumber(123123L)
-            .loginId("institutuion1")
-            .loginPassword("password")
-            .build();
-
-        InstitutionRequest institutionRequest =
+        InstitutionRequest institutionRequest = new InstitutionRequest(123123L, "김치덮밥요양원", "institutuion1", "password");
         //when
 
         //서버 관리자가 신규 요양원을 등록한다.
         var response = testHelper.user(Role.ADMIN, "testadmin", "adminpassword")
             .uri("/admin/institution").requestBody(institutionRequest).post()
-            .toEntity(InstitutionResponse.class);
+                .toEntity(new ParameterizedTypeReference<ApiResult<InstitutionResponse>>() {}).getBody();
+
 
         //then
 
-        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
-        assertThat(response.getBody().institutionName()).isEqualTo(
-            institution.getInstitutionName());
-        assertThat(response.getBody().institutionNumber()).isEqualTo(
-            institution.getInstitutionNumber());
+        assertThat(response.success()).isTrue();
+        assertThat(response.response().institutionName()).isEqualTo("김치덮밥요양원");
+        assertThat(response.response().institutionNumber()).isEqualTo(123123L);
     }
-
+/*
     @Test
     @DisplayName("요양원 번호 중복 등록 방지")
     public void addInstitutionTest2() {
@@ -238,7 +246,7 @@ public class InstitutionTest {
                 .institution(institution)
                 .email("abcd@gmail.com")
                 .build();
-        /*
+
         Recipient recipient = Recipient.builder()
                 .name("Dummy Name")
                 .birth(LocalDate.of(1980, 1, 1))
@@ -299,6 +307,7 @@ public class InstitutionTest {
 
 
 
+ */
+
 }
 
- */

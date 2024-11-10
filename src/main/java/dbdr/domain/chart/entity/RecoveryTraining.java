@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
@@ -14,6 +15,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Entity
 @Table(name = "recovery_training")
 @Getter
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @SQLDelete(sql = "UPDATE recovery_training SET is_active = false WHERE id = ?")
@@ -27,10 +29,10 @@ public class RecoveryTraining extends BaseEntity {
     private boolean recoveryTraining; // 회복훈련 완료 여부
 
     @Comment("인지훈련 제공 여부")
-    private boolean isCognitiveTrainingProvided; // 인지훈련 제공 여부
+    private boolean cognitiveTrainingProvided; // 인지훈련 제공 여부
 
     @Comment("물리치료 제공 여부")
-    private boolean isPhysicalTherapyProvided; // 물리치료 제공 여부
+    private boolean physicalTherapyProvided; // 물리치료 제공 여부
 
     @Comment("회복 훈련 특이사항")
     @Column(columnDefinition = "TEXT")

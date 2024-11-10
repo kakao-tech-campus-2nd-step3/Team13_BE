@@ -1,11 +1,12 @@
 package dbdr.domain.careworker.controller;
 
-import dbdr.domain.careworker.dto.request.CareworkerRequestDTO;
-import dbdr.domain.careworker.dto.response.CareworkerResponseDTO;
+import dbdr.domain.careworker.dto.request.CareworkerRequest;
+import dbdr.domain.careworker.dto.response.CareworkerResponse;
 import dbdr.domain.careworker.service.CareworkerService;
 import dbdr.domain.institution.service.InstitutionService;
 import dbdr.global.util.api.ApiUtils;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -23,38 +24,38 @@ public class CareworkerAdminController {
     private final CareworkerService careworkerService;
     private final InstitutionService institutionService;
 
-    @Operation(summary = "전체 요양보호사 정보 조회")
+    @Operation(summary = "전체 요양보호사 정보 조회", security = @SecurityRequirement(name = "JWT"))
     @GetMapping
-    public ResponseEntity<ApiUtils.ApiResult<List<CareworkerResponseDTO>>> getAllCareworkers() {
-        List<CareworkerResponseDTO> careworkers = careworkerService.getAllCareworkers();
+    public ResponseEntity<ApiUtils.ApiResult<List<CareworkerResponse>>> getAllCareworkers() {
+        List<CareworkerResponse> careworkers = careworkerService.getAllCareworkers();
         return ResponseEntity.ok(ApiUtils.success(careworkers));
     }
 
 
-    @Operation(summary = "요양보호사 정보 조회")
+    @Operation(summary = "요양보호사 정보 조회", security = @SecurityRequirement(name = "JWT"))
     @GetMapping("/{careworkerId}")
-    public ResponseEntity<ApiUtils.ApiResult<CareworkerResponseDTO>> getCareworkerById(
+    public ResponseEntity<ApiUtils.ApiResult<CareworkerResponse>> getCareworkerById(
             @PathVariable Long careworkerId) {
-        CareworkerResponseDTO careworker = careworkerService.getCareworkerResponseById(careworkerId);
+        CareworkerResponse careworker = careworkerService.getCareworkerResponseById(careworkerId);
         return ResponseEntity.ok(ApiUtils.success(careworker));
     }
 
-    @Operation(summary = "요양보호사 추가")
+    @Operation(summary = "요양보호사 추가", security = @SecurityRequirement(name = "JWT"))
     @PostMapping
-    public ResponseEntity<ApiUtils.ApiResult<CareworkerResponseDTO>> createCareworker(
-            @Valid @RequestBody CareworkerRequestDTO careworkerDTO) {
-        CareworkerResponseDTO newCareworker = careworkerService.createCareworker(careworkerDTO, careworkerDTO.getInstitutionId());
+    public ResponseEntity<ApiUtils.ApiResult<CareworkerResponse>> createCareworker(
+            @Valid @RequestBody CareworkerRequest careworkerDTO) {
+        CareworkerResponse newCareworker = careworkerService.createCareworker(careworkerDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiUtils.success(newCareworker));
 
     }
 
 
-    @Operation(summary = "요양보호사 정보 수정 ")
+    @Operation(summary = "요양보호사 정보 수정 ", security = @SecurityRequirement(name = "JWT"))
     @PutMapping("/{careworkerId}")
-    public ResponseEntity<ApiUtils.ApiResult<CareworkerResponseDTO>> updateCareworker(
+    public ResponseEntity<ApiUtils.ApiResult<CareworkerResponse>> updateCareworker(
             @PathVariable Long careworkerId,
-            @Valid @RequestBody CareworkerRequestDTO careworkerDTO) {
-        CareworkerResponseDTO updatedCareworker = careworkerService.updateCareworkerByAdmin(careworkerId, careworkerDTO);
+            @Valid @RequestBody CareworkerRequest careworkerDTO) {
+        CareworkerResponse updatedCareworker = careworkerService.updateCareworkerByAdmin(careworkerId, careworkerDTO);
         return ResponseEntity.ok(ApiUtils.success(updatedCareworker));
     }
 

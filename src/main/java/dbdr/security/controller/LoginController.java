@@ -2,11 +2,14 @@ package dbdr.security.controller;
 
 import dbdr.global.exception.ApplicationError;
 import dbdr.global.exception.ApplicationException;
-import dbdr.security.model.Role;
 import dbdr.security.dto.LoginRequest;
+import dbdr.security.dto.RenewTokenRequest;
 import dbdr.security.dto.TokenDTO;
+import dbdr.security.model.Role;
 import dbdr.security.service.LoginService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
@@ -38,22 +41,24 @@ public class LoginController {
     @PostMapping("/login/{role}")
     public ResponseEntity<TokenDTO> login(@PathVariable("role") String role,
                                           @RequestBody @Valid LoginRequest loginRequest) {
-        log.info("로그인 요청 받음 : 역할 = {}, id : {}, password : {}", role,loginRequest.userId(), loginRequest.password());
+        log.info("로그인 요청 받음 : 역할 = {}, id : {}, password : {}", role, loginRequest.userId(), loginRequest.password());
         Role roleEnum = roleCheck(role);
         TokenDTO token = loginService.login(roleEnum, loginRequest);
         return ResponseEntity.ok().header(authHeader, token.accessToken()).body(token);
     }
 
-    @Operation(summary = "리프레시 토큰으로 액세스 토큰 재발급")
+    @Operation(summary = "리프레시 토큰으로 액세스 토큰 재발급",
+            security = @SecurityRequirement(name = "JWT"))
     @PostMapping("/renew")
-    public ResponseEntity<TokenDTO> renewAccessToken(@RequestBody String refreshToken) {
-        TokenDTO token = loginService.renewAccessToken(refreshToken);
+    public ResponseEntity<TokenDTO> renewAccessToken(@RequestBody RenewTokenRequest renewTokenRequest) {
+        TokenDTO token = loginService.renewAccessToken(renewTokenRequest.refreshToken());
         return ResponseEntity.ok().header(authHeader, token.accessToken()).body(token);
     }
 
-    @Operation(summary = "로그아웃")
+    @Operation(summary = "로그아웃",
+            security = @SecurityRequirement(name = "JWT"))
     @PostMapping("/logout")
-    public ResponseEntity<Void> logout(@RequestHeader("Authorization") String accessToken) {
+    public ResponseEntity<Void> logout(@Parameter(hidden = true) @RequestHeader("Authorization") String accessToken) {
         loginService.logout(accessToken);
         return ResponseEntity.ok().build();
     }

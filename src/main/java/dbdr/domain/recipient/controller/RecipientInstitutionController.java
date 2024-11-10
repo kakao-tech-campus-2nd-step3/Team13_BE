@@ -1,8 +1,8 @@
 package dbdr.domain.recipient.controller;
 
 import dbdr.domain.institution.entity.Institution;
-import dbdr.domain.recipient.dto.request.RecipientRequestDTO;
-import dbdr.domain.recipient.dto.response.RecipientResponseDTO;
+import dbdr.domain.recipient.dto.request.RecipientRequest;
+import dbdr.domain.recipient.dto.response.RecipientResponse;
 import dbdr.domain.recipient.service.RecipientService;
 import dbdr.global.util.api.ApiUtils;
 import dbdr.security.LoginInstitution;
@@ -26,37 +26,37 @@ public class RecipientInstitutionController {
 
     @Operation(summary = "전체 돌봄대상자 조회 ", security = @SecurityRequirement(name = "JWT"))
     @GetMapping
-    public ResponseEntity<ApiUtils.ApiResult<List<RecipientResponseDTO>>> getAllRecipients(
+    public ResponseEntity<ApiUtils.ApiResult<List<RecipientResponse>>> getAllRecipients(
             @LoginInstitution Institution institution) {
-        List<RecipientResponseDTO> recipients = recipientService.getRecipientsByInstitution(institution.getId());
+        List<RecipientResponse> recipients = recipientService.getRecipientsByInstitution(institution.getId());
         return ResponseEntity.ok(ApiUtils.success(recipients));
     }
 
     @Operation(summary = "돌봄대상자 정보 조회", security = @SecurityRequirement(name = "JWT"))
     @GetMapping("/{recipientId}")
-    public ResponseEntity<ApiUtils.ApiResult<RecipientResponseDTO>> getRecipientById(
+    public ResponseEntity<ApiUtils.ApiResult<RecipientResponse>> getRecipientById(
             @PathVariable("recipientId") Long recipientId,
             @LoginInstitution Institution institution) {
-        RecipientResponseDTO recipient = recipientService.getRecipientByInstitution(recipientId, institution.getId());
+        RecipientResponse recipient = recipientService.getRecipientByInstitution(recipientId, institution.getId());
         return ResponseEntity.ok(ApiUtils.success(recipient));
     }
 
     @Operation(summary = "돌봄대상자 추가", security = @SecurityRequirement(name = "JWT"))
     @PostMapping
-    public ResponseEntity<ApiUtils.ApiResult<RecipientResponseDTO>> createRecipient(
+    public ResponseEntity<ApiUtils.ApiResult<RecipientResponse>> createRecipient(
             @LoginInstitution Institution institution,
-            @Valid @RequestBody RecipientRequestDTO recipientDTO) {
-        RecipientResponseDTO newRecipient = recipientService.createRecipientForInstitution(recipientDTO, institution.getId());
+            @Valid @RequestBody RecipientRequest recipientDTO) {
+        RecipientResponse newRecipient = recipientService.createRecipientForInstitution(recipientDTO, institution.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiUtils.success(newRecipient));
     }
 
     @Operation(summary = "돌봄대상자 정보 수정", security = @SecurityRequirement(name = "JWT"))
     @PutMapping("/{recipientId}")
-    public ResponseEntity<ApiUtils.ApiResult<RecipientResponseDTO>> updateRecipient(
+    public ResponseEntity<ApiUtils.ApiResult<RecipientResponse>> updateRecipient(
             @PathVariable("recipientId") Long recipientId,
             @LoginInstitution Institution institution,
-            @Valid @RequestBody RecipientRequestDTO recipientDTO) {
-        RecipientResponseDTO updatedRecipient = recipientService.updateRecipientForInstitution(recipientId, recipientDTO, institution.getId());
+            @Valid @RequestBody RecipientRequest recipientDTO) {
+        RecipientResponse updatedRecipient = recipientService.updateRecipientForInstitution(recipientId, recipientDTO, institution.getId());
         return ResponseEntity.ok(ApiUtils.success(updatedRecipient));
     }
 

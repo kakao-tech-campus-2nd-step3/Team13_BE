@@ -1,7 +1,7 @@
 package dbdr.domain.recipient.controller;
 
 import dbdr.domain.guardian.entity.Guardian;
-import dbdr.domain.recipient.dto.response.RecipientResponseDTO;
+import dbdr.domain.recipient.dto.response.RecipientResponse;
 import dbdr.domain.recipient.service.RecipientService;
 import dbdr.global.util.api.ApiUtils;
 import dbdr.security.LoginGuardian;
@@ -24,18 +24,18 @@ public class RecipientGuardianController {
 
     @Operation(summary = "보호자가 확인 가능한 모든 돌봄대상자 조회", security = @SecurityRequirement(name = "JWT"))
     @GetMapping
-    public ResponseEntity<ApiUtils.ApiResult<List<RecipientResponseDTO>>> getAllRecipients(
+    public ResponseEntity<ApiUtils.ApiResult<List<RecipientResponse>>> getAllRecipients(
             @LoginGuardian Guardian guardian) {
-        List<RecipientResponseDTO> recipients = recipientService.getAllRecipientsForGuardian(guardian.getId());
+        List<RecipientResponse> recipients = recipientService.getAllRecipientsForGuardian(guardian.getId());
         return ResponseEntity.ok(ApiUtils.success(recipients));
     }
 
     @Operation(summary = "보호자가 확인 가능한 특정 돌봄대상자 조회", security = @SecurityRequirement(name = "JWT"))
     @GetMapping("/{recipientId}")
-    public ResponseEntity<ApiUtils.ApiResult<RecipientResponseDTO>> getRecipientById(
+    public ResponseEntity<ApiUtils.ApiResult<RecipientResponse>> getRecipientById(
             @PathVariable("recipientId") Long recipientId,
             @LoginGuardian Guardian guardian) {
-        RecipientResponseDTO recipient = recipientService.getRecipientForGuardian(guardian.getId(), recipientId);
+        RecipientResponse recipient = recipientService.getRecipientForGuardian(guardian.getId(), recipientId);
         return ResponseEntity.ok(ApiUtils.success(recipient));
     }
 }

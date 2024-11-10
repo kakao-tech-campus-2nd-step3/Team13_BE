@@ -31,8 +31,7 @@ public class GuardianChartController {
     @Operation(summary = "돌봄대상자 아이디로 차트 정보 조회")
     @GetMapping("/recipient")
     public ResponseEntity<ApiUtils.ApiResult<List<ChartOverviewResponse>>> getAllChartByRecipientId(
-            @RequestParam(value = "recipient-id", required = false) Long recipientId,
-            @PageableDefault(size = DEFAULT_PAGE_SIZE, sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+            @RequestParam(value = "recipient-id") Long recipientId) {
         // 환자 정보 접근 권한 확인 로직 필요 -> 보호자가 자신의 환자 정보만 조회 가능
         List<ChartOverviewResponse> recipients = chartService.getAllChartByRecipientId(recipientId);
         return ResponseEntity.ok(ApiUtils.success(recipients));

@@ -1,12 +1,9 @@
 package dbdr.testhelper;
 
-import dbdr.domain.admin.entity.Admin;
-import dbdr.domain.careworker.entity.Careworker;
-import dbdr.domain.guardian.entity.Guardian;
-import dbdr.domain.institution.entity.Institution;
 import dbdr.security.dto.LoginRequest;
 import dbdr.security.dto.TokenDTO;
 import dbdr.security.model.Role;
+import java.util.HashMap;
 import java.util.Map;
 import org.springframework.web.client.RestClient;
 import org.springframework.web.client.RestClient.ResponseSpec;
@@ -17,7 +14,7 @@ public class TestHelper {
     private Integer port;
     private Object user;
     private String authHeader;
-    private Map<String,String> queryParam;
+    private Map<String,String> queryParam = new HashMap<>();
     private Object requestBody;
     private String uri;
 
@@ -70,9 +67,9 @@ public class TestHelper {
 
 
     private String userLogin() {
-        TokenDTO tokenDTO = restClient.post().uri("/auth/login/"+userRole.toString()).body(convertUserToLoginRequest()).retrieve().toEntity(
+        TokenDTO tokenDTO = restClient.post().uri("/auth/login/" + userRole.toString()).body(convertUserToLoginRequest()).retrieve().toEntity(
             TokenDTO.class).getBody();
-        return "Bearer "+tokenDTO.accessToken();
+        return "Bearer " + tokenDTO.accessToken();
     }
 
     private LoginRequest convertUserToLoginRequest(){

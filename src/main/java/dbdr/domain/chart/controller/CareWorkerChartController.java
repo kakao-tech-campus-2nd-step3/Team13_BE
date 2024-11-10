@@ -35,8 +35,7 @@ public class CareWorkerChartController {
             security = @SecurityRequirement(name = "JWT"))
     @GetMapping("/recipient")
     public ResponseEntity<ApiUtils.ApiResult<List<ChartOverviewResponse>>> getAllChartByRecipientId(
-            @Parameter(hidden = true)
-            @RequestParam(value = "recipient-id", required = false) Long recipientId) {
+            @RequestParam(value = "recipient-id") Long recipientId) {
         // 환자 정보 접근 권한 확인 로직 필요 -> 요양사가 맡은 환자 정보만 조회 가능
         List<ChartOverviewResponse> recipients = chartService.getAllChartByRecipientId(recipientId);
         return ResponseEntity.ok(ApiUtils.success(recipients));

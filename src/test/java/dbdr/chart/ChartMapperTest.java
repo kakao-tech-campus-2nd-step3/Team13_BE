@@ -31,7 +31,7 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-/*
+
 @SpringBootTest
 public class ChartMapperTest {
 
@@ -138,6 +138,7 @@ public class ChartMapperTest {
         BodyManagement bodyManagement = chartMapper.toEntity(request);
         assertThat(bodyManagement).isNotNull();
         assertThat(bodyManagement.getPhysicalClear().isWash()).isEqualTo(request.wash());
+        assertThat(bodyManagement.isHasWalked()).isEqualTo(request.hasWalked());
         assertThat(bodyManagement.getPhysicalClear().isBath()).isEqualTo(request.bath());
         assertThat(bodyManagement.getPhysicalMeal().getMealType()).isEqualTo(request.mealType());
         assertThat(bodyManagement.getPhysicalMeal().getIntakeAmount()).isEqualTo(request.intakeAmount());
@@ -167,4 +168,3 @@ public class ChartMapperTest {
     }
 }
 
- */

@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class RecipientRequestDTO {
+public class RecipientRequest {
 
     @Schema(description = "돌봄대상자 이름", example = "이순자")
     @NotBlank(message = "이름은 필수 항목입니다.")

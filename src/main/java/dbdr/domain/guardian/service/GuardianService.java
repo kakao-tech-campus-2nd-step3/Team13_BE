@@ -11,7 +11,10 @@ import dbdr.global.exception.ApplicationException;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,6 +22,10 @@ public class GuardianService {
 
     private final GuardianRepository guardianRepository;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
+    @Transactional(readOnly = true)
     public GuardianResponse getGuardianById(Long guardianId) {
         Guardian guardian = findGuardianById(guardianId);
         return new GuardianResponse(guardian.getPhone(), guardian.getName(), guardian.isActive());
@@ -32,7 +39,7 @@ public class GuardianService {
 
     public GuardianMyPageResponse updateAlertTime(Long guardianId,
         GuardianAlertTimeRequest request) {
-        ensureUniquePhone(request.phone());
+        ensureUniquePhoneButNotId(request.phone(), guardianId);
         Guardian guardian = findGuardianById(guardianId);
         guardian.updateAlertTime(request.name(), request.phone(), request.alertTime());
         guardianRepository.save(guardian);
@@ -40,9 +47,12 @@ public class GuardianService {
             guardian.getLoginId(), guardian.getAlertTime());
     }
 
-    public GuardianResponse updateGuardianById(Long guardianId,
-        GuardianRequest guardianRequest) {
-        ensureUniquePhone(guardianRequest.phone());
+    @Transactional
+    public GuardianResponse updateGuardianById(
+            Long guardianId,
+            GuardianRequest guardianRequest
+    ) {
+        ensureUniquePhoneButNotId(guardianRequest.phone(), guardianId);
 
         Guardian guardian = findGuardianById(guardianId);
         guardian.updateGuardian(guardianRequest.phone(), guardianRequest.name());
@@ -51,6 +61,7 @@ public class GuardianService {
             guardian.isActive());
     }
 
+    @Transactional(readOnly = true)
     public List<GuardianResponse> getAllGuardian() {
         List<Guardian> guardianList = guardianRepository.findAll();
         return guardianList.stream()
@@ -59,23 +70,20 @@ public class GuardianService {
             .toList();
     }
 
+    @Transactional
     public GuardianResponse addGuardian(GuardianRequest guardianRequest) {
         ensureUniquePhone(guardianRequest.phone());
-        /*
+        String password = passwordEncoder.encode(guardianRequest.loginPassword());
         Guardian guardian = Guardian.builder().phone(guardianRequest.phone())
             .name(guardianRequest.name())
             .loginId(guardianRequest.phone())
-            .loginPassword(guardianRequest.loginPassword())
-            .recipient(null)
+            .loginPassword(password)
             .build();
         guardian = guardianRepository.save(guardian);
         return new GuardianResponse(guardian.getPhone(), guardian.getName(), guardian.isActive());
-
-         */
-        return null;
-        //TODO
     }
 
+    @Transactional
     public void deleteGuardianById(Long guardianId) {
         Guardian guardian = findGuardianById(guardianId);
         guardian.deactivate();
@@ -89,6 +97,12 @@ public class GuardianService {
 
     private void ensureUniquePhone(String phone) {
         if (guardianRepository.existsByPhone(phone)) {
+            throw new ApplicationException(ApplicationError.DUPLICATE_PHONE);
+        }
+    }
+
+    private void ensureUniquePhoneButNotId(String phone, Long id) {
+        if(guardianRepository.existsByPhoneAndIdNot(phone, id)) {
             throw new ApplicationException(ApplicationError.DUPLICATE_PHONE);
         }
     }

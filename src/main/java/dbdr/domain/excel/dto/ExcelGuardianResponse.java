@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ExcelGuardianResponseDto {
+public class ExcelGuardianResponse {
 
     private Long id;
     private String name;
