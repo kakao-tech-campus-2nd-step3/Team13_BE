@@ -30,7 +30,8 @@ public abstract class ChartMapper {
 
     @Mappings({
             @Mapping(source = "bodyManagement", target = "bodyManagement"),
-            @Mapping(target = "chartId", source = "id")})
+            @Mapping(target = "chartId", source = "id"),
+            @Mapping(target = "recipientId", source = "recipient.id"),})
     public abstract ChartDetailResponse toResponse(Chart chart);
 
     @Mappings({
