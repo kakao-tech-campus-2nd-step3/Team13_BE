@@ -57,7 +57,7 @@ public class SecurityConfig {
                 .authenticationProvider(baseAuthenticationProvider())
                 .authorizeHttpRequests((authorize) -> {
                     authorize
-                        .requestMatchers("/actuator/health")
+                        .requestMatchers("/health")
                         .permitAll()
                         .requestMatchers("/v1/ocr/**")
                         .permitAll()
