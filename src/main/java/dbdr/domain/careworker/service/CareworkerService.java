@@ -183,8 +183,6 @@ public class CareworkerService {
 
     public List<Careworker> findByAlertTime(LocalTime currentTime) {
         return careworkerRepository.findByAlertTime(currentTime);
-    public List<Careworker> findByAlertTime(LocalTime currentTime) {
-        return careworkerRepository.findByAlertTime(currentTime);
     }
 
     public Careworker findByPhone(String phoneNumber) {
@@ -209,13 +207,4 @@ public class CareworkerService {
                 careworker.getWorkingDays()
         );
     }
-
-    @Transactional
-    public void updateLineUserId(String userId, String phoneNumber) {
-        Careworker careworker = findByPhone(phoneNumber);
-        careworker.updateLineUserId(userId);
-        careworkerRepository.save(careworker);
-    }
-
-
 }
