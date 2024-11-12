@@ -74,8 +74,21 @@ dependencies {
 
     // CoolSMS
     implementation 'net.nurigo:sdk:4.3.0'
+
+    // AWS S3
+    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
+    // Naver Clova OCR API
+    implementation 'org.springframework.boot:spring-boot-starter-webflux' // WebClient 사용을 위한 라이브러리
+
+    // Health check
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += ['-parameters']
 }

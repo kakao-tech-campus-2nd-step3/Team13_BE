@@ -1,6 +1,6 @@
 package dbdr.security.config;
 
-import dbdr.security.service.JwtProvider;
+import dbdr.security.model.JwtProvider;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

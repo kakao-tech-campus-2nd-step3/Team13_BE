@@ -15,8 +15,8 @@ import org.hibernate.annotations.Comment;
 public class HealthBloodPressure {
 
     @Comment("혈압 최고")
-    private int systolic;
+    private String systolic;
 
     @Comment("혈압 최저")
-    private int diastolic;
+    private String diastolic;
 }

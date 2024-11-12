@@ -7,6 +7,7 @@ import dbdr.domain.chart.dto.request.NursingManagementRequest;
 import dbdr.domain.chart.dto.request.RecoveryTrainingRequest;
 import dbdr.domain.chart.dto.response.BodyManagementResponse;
 import dbdr.domain.chart.dto.response.ChartDetailResponse;
+import dbdr.domain.chart.dto.response.ChartOverviewResponse;
 import dbdr.domain.chart.dto.response.CognitiveManagementResponse;
 import dbdr.domain.chart.dto.response.NursingManagementResponse;
 import dbdr.domain.chart.dto.response.RecoveryTrainingResponse;
@@ -29,7 +30,8 @@ public abstract class ChartMapper {
 
     @Mappings({
             @Mapping(source = "bodyManagement", target = "bodyManagement"),
-            @Mapping(target = "chartId", source = "id")})
+            @Mapping(target = "chartId", source = "id"),
+            @Mapping(target = "recipientId", source = "recipient.id"),})
     public abstract ChartDetailResponse toResponse(Chart chart);
 
     @Mappings({
@@ -42,6 +44,11 @@ public abstract class ChartMapper {
     })
     public abstract Chart toEntity(ChartDetailRequest request);
 
+    @Mapping(target = "chartId", source = "id")
+    @Mapping(target = "recipientName", source = "recipient.name")
+    @Mapping(target = "chartDate", source = "createdAt")
+    public abstract ChartOverviewResponse toOverviewResponse(Chart chart);
+
     protected Recipient mapRecipient(Long recipientId) {
         return recipientService.findRecipientById(recipientId);
     }
@@ -51,7 +58,8 @@ public abstract class ChartMapper {
             @Mapping(target = "wash", source = "physicalClear.wash"),
             @Mapping(target = "bath", source = "physicalClear.bath"),
             @Mapping(target = "mealType", source = "physicalMeal.mealType"),
-            @Mapping(target = "intakeAmount", source = "physicalMeal.intakeAmount")
+            @Mapping(target = "intakeAmount", source = "physicalMeal.intakeAmount"),
+            @Mapping(target = "physicalRestroom", source = "physicalRestroom")
     })
     public abstract BodyManagementResponse toResponse(BodyManagement bodyManagement);
 

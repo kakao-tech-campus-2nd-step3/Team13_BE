@@ -9,6 +9,7 @@ import org.springdoc.core.models.GroupedOpenApi;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+// 스웨거 설정
 @Configuration
 public class OpenApiConfiguration {
 
@@ -27,7 +28,7 @@ public class OpenApiConfiguration {
         Info info = new Info()
             .title("돌봄다리 API Document")
             .version("v1.0.0")
-            .description("돌봄다리 서버 API 명세서입니다.");
+            .description("돌봄다리 백엔드 서버 API 명세서입니다.");
 
         return new OpenAPI()
             .components(components)
@@ -59,15 +60,6 @@ public class OpenApiConfiguration {
             .group("admin")
             .displayName("Admin API")
             .pathsToMatch("/v*/admin/**")
-            .build();
-    }
-
-    @Bean
-    public GroupedOpenApi recipientApi() {
-        return GroupedOpenApi.builder()
-            .group("recipient")
-            .displayName("Recipient API")
-            .pathsToMatch("/v*/recipient/**")
             .build();
     }
 
@@ -113,15 +105,6 @@ public class OpenApiConfiguration {
             .group("authentication")
             .displayName("Auth API")
             .pathsToMatch("/v*/auth/**")
-            .build();
-    }
-
-    @Bean
-    public GroupedOpenApi summarization() {
-        return GroupedOpenApi.builder()
-            .group("summarization")
-            .displayName("Summary API")
-            .pathsToMatch("/v*/summary/**")
             .build();
     }
 }

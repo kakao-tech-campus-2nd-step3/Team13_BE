@@ -1,8 +1,8 @@
 package dbdr.security.config;
 
+import dbdr.security.model.JwtProvider;
 import dbdr.security.service.BaseAuthenticationProvider;
 import dbdr.security.service.BaseUserDetailsService;
-import dbdr.security.service.JwtProvider;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -47,50 +47,46 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
-            .cors(AbstractHttpConfigurer::disable)
-            .httpBasic(AbstractHttpConfigurer::disable)
-            .formLogin(AbstractAuthenticationFilterConfigurer::disable)
-            .sessionManagement(
-                (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .cors(AbstractHttpConfigurer::disable)
+                .httpBasic(AbstractHttpConfigurer::disable)
+                .formLogin(AbstractAuthenticationFilterConfigurer::disable)
+                .sessionManagement(
+                        (session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
-            .addFilterBefore(new ExceptionHandlingFilter(), UsernamePasswordAuthenticationFilter.class)
-            .authenticationProvider(baseAuthenticationProvider())
-            .authorizeHttpRequests((authorize) -> {
-                authorize
-                    // Swagger 및 인증 없이 접근 가능한 엔드포인트 설정
-                    .requestMatchers(
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**",
-                        "/swagger-resources/**",
-                        "/webjars/**",
-                        "/favicon.ico",
-                        "/api-docs/**")
-                    .permitAll()
-                    .requestMatchers(HttpMethod.GET, "/sms/send-sms/**")
-                    .permitAll()
-                    .requestMatchers(HttpMethod.POST, "/v1/institution/*")
-                    .permitAll()
-                    // LINE 웹훅 엔드포인트에 대해 인증 없이 접근 허용
-                    .requestMatchers(HttpMethod.POST, "/line")
-                    .permitAll()
-                    // 요양보호사 추가 API에 대해 인증 없이 접근 허용
-                    .requestMatchers(HttpMethod.POST, "/v1/careworker/*")
-                    .permitAll()
-                    // 로그인 및 갱신 API에 대해 인증 없이 접근 허용
-                    .requestMatchers(HttpMethod.POST,
-                        "/*/auth/login/*",
-                        "/*/auth/renew")
-                    .permitAll()
-                    .anyRequest().authenticated();
-            })
-            .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
-            .exceptionHandling((exception) -> exception
-                .accessDeniedHandler((request, response, accessDeniedException) -> {
-                    response.sendError(HttpServletResponse.SC_FORBIDDEN, "접근 거부");
+                .addFilterBefore(new ExceptionHandlingFilter(), UsernamePasswordAuthenticationFilter.class)
+                .authenticationProvider(baseAuthenticationProvider())
+                .authorizeHttpRequests((authorize) -> {
+                    authorize
+                        .requestMatchers("/health")
+                        .permitAll()
+                        .requestMatchers("/v1/ocr/**")
+                        .permitAll()
+                        .requestMatchers("/v1/admin/**")
+                        .permitAll()
+                        .requestMatchers("/v1/s3/chart/**")
+                        .permitAll()
+                        .requestMatchers(
+                            "/swagger-ui/**",
+                            "/v3/api-docs/**",
+                            "/swagger-resources/**",
+                            "/webjars/**",
+                            "/favicon.ico",
+                            "/api-docs/**")
+                        .permitAll()
+                            .requestMatchers(HttpMethod.POST,
+                                    "/*/auth/login/*",
+                                    "/*/auth/renew")
+                            .permitAll()
+                            .anyRequest().authenticated();
                 })
-                .authenticationEntryPoint((request, response, authException) -> {
-                    response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증 실패");
-                }));
+                .addFilterBefore(new JwtFilter(jwtProvider), UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling((exception) -> exception
+                        .accessDeniedHandler((request, response, accessDeniedException) -> {
+                            response.sendError(HttpServletResponse.SC_FORBIDDEN, "접근 거부");
+                        })
+                        .authenticationEntryPoint((request, response, authException) -> {
+                            response.sendError(HttpServletResponse.SC_UNAUTHORIZED, "인증 실패");
+                        }));
         return http.build();
     }
 

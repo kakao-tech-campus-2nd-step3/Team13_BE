@@ -1,16 +1,15 @@
 package dbdr.domain.careworker.repository;
 
 import dbdr.domain.careworker.entity.Careworker;
-import dbdr.domain.institution.entity.Institution;
 import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
 
 public interface CareworkerRepository extends JpaRepository<Careworker, Long> {
 
-    List<Careworker> findByInstitutionId(Long institutionId);
+
+    List<Careworker> findAllByInstitutionId(Long institutionId);
 
     Optional<Careworker> findByLineUserId(String userId);
 
@@ -21,4 +20,8 @@ public interface CareworkerRepository extends JpaRepository<Careworker, Long> {
     boolean existsByEmail(String email);
 
     boolean existsByPhone(String phone);
+
+	boolean existsByPhoneAndIdNot(String phone, Long id);
+
+    boolean existsByEmailAndIdNot(String phone, Long id);
 }

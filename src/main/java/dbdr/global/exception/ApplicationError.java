@@ -13,6 +13,7 @@ public enum ApplicationError {
     ACCESS_NOT_ALLOWED(HttpStatus.FORBIDDEN, "접근 권한이 없습니다."),
     TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "만료된 토큰입니다."),
     PASSWORD_NOT_MATCH(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
+    ILLIGAL_ARGUMENT(HttpStatus.INTERNAL_SERVER_ERROR, "인증 과정 중 문제가 생겼습니다."),
     REFRESH_TOKEN_EXPIRED(HttpStatus.UNAUTHORIZED, "유효하지 않은 리프레시 토큰입니다. 재로그인 해주세요."),
 
     // Guardian (보호자)
@@ -27,11 +28,19 @@ public enum ApplicationError {
     // Institution (요양원)
     INSTITUTION_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 요양원을 찾을 수가 없습니다."),
 
+    // Chart (차트)
+    CHART_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 차트을 찾을 수가 없습니다."),
+
+    // Admin (관리자)
+    ADMIN_NOT_FOUND(HttpStatus.NOT_FOUND, "해당 관리자를 찾을 수가 없습니다."),
+
     // 공통
     DUPLICATE_EMAIL(HttpStatus.CONFLICT, "이미 존재하는 이메일입니다."),
     DUPLICATE_PHONE(HttpStatus.CONFLICT, "이미 존재하는 전화번호입니다."),
     DUPLICATE_CARE_NUMBER(HttpStatus.CONFLICT, "이미 존재하는 장기요양번호입니다."),
     DUPLICATE_INSTITUTION_NUMBER(HttpStatus.CONFLICT, "이미 존재하는 요양기관번호입니다."),
+    DUPILCATE_INSTITUTION_NAME(HttpStatus.CONFLICT, "이미 존재하는 요양기관명입니다."),
+    DUPILCATE_INSTITUTION_LOGIN_ID(HttpStatus.CONFLICT, "이미 존재하는 요양기관 로그인 아이디입니다."),
     INVALID_INPUT(HttpStatus.BAD_REQUEST, "잘못된 입력값입니다."),
     INVALID_PHONE_NUMBER(HttpStatus.BAD_REQUEST, "잘못된 입력입니다. 010XXXXXXXX 형식으로 입력해주세요."),
 
@@ -54,7 +63,10 @@ public enum ApplicationError {
 
     //엑셀 파일
     FILE_UPLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 업로드 중 오류가 발생했습니다."),
-    FILE_DOWNLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 다운로드 중 오류가 발생했습니다.");
+    FILE_DOWNLOAD_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "파일 다운로드 중 오류가 발생했습니다."),
+    EMPTY_FILE(HttpStatus.BAD_REQUEST, "파일이 비어 있습니다."),
+    FILE_SIZE_EXCEEDED(HttpStatus.BAD_REQUEST, "파일 크기는 5MB를 초과할 수 없습니다."),
+    INVALID_FILE(HttpStatus.BAD_REQUEST, "유효하지 않은 파일입니다. 엑셀 파일 (.xlsx)만 업로드 가능합니다.");
 
     private final HttpStatus status;
     private final String message;
