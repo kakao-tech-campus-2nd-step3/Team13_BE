@@ -8,6 +8,7 @@ import dbdr.domain.chart.dto.response.ChartDetailResponse;
 import dbdr.domain.chart.dto.response.ChartOverviewResponse;
 import dbdr.domain.chart.entity.Chart;
 import dbdr.domain.chart.repository.ChartRepository;
+import dbdr.domain.core.alarm.service.AlarmService;
 import dbdr.global.exception.ApplicationError;
 import dbdr.global.exception.ApplicationException;
 import java.util.List;
@@ -40,6 +41,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -50,6 +52,7 @@ public class ChartService {
     private final ChartMapper chartMapper;
     private final SummaryRepository summaryRepository;
     private final OpenAiSummarizationConfig summarizationConfig;
+    private final AlarmService alarmService;
 
     @Value("${openai.chat-completions}")
     private String chatUrl;
@@ -77,6 +80,7 @@ public class ChartService {
         chartRepository.deleteById(chartId);
     }
 
+    @Transactional
     public ChartDetailResponse saveChart(ChartDetailRequest request) {
         Chart chart = chartMapper.toEntity(request);
         Chart savedChart = chartRepository.save(chart);
@@ -87,7 +91,9 @@ public class ChartService {
                 summaryResponse.bodyManagement(), summaryResponse.recoveryTraining(),
                 summaryResponse.conditionDisease(), summaryResponse.nursingManagement(),
                 tagResponse.tag1(), tagResponse.tag2(), tagResponse.tag3()));
-        return chartMapper.toResponse(savedChart);
+        ChartDetailResponse chartDetailResponse = chartMapper.toResponse(savedChart);
+        alarmService.updateGuardianAlarmMessage(chartDetailResponse);
+        return chartDetailResponse;
     }
 
     public ChartDetailResponse updateChart(Long chartId, ChartDetailRequest request) {

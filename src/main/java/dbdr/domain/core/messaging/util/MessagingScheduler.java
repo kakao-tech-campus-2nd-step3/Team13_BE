@@ -57,11 +57,13 @@ public class MessagingScheduler {
 			String phone = careworker.getPhone();
 			Alarm alarm = alarmService.getAlarmByPhoneAndAlertTime(phone, currentDateTime);
 			String name = careworker.getName();
+			// (1) Line 채널 알림 보내기
 			if (alarm != null && alarm.getChannel().equals(MessageChannel.LINE) && !alarm.isSend()) {
 				log.info("알림 보낼 요양보호사 : {}", name);
 				alarmService.sendAlarmToSqs(alarm, alarm.getChannelId(), name);
 				alarmService.createCareworkerNextWorkingdayAlarm(careworker);
 			}
+			// (2) SMS 알림 보내기
 		}
 	}
 }

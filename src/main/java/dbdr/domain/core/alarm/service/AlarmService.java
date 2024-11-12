@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import dbdr.domain.careworker.entity.Careworker;
+import dbdr.domain.chart.dto.response.ChartDetailResponse;
 import dbdr.domain.core.alarm.entity.Alarm;
 import dbdr.domain.core.messaging.MessageChannel;
 import dbdr.domain.core.messaging.MessageTemplate;
@@ -17,6 +18,10 @@ import dbdr.domain.core.messaging.dto.SqsMessageDto;
 import dbdr.domain.core.alarm.repository.AlarmRepository;
 import dbdr.domain.core.messaging.service.CallSqsService;
 import dbdr.domain.guardian.entity.Guardian;
+import dbdr.domain.recipient.dto.response.RecipientResponse;
+import dbdr.domain.recipient.entity.Recipient;
+import dbdr.domain.recipient.repository.RecipientRepository;
+import dbdr.domain.recipient.service.RecipientService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,6 +31,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AlarmService {
 	private final AlarmRepository alarmRepository;
 	private final CallSqsService callSqsService;
+	private final RecipientRepository recipientRepository;
 
 	@Transactional
 	public void createCareworkerAlarm(Careworker careworker) {
@@ -135,6 +141,31 @@ public class AlarmService {
 		Alarm alarm = alarmRepository.findByPhone(phone).orElse(null);
 		if (alarm != null && !alarm.isSend()) {
 			alarm.setAlertTime(localTime.atDate(alarm.getAlertTime().toLocalDate()));
+			alarmRepository.save(alarm);
+		}
+	}
+
+	@Transactional
+	public void updateGuardianAlarmMessage(ChartDetailResponse chartDetailResponse) {
+		Recipient recipient = recipientRepository.findById(chartDetailResponse.recipientId()).orElse(null);
+		Alarm alarm = alarmRepository.findByPhone(recipient.getGuardian().getPhone()).orElse(null);
+
+		if (alarm != null && !alarm.isSend() && alarm.getAlertTime().isAfter(LocalDateTime.now())) {
+			// ChartDetailResponse의 데이터를 사용해 알림 메시지 생성
+			String message = MessageTemplate.CHART_UPDATED_MESSAGE.format(
+				recipient.getGuardian().getName(),
+				chartDetailResponse.conditionDisease(),
+				chartDetailResponse.bodyManagement().wash() ? "예" : "아니오",
+				chartDetailResponse.bodyManagement().bath() ? "예" : "아니오",
+				chartDetailResponse.bodyManagement().mealType(),
+				chartDetailResponse.nursingManagement().systolic(),
+				chartDetailResponse.nursingManagement().diastolic(),
+				chartDetailResponse.nursingManagement().healthTemperature(),
+				chartDetailResponse.cognitiveManagement().cognitiveHelp() ? "예" : "아니오",
+				chartDetailResponse.recoveryTraining().recoveryProgram()
+			);
+
+			alarm.setMessage(message);
 			alarmRepository.save(alarm);
 		}
 	}

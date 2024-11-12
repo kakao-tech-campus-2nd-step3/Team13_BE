@@ -40,7 +40,7 @@ public class Guardian extends BaseEntity {
     private String lineUserId;
 
     @Column(nullable = true)
-    private LocalTime alertTime = LocalTime.of(18, 0); // 오후 6시로 초기화
+    private LocalTime alertTime = LocalTime.of(9, 0); // 오전 9시로 초기화
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "institution_id")
