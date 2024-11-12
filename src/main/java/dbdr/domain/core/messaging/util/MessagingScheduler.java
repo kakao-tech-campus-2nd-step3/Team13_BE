@@ -42,11 +42,14 @@ public class MessagingScheduler {
 			LocalDateTime alertTime = LocalDateTime.of(LocalDate.now(), currentTime);
 			Alarm alarm = alarmService.getAlarmByPhoneAndAlertTime(phone, alertTime);
 			String name = guardian.getName();
+
+			// (1) Line 채널 알림 보내기
 			if (alarm != null && alarm.getChannel().equals(MessageChannel.LINE)) {
 				log.info("알림 보낼 보호자 : {}", name);
 				alarmService.sendAlarmToSqs(alarm, alarm.getChannelId(), name);
 				alarmService.createGuardianNextDayAlarm(guardian);
 			}
+			// (2) SMS 알림 보내기
 		}
 
 		// 요양보호사에게 알람 메시지를 SQS로 전송합니다.
