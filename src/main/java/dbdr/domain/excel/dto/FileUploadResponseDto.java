@@ -1,4 +1,4 @@
-package dbdr.domain.core.excel.dto;
+package dbdr.domain.excel.dto;
 
 import java.util.List;
 
