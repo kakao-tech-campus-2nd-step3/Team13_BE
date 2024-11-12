@@ -129,4 +129,13 @@ public class AlarmService {
 			alarmRepository.save(alarm);
 		}
 	}
+
+	@Transactional
+	public void updateAlarmByLocalTime(LocalTime localTime, String phone) {
+		Alarm alarm = alarmRepository.findByPhone(phone).orElse(null);
+		if (alarm != null && !alarm.isSend()) {
+			alarm.setAlertTime(localTime.atDate(alarm.getAlertTime().toLocalDate()));
+			alarmRepository.save(alarm);
+		}
+	}
 }

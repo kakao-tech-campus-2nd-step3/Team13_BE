@@ -142,6 +142,7 @@ public class CareworkerService {
 
         careworker.updateWorkingDays(request.getWorkingDays());
         careworker.updateAlertTime(request.getAlertTime());
+        alarmService.updateAlarmByLocalTime(request.getAlertTime(), careworker.getPhone());
 
         return toMyPageResponseDTO(careworker);
     }
