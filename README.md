@@ -66,19 +66,19 @@
 
 ![java 17](https://img.shields.io/badge/-Java%2017-ED8B00?style=for-the-badge&logo=java&logoColor=white)
 ![spring boot 3.1.3](https://img.shields.io/badge/Spring%20boot%203.1.3-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
-![Python 3.8.10](https://img.shields.io/badge/python%203.8.10-3776AB?style=for-the-badge&logo=python&logoColor=white)
-![Flask 2.2.2](https://img.shields.io/badge/Flask%202.2.2-000000?style=for-the-badge&logo=flask&logoColor=white)
-
+![spring security](https://img.shields.io/badge/spring%20security-6DB33F?style=for-the-badge&logo=spring&logoColor=white)
 ![mysql 8.0](https://img.shields.io/badge/MySQL%208.0-005C84?style=for-the-badge&logo=mysql&logoColor=white)
+
 ![Redis 6.2](https://img.shields.io/badge/Redis%206.2-DC382D?style=for-the-badge&logo=Redis&logoColor=white)
 ![AWS S3](https://img.shields.io/badge/AWS%20S3-569A31?style=for-the-badge&logo=amazons3&logoColor=white)
 ![AWS EC2](https://img.shields.io/badge/AWS%20EC2-FF9900?style=for-the-badge&logo=amazonec2&logoColor=white)
-![Naver cloud](https://img.shields.io/badge/naver%20cloud-03C75A?style=for-the-badge&logo=naver&logoColor=white)
+![Amazon sqs](https://img.shields.io/badge/Amazon%20sqs-FF9900?style=for-the-badge&logo=amazon&logoColor=white)
 
-![nginx 1.18.0](https://img.shields.io/badge/nginx%201.18.0-009639?style=for-the-badge&logo=nginx&logoColor=white)
-![docker 24.0.7](https://img.shields.io/badge/docker%2024.0.7-2496ED?style=for-the-badge&logo=docker&logoColor=white)
-![Kubernetes 1.28.0](https://img.shields.io/badge/KUBERNETES%201.28.0-326CE5?style=for-the-badge&logo=Kubernetes&logoColor=white)
-![github action](https://img.shields.io/badge/GITHUB%20ACTIONS-2088FF?style=for-the-badge&logo=github-actions&logoColor=white)
+![Naver cloud](https://img.shields.io/badge/naver%20cloud-03C75A?style=for-the-badge&logo=naver&logoColor=white)
+![openAI](https://img.shields.io/badge/openAI-FF6C37?style=for-the-badge&logo=openai&logoColor=white)
+![poi](https://img.shields.io/badge/poi-3F6EB5?style=for-the-badge&logo=apache&logoColor=white)
+![line api](https://img.shields.io/badge/line%20api-00C300?style=for-the-badge&logo=line&logoColor=white)
+![coolSms](https://img.shields.io/badge/coolSms-FF6C37?style=for-the-badge&logo=coolSms&logoColor=white)
 
 </div>
 
@@ -110,9 +110,3 @@
 
 
 
-
----
-## ☑️ TODO
-
-- [ ] todo1
-- [ ] todo2
