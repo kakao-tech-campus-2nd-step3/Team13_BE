@@ -122,7 +122,6 @@ public class GuardianService {
             .institution(institution)
             .build();
         guardian = guardianRepository.save(guardian);
-        alarmService.createGuardianAlarm(guardian);
         return new GuardianResponse(guardian.getId(), guardian.getPhone(), guardian.getName(),
             guardian.getInstitution().getId(), guardian.isActive());
     }
