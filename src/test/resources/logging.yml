@@ -3,3 +3,5 @@ logging:
     root: info
     org.springframework.web: debug  # Spring Web 관련 로그
     org.springframework.security: debug  # Spring Security 관련 로그
+  pattern:
+    dateformat: yyyy-MM-dd HH:mm:ss.SSSz,Asia/Seoul

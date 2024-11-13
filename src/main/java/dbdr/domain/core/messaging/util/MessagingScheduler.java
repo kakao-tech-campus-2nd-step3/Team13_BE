@@ -26,8 +26,10 @@ public class MessagingScheduler {
 	private final CareworkerService	careworkerService;
 	private final AlarmService alarmService;
 
-	@Scheduled(cron = "0 0/1 * * * ?")
+	@Scheduled(cron = "0 0/1 * * * ?", zone = "Asia/Seoul")
 	public void sendChartUpdate() {
+		// 현재 시간 출력
+		log.info("현재 시간 : {}", LocalDateTime.now());
 		// 초와 나노초를 제거하고 분 단위로 비교하기 위해 현재 시간을 가져옴
 		LocalTime currentTime = LocalTime.now().withSecond(0).withNano(0);
 		LocalDateTime currentDateTime = LocalDateTime.now().withSecond(0).withNano(0);
