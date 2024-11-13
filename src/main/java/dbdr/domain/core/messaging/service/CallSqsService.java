@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import dbdr.domain.core.messaging.MessageChannel;
 import dbdr.domain.core.messaging.dto.SqsMessageDto;
 import io.awspring.cloud.sqs.annotation.SqsListener;
 import io.awspring.cloud.sqs.operations.SendResult;
@@ -19,6 +20,7 @@ public class CallSqsService {
 
 	private final SqsTemplate queueMessagingTemplate;
 	private final LineMessagingService lineMessagingService;
+	private final SmsMessagingService smsMessagingService;
 	private final ObjectMapper objectMapper; // JSON 변환용 ObjectMapper
 
 	@Value("${cloud.aws.sqs.queue-name}")
@@ -46,8 +48,13 @@ public class CallSqsService {
 			SqsMessageDto messageDto = objectMapper.readValue(messageJson, SqsMessageDto.class);
 			log.info("Received message from SQS: {}", messageDto);
 
-			// LineMessagingService를 통해 사용자에게 메시지 전송
-			lineMessagingService.pushAlarmMessage(messageDto.getUserId(), messageDto.getMessage());
+			if (messageDto.getMessageChannel() != null && messageDto.getMessageChannel().equals(MessageChannel.LINE)) { // LineMessagingService를 통해 사용자에게 메시지 전송
+				log.info("라인 메시지 전송! 아이디 : {}, 메시지 : {} ", messageDto.getUserId(), messageDto.getMessage());
+				lineMessagingService.pushAlarmMessage(messageDto.getUserId(), messageDto.getMessage());
+			} else if (messageDto.getMessageChannel() != null && messageDto.getMessageChannel().equals(MessageChannel.SMS)) {  // SMSMessagingService를 통해 사용자에게 메시지 전송
+				log.info("SMS 메시지 전송! 전화번호 : {}, 메시지 : {} ", messageDto.getPhoneNumber(), messageDto.getMessage());
+				smsMessagingService.sendMessageToUser(messageDto.getPhoneNumber(), messageDto.getMessage());
+			}
 		} catch (Exception e) {
 			log.error("Failed to process message from SQS", e);
 		}

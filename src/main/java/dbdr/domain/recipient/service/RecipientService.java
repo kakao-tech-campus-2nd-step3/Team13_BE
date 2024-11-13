@@ -1,6 +1,9 @@
 package dbdr.domain.recipient.service;
 
 import dbdr.domain.careworker.entity.Careworker;
+import dbdr.domain.chart.entity.Chart;
+import dbdr.domain.chart.repository.ChartRepository;
+import dbdr.domain.chart.service.ChartService;
 import dbdr.domain.guardian.entity.Guardian;
 import dbdr.domain.guardian.service.GuardianService;
 import dbdr.domain.institution.entity.Institution;
@@ -18,6 +21,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -28,6 +33,7 @@ public class RecipientService {
     private final CareworkerService careworkerService;
     private final InstitutionService institutionService;
     private final GuardianService guardianService;
+    private final ChartRepository chartRepository;
 
     // 전체 돌봄대상자 목록 조회 (관리자용)
     public List<RecipientResponse> getAllRecipients() {
@@ -272,5 +278,30 @@ public class RecipientService {
                 recipient.getCareworker() != null ? recipient.getCareworker().getId() : null,
                 recipient.getGuardian() != null ? recipient.getGuardian().getId() : null
         );
+    }
+
+    // 어제 날짜의 차트가 작성되었는지 확인
+    public boolean isChartWrittenYesterday(Long guardianId) {
+        Recipient recipient = recipientRepository.findByGuardianId(
+            guardianId).orElseThrow(() -> new ApplicationException(ApplicationError.RECIPIENT_NOT_FOUND
+        ));
+        Chart chart = getChartByRecipientIdAndDate(recipient.getId(), LocalDate.now().minusDays(1));
+        return chart != null;
+    }
+
+    // 보호자 ID로 어제 차트 ID 조회
+    public Long getChartIdByGuardianId(Long guardianId) {
+        Recipient recipient = recipientRepository.findByGuardianId(guardianId)
+            .orElseThrow(() -> new ApplicationException(ApplicationError.RECIPIENT_NOT_FOUND));
+        Chart chart = getChartByRecipientIdAndDate(recipient.getId(), LocalDate.now().minusDays(1));
+        return chart.getId();
+    }
+
+    public Chart getChartByRecipientIdAndDate(Long recipientId, LocalDate date) {
+        LocalDateTime startDateTime = date.atStartOfDay();
+        LocalDateTime endDateTime = date.atTime(23, 59, 59);
+
+        return chartRepository.findByRecipientIdAndCreatedAtBetween(recipientId, startDateTime, endDateTime)
+            .orElse(null);
     }
 }

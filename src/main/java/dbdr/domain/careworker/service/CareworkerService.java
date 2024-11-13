@@ -27,7 +27,6 @@ public class CareworkerService {
 
     private final CareworkerRepository careworkerRepository;
     private final InstitutionService institutionService;
-    private final AlarmService alarmService;
     private final CareworkerMapper careworkerMapper;
 
     @Transactional(readOnly = true)
@@ -90,7 +89,6 @@ public class CareworkerService {
         Careworker careworker = careworkerMapper.toEntity(careworkerRequestDTO);
 
         careworkerRepository.save(careworker);
-        alarmService.createCareworkerAlarm(careworker);
 
         return careworkerMapper.toResponse(careworker);
     }
@@ -255,6 +253,4 @@ public class CareworkerService {
         careworker.updateLineUserId(userId);
         careworkerRepository.save(careworker);
     }
-
-
 }

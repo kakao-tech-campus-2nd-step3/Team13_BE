@@ -52,10 +52,10 @@ public class Careworker extends BaseEntity {
     private LocalTime alertTime = LocalTime.of(17, 0); // 오후 5시로 초기화
 
     @Column(nullable = false)
-    private boolean smsSubscription = false; // 기본값을 false로 설정
+    private boolean smsSubscription = false;
 
     @Column(nullable = false)
-    private boolean lineSubscription = false; // 기본값을 false로 설정
+    private boolean lineSubscription = false;
 
     @Column(unique = true)
     private String email;

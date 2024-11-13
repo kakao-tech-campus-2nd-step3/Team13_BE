@@ -27,7 +27,6 @@ public class GuardianService {
 
     private final GuardianRepository guardianRepository;
     private final InstitutionRepository institutionRepository;
-    private final AlarmService alarmService;
 
     @Autowired
     PasswordEncoder passwordEncoder;

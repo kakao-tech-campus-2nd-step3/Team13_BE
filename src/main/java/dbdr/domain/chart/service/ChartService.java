@@ -8,14 +8,11 @@ import dbdr.domain.chart.dto.response.ChartDetailResponse;
 import dbdr.domain.chart.dto.response.ChartOverviewResponse;
 import dbdr.domain.chart.entity.Chart;
 import dbdr.domain.chart.repository.ChartRepository;
-import dbdr.domain.core.alarm.service.AlarmService;
 import dbdr.global.exception.ApplicationError;
 import dbdr.global.exception.ApplicationException;
 import java.util.List;
 import java.util.stream.Collectors;
 import dbdr.global.configuration.OpenAiSummarizationConfig;
-import dbdr.global.exception.ApplicationError;
-import dbdr.global.exception.ApplicationException;
 import dbdr.openai.dto.etc.Message;
 import dbdr.openai.dto.request.ChartDataRequest;
 import dbdr.openai.dto.request.OpenAiSummaryRequest;
@@ -27,15 +24,11 @@ import dbdr.openai.repository.SummaryRepository;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -52,7 +45,6 @@ public class ChartService {
     private final ChartMapper chartMapper;
     private final SummaryRepository summaryRepository;
     private final OpenAiSummarizationConfig summarizationConfig;
-    private final AlarmService alarmService;
 
     @Value("${openai.chat-completions}")
     private String chatUrl;

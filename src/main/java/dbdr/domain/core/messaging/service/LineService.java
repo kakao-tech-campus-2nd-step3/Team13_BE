@@ -95,11 +95,9 @@ public class LineService {
 
 		if (guardianService.findByPhone(phoneNumber) != null) {
 			guardianService.updateLineUserId(userId, phoneNumber);
-			alarmService.updateNewLineUser(phoneNumber, userId);
 			lineMessagingService.sendMessageToUser(userId, MessageTemplate.GUARDIAN_WELCOME_MESSAGE.format(userName));
 		} else if (careworkerService.findByPhone(phoneNumber) != null) {
 			careworkerService.updateLineUserId(userId, phoneNumber);
-			alarmService.updateNewLineUser(phoneNumber, userId);
 			lineMessagingService.sendMessageToUser(userId, MessageTemplate.CAREWORKER_WELCOME_MESSAGE.format(userName));
 		} else {
 			// 보호자나 요양보호사가 아닌 경우

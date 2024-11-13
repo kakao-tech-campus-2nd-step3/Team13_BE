@@ -1,15 +1,13 @@
 package dbdr.domain.core.alarm.service;
 
-import java.time.DayOfWeek;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.temporal.TemporalAdjusters;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import dbdr.domain.careworker.entity.Careworker;
-import dbdr.domain.chart.dto.response.ChartDetailResponse;
+import dbdr.domain.careworker.repository.CareworkerRepository;
+import dbdr.domain.chart.entity.Chart;
+import dbdr.domain.chart.repository.ChartRepository;
 import dbdr.domain.core.alarm.entity.Alarm;
 import dbdr.domain.core.messaging.MessageChannel;
 import dbdr.domain.core.messaging.MessageTemplate;
@@ -17,11 +15,10 @@ import dbdr.domain.core.messaging.Role;
 import dbdr.domain.core.messaging.dto.SqsMessageDto;
 import dbdr.domain.core.alarm.repository.AlarmRepository;
 import dbdr.domain.core.messaging.service.CallSqsService;
-import dbdr.domain.guardian.entity.Guardian;
-import dbdr.domain.recipient.dto.response.RecipientResponse;
-import dbdr.domain.recipient.entity.Recipient;
-import dbdr.domain.recipient.repository.RecipientRepository;
+import dbdr.domain.guardian.repository.GuardianRepository;
 import dbdr.domain.recipient.service.RecipientService;
+import dbdr.openai.dto.response.SummaryResponse;
+import dbdr.openai.service.SummaryService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,133 +28,67 @@ import lombok.extern.slf4j.Slf4j;
 public class AlarmService {
 	private final AlarmRepository alarmRepository;
 	private final CallSqsService callSqsService;
-	private final RecipientRepository recipientRepository;
+	private final RecipientService recipientService;
+	private final CareworkerRepository careworkerRepository;
+	private final GuardianRepository guardianRepository;
+	private final ChartRepository chartRepository;
+	private final SummaryService summaryService;
+
 
 	@Transactional
-	public void createCareworkerAlarm(Careworker careworker) {
-		Alarm alarm = new Alarm(
-			LocalDateTime.now().with(LocalTime.of(17, 0)), // 오늘 17:00으로 설정
-			MessageTemplate.CAREWORKER_ALARM_MESSAGE.getTemplate(),
-			careworker.getPhone(),
-			Role.CAREWORKER,
-			careworker.getId()
-		);
-
-		alarmRepository.save(alarm);
-	}
-
-	@Transactional
-	public void createCareworkerNextWorkingdayAlarm(Careworker careworker) {
-		LocalDateTime currentDateTime = LocalDateTime.now();
-		DayOfWeek currentDay = currentDateTime.getDayOfWeek();
-		Alarm currentAlarm = getAlarmByPhone(careworker.getPhone());
-		DayOfWeek nextWorkDay = careworker.getNextWorkingDay(currentDay); // 다음 근무일 계산
-		if (nextWorkDay != null) {
-			LocalDateTime nextAlertTime = LocalDateTime.of(
-				currentDateTime.with(TemporalAdjusters.next(nextWorkDay)).toLocalDate(),
-				careworker.getAlertTime()
-			);
-			Alarm alarm = new Alarm(
-				nextAlertTime,
-				currentAlarm.getChannel(),
-				currentAlarm.getChannelId(),
-				MessageTemplate.CAREWORKER_ALARM_MESSAGE.getTemplate(),
-				careworker.getPhone(),
-				Role.CAREWORKER,
-				careworker.getId()
-			);
-			alarmRepository.save(alarm);
-		} else {
-			log.warn("{} 요양보호사의 다음 근무일이 지정되지 않았습니다.", careworker.getName());
-		}
-	}
-
-	@Transactional
-	public void createGuardianAlarm(Guardian guardian) {
-		Alarm alarm = new Alarm(
-			LocalDateTime.now().with(LocalTime.of(9, 0)), // 오늘 09:00으로 설정
-			MessageTemplate.NO_CHART_MESSAGE.getTemplate(),
-			guardian.getPhone(),
-			Role.GUARDIAN,
-			guardian.getId()
-		);
-
-		alarmRepository.save(alarm);
-	}
-
-	// 내일 알림 생성
-	@Transactional
-	public void createGuardianNextDayAlarm(Guardian guardian) {
-		LocalDateTime currentDateTime = LocalDateTime.now();
-		DayOfWeek currentDay = currentDateTime.getDayOfWeek();
-		Alarm currentAlarm = getAlarmByPhone(guardian.getPhone());
-		DayOfWeek nextDay = currentDay.plus(1); // 다음 날 계산
-		LocalDateTime nextAlertTime = LocalDateTime.of(
-			currentDateTime.with(TemporalAdjusters.next(nextDay)).toLocalDate(),
-			guardian.getAlertTime()
-		);
-		Alarm alarm = new Alarm(
-			nextAlertTime,
-			currentAlarm.getChannel(),
-			currentAlarm.getChannelId(),
-			MessageTemplate.NO_CHART_MESSAGE.getTemplate(),
-			guardian.getPhone(),
-			Role.GUARDIAN,
-			guardian.getId()
-		);
-		alarmRepository.save(alarm);
-	}
-
-	@Transactional(readOnly = true)
-	public Alarm getAlarmByPhoneAndAlertTime(String phone, LocalDateTime alertTime) {
-		return alarmRepository.findByPhoneAndAlertTime(phone, alertTime).orElse(null);
-	}
-
-	@Transactional(readOnly = true)
-	public Alarm getAlarmByPhone(String phone) {
-		return alarmRepository.findByPhone(phone).orElse(null);
-	}
-
-	@Transactional
-	public void sendAlarmToSqs(Alarm alarm, String lineUserId, String name) {
+	public void sendAlarmToSqs(Alarm alarm, MessageChannel messageChannel, String name, String phoneNumber, String lineUserId) {
 		String alarmMessage = String.format(alarm.getMessage(), name);
-		callSqsService.sendMessage(new SqsMessageDto(lineUserId, alarmMessage));
-		alarm.setSend(true); // 메시지 전송 상태 업데이트
+		callSqsService.sendMessage(new SqsMessageDto(messageChannel, lineUserId, alarmMessage, phoneNumber));
+		log.info("알림 메시지를 SQS로 전송했습니다. 이름 : {}, 메시지 : {}, 메세지 채널 : {}", name, alarmMessage, MessageChannel.valueOf(messageChannel.name()));
+		alarm.setSend(true);
+		alarm.setChannel(messageChannel);
 		alarmRepository.save(alarm);
 	}
 
+	// 보호자 알림 메시지 생성
 	@Transactional
-	public void updateNewLineUser(String phone, String lineUserId) {
-		Alarm alarm = alarmRepository.findByPhone(phone).orElse(null);
-		if (alarm != null) {
-			alarm.setChannel(MessageChannel.LINE);
-			alarm.setChannelId(lineUserId);
-			alarmRepository.save(alarm);
+	public Alarm getGuardianAlarmMessage(Long guardianId, LocalDateTime currentDateTime) {
+		// 어제 날짜로 차트 데이터가 있는지 확인하기
+		boolean isChartWrittenYesterday = recipientService.isChartWrittenYesterday(guardianId);
+		log.info("어제 날짜로 차트 데이터가 있는지 확인하기 : {}", isChartWrittenYesterday);
+		if (isChartWrittenYesterday) { // 어제자 차트 내용으로 알림 메시지 생성
+			Long chartId = recipientService.getChartIdByGuardianId(guardianId);
+			Chart chart = chartRepository.findById(chartId).orElseThrow(() -> new IllegalArgumentException("차트가 존재하지 않습니다."));
+			SummaryResponse summaryResponse = summaryService.getSummarization(chartId);
+			String message = MessageTemplate.CHART_UPDATED_MESSAGE.format(
+				guardianRepository.findById(guardianId).orElseThrow(() -> new IllegalArgumentException("보호자가 존재하지 않습니다.")).getName(),
+				summaryResponse.bodyManagement(),
+				summaryResponse.cognitiveManagement(),
+				summaryResponse.nursingManagement(),
+				summaryResponse.recoveryTraining()
+			);
+
+			return new Alarm(
+				currentDateTime,
+				message,
+				chart.getRecipient().getGuardian().getPhone(),
+				Role.GUARDIAN,
+				guardianId
+			);
+		} else {
+			return new Alarm(
+				currentDateTime,
+				MessageTemplate.NO_CHART_MESSAGE.getTemplate(),
+				guardianRepository.findById(guardianId).orElseThrow(() -> new IllegalArgumentException("보호자가 존재하지 않습니다.")).getPhone(),
+				Role.GUARDIAN,
+				guardianId
+			);
 		}
 	}
 
-	@Transactional
-	public void updateGuardianAlarmMessage(ChartDetailResponse chartDetailResponse) {
-		Recipient recipient = recipientRepository.findById(chartDetailResponse.recipientId()).orElse(null);
-		Alarm alarm = alarmRepository.findByPhone(recipient.getGuardian().getPhone()).orElse(null);
-
-		if (alarm != null && !alarm.isSend() && alarm.getAlertTime().isAfter(LocalDateTime.now())) {
-			// ChartDetailResponse의 데이터를 사용해 알림 메시지 생성
-			String message = MessageTemplate.CHART_UPDATED_MESSAGE.format(
-				recipient.getGuardian().getName(),
-				chartDetailResponse.conditionDisease(),
-				chartDetailResponse.bodyManagement().wash() ? "예" : "아니오",
-				chartDetailResponse.bodyManagement().bath() ? "예" : "아니오",
-				chartDetailResponse.bodyManagement().mealType(),
-				chartDetailResponse.nursingManagement().systolic(),
-				chartDetailResponse.nursingManagement().diastolic(),
-				chartDetailResponse.nursingManagement().healthTemperature(),
-				chartDetailResponse.cognitiveManagement().cognitiveHelp() ? "예" : "아니오",
-				chartDetailResponse.recoveryTraining().recoveryProgram()
-			);
-
-			alarm.setMessage(message);
-			alarmRepository.save(alarm);
-		}
+	// 요양보호사 알림 메시지 생성
+	public Alarm getCareworkerAlarmMessage(Long careworkerId, LocalDateTime currentDateTime) {
+		return new Alarm(
+			currentDateTime,
+			MessageTemplate.CAREWORKER_ALARM_MESSAGE.getTemplate(),
+			careworkerRepository.findById(careworkerId).orElseThrow(() -> new IllegalArgumentException("요양보호사가 존재하지 않습니다.")).getPhone(),
+			Role.CAREWORKER,
+			careworkerId
+		);
 	}
 }

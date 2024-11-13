@@ -38,9 +38,6 @@ public class Alarm extends BaseEntity {
 	@Column(nullable = true)
 	private MessageChannel channel;
 
-	@Column(nullable = true)
-	private String channelId;
-
 	@Column(nullable = false)
 	private String phone;
 
@@ -56,16 +53,6 @@ public class Alarm extends BaseEntity {
 
 	public Alarm(LocalDateTime alertTime, String message, String phone, Role role, Long roleId) {
 		this.alertTime = alertTime;
-		this.message = message;
-		this.phone = phone;
-		this.role = role;
-		this.roleId = roleId;
-	}
-
-	public Alarm(LocalDateTime alertTime, MessageChannel channel, String channelId, String message, String phone, Role role, Long roleId) {
-		this.alertTime = alertTime;
-		this.channel = channel;
-		this.channelId = channelId;
 		this.message = message;
 		this.phone = phone;
 		this.role = role;
