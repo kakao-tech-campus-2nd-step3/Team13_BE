@@ -4,8 +4,14 @@ import dbdr.domain.guardian.dto.request.GuardianRequest;
 import dbdr.domain.guardian.dto.request.GuardianUpdateRequest;
 import dbdr.domain.guardian.dto.response.GuardianResponse;
 import dbdr.domain.guardian.service.GuardianService;
+import dbdr.domain.institution.entity.Institution;
 import dbdr.global.util.api.ApiUtils;
+import dbdr.security.LoginInstitution;
+import dbdr.security.model.AuthParam;
+import dbdr.security.model.DbdrAuth;
+import dbdr.security.model.Role;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
@@ -31,13 +37,17 @@ public class GuardianInstitutionController {
 
     @Operation(summary = "전체 보호자 정보 조회")
     @GetMapping
-    public ResponseEntity<ApiUtils.ApiResult<List<GuardianResponse>>> showAllGuardian() {
-        List<GuardianResponse> guardianResponseList = guardianService.getAllGuardian();
+    @DbdrAuth(targetRole = Role.INSTITUTION, authParam = AuthParam.LOGIN_INSTITUTION)
+    public ResponseEntity<ApiUtils.ApiResult<List<GuardianResponse>>> showAllGuardian(
+        @Parameter(hidden = true) @LoginInstitution Institution institution) {
+        List<GuardianResponse> guardianResponseList = guardianService.getAllGuardianByInstitutionId(
+            institution.getId());
         return ResponseEntity.ok(ApiUtils.success(guardianResponseList));
     }
 
     @Operation(summary = "보호자 한 사람의 정보 조회")
     @GetMapping("/{guardianId}")
+    @DbdrAuth(targetRole = Role.INSTITUTION, authParam = AuthParam.GUARDIAN_ID, id = "guardianId")
     public ResponseEntity<ApiUtils.ApiResult<GuardianResponse>> showOneGuardian(
         @PathVariable("guardianId") Long guardianId) {
         GuardianResponse guardianResponse = guardianService.getGuardianById(guardianId);
@@ -46,14 +56,18 @@ public class GuardianInstitutionController {
 
     @Operation(summary = "보호자 추가")
     @PostMapping
+    @DbdrAuth(targetRole = Role.INSTITUTION, authParam = AuthParam.LOGIN_INSTITUTION)
     public ResponseEntity<ApiUtils.ApiResult<GuardianResponse>> addGuardian(
-        @Valid @RequestBody GuardianRequest guardianRequest) {
-        GuardianResponse guardianResponse = guardianService.addGuardian(guardianRequest);
+        @Valid @RequestBody GuardianRequest guardianRequest,
+        @Parameter(hidden = true) @LoginInstitution Institution institution) {
+        GuardianResponse guardianResponse = guardianService.addGuardianByInstitution(
+            guardianRequest, institution.getId());
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiUtils.success(guardianResponse));
     }
 
     @Operation(summary = "보호자 정보 수정")
     @PutMapping("/{guardianId}")
+    @DbdrAuth(targetRole = Role.INSTITUTION, authParam = AuthParam.GUARDIAN_ID, id = "guardianId")
     public ResponseEntity<ApiUtils.ApiResult<GuardianResponse>> updateGuardian(
         @PathVariable("guardianId") Long guardianId,
         @Valid @RequestBody GuardianUpdateRequest guardianRequest) {
@@ -64,7 +78,9 @@ public class GuardianInstitutionController {
 
     @Operation(summary = "보호자 삭제")
     @DeleteMapping("/{guardianId}")
-    public ResponseEntity<ApiUtils.ApiResult<String>> deleteGuardian(@PathVariable("guardianId") Long guardianId) {
+    @DbdrAuth(targetRole = Role.INSTITUTION, authParam = AuthParam.GUARDIAN_ID, id = "guardianId")
+    public ResponseEntity<ApiUtils.ApiResult<String>> deleteGuardian(
+        @PathVariable("guardianId") Long guardianId) {
         guardianService.deleteGuardianById(guardianId);
         return ResponseEntity.noContent().build();
     }

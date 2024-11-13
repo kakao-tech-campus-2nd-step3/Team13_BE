@@ -34,8 +34,5 @@ public class CareworkerUpdateAdminRequest {
     @Pattern(regexp = "010\\d{8}", message = "010XXXXXXXX형식으로 입력해주세요.")
     private String phone;
 
-
-
-
     // 비밀번호는 수정 불가
 }

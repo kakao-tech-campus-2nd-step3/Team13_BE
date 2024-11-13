@@ -1,6 +1,5 @@
 package dbdr.domain.core.messaging.service;
 
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.linecorp.bot.client.LineMessagingClient;

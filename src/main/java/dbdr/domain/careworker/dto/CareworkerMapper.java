@@ -32,5 +32,4 @@ public abstract class CareworkerMapper {
         return institutionService.getInstitutionById(institutionId);
     }
 
-
 }

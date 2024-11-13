@@ -30,4 +30,3 @@ public final class ApiUtils {
     public record ApiError<T>(int status, T message) {
     }
 }
-

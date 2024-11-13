@@ -44,4 +44,3 @@ public class RecipientGuardianController {
         return ResponseEntity.ok(ApiUtils.success(recipient));
     }
 }
-

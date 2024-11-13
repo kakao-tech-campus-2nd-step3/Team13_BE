@@ -1,6 +1,5 @@
 package dbdr.global.configuration;
 
-
 import io.lettuce.core.ClientOptions;
 import io.lettuce.core.SocketOptions;
 import java.time.Duration;

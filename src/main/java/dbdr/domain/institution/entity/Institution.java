@@ -44,8 +44,4 @@ public class Institution extends BaseEntity {
         this.institutionNumber = institutionNumber;
         this.institutionName = institutionName;
     }
-
-    public void updatePassword(String encodedPassword) {
-        this.loginPassword = encodedPassword;
-    }
 }

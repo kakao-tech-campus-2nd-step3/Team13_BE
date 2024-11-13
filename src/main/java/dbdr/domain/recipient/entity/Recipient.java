@@ -159,7 +159,4 @@ public class Recipient extends BaseEntity {
         this.guardian = guardian;
     } //관리자용
 
-
-
-
 }

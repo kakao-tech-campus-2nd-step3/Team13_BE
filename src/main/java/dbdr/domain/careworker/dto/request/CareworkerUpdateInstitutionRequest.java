@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -27,7 +26,6 @@ public class CareworkerUpdateInstitutionRequest {
     @NotBlank(message = "휴대폰 번호는 필수 항목입니다.")
     @Pattern(regexp = "010\\d{8}", message = "010XXXXXXXX형식으로 입력해주세요.")
     private String phone;
-
 
     // 요양원 권한 사용자는 institutionId를 변경할 수 없음
 }

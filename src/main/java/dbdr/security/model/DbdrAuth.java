@@ -27,5 +27,3 @@ public @interface DbdrAuth {
     AuthParam authParam() default AuthParam.NONE;
     String id() default "";
 }
-
-

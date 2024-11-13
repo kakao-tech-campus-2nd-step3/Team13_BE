@@ -79,6 +79,17 @@ public class GuardianService {
             .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<GuardianResponse> getAllGuardianByInstitutionId(Long institutionId) {
+        List<Guardian> guardianList = guardianRepository.findAllByInstitutionId(institutionId);
+        return guardianList.stream()
+            .map(guardian -> new GuardianResponse(guardian.getId(), guardian.getPhone(),
+                guardian.getName(),
+                guardian.getInstitution().getId(),
+                guardian.isActive()))
+            .toList();
+    }
+
     @Transactional
     public GuardianResponse addGuardian(GuardianRequest guardianRequest) {
         ensureUniquePhone(guardianRequest.phone());
@@ -93,6 +104,25 @@ public class GuardianService {
             .institution(institution)
             .build();
         guardian = guardianRepository.save(guardian);
+        return new GuardianResponse(guardian.getId(), guardian.getPhone(), guardian.getName(),
+            guardian.getInstitution().getId(), guardian.isActive());
+    }
+
+    @Transactional
+    public GuardianResponse addGuardianByInstitution(GuardianRequest guardianRequest, Long institutionId) {
+        ensureUniquePhone(guardianRequest.phone());
+        Institution institution = institutionRepository.findById(institutionId)
+            .orElseThrow(() -> new ApplicationException(
+                ApplicationError.INSTITUTION_NOT_FOUND));
+        String password = passwordEncoder.encode(guardianRequest.loginPassword());
+        Guardian guardian = Guardian.builder().phone(guardianRequest.phone())
+            .name(guardianRequest.name())
+            .phone(guardianRequest.phone())
+            .loginPassword(password)
+            .institution(institution)
+            .build();
+        guardian = guardianRepository.save(guardian);
+        alarmService.createGuardianAlarm(guardian);
         return new GuardianResponse(guardian.getId(), guardian.getPhone(), guardian.getName(),
             guardian.getInstitution().getId(), guardian.isActive());
     }

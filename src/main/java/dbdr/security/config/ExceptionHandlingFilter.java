@@ -1,6 +1,5 @@
 package dbdr.security.config;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dbdr.global.util.api.ApiUtils;
 import io.jsonwebtoken.ExpiredJwtException;

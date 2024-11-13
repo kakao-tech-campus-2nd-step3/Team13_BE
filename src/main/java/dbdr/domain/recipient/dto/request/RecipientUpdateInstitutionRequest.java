@@ -49,5 +49,4 @@ public class RecipientUpdateInstitutionRequest {
     @NotNull(message = "보호자 ID는 필수 항목입니다.")
     private Long guardianId;
 
-
 }

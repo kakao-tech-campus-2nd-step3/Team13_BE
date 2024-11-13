@@ -8,7 +8,6 @@ import java.util.Optional;
 
 public interface CareworkerRepository extends JpaRepository<Careworker, Long> {
 
-
     List<Careworker> findAllByInstitutionId(Long institutionId);
 
     Optional<Careworker> findByLineUserId(String userId);

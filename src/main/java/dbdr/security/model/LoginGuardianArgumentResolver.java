@@ -18,9 +18,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @RequiredArgsConstructor
 public class LoginGuardianArgumentResolver implements HandlerMethodArgumentResolver {
 
-
     private final GuardianRepository guardianRepository;
-
 
     @Override
     public boolean supportsParameter(MethodParameter parameter) {

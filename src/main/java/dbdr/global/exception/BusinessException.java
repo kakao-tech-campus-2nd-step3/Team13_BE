@@ -1,6 +1,5 @@
 package dbdr.global.exception;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
@@ -18,4 +17,3 @@ public class BusinessException extends RuntimeException {
         return businessError.getMessage();
     }
 }
-

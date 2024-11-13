@@ -33,7 +33,6 @@ public class DbdrAuthAop {
             id = args[0].toString();
         }
 
-
         if(!dbdrSeucrityService.hasAcesssPermission(role, authParam, id)) {
             log.info("권한이 없습니다.");
             throw new ApplicationException(ApplicationError.ACCESS_NOT_ALLOWED);

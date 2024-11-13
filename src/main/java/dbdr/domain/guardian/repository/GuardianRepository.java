@@ -19,4 +19,6 @@ public interface GuardianRepository extends JpaRepository<Guardian, Long> {
     List<Guardian> findByAlertTime(LocalTime currentTime);
 
 	Optional<Guardian> findByPhone(String phone);
+
+    List<Guardian> findAllByInstitutionId(Long institutionId);
 }

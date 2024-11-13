@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @Slf4j
 public class GlobalExceptionHandler {
 
-
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ApiUtils.ApiResult<String>> methodArgumentNotValidExceptionHandler(
             MethodArgumentNotValidException exception) {
@@ -31,7 +30,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(ApiUtils.error(HttpStatus.BAD_REQUEST, error));
     }
-
 
     @ExceptionHandler(ApplicationException.class)
     public ResponseEntity<ApiUtils.ApiResult<String>> applicationExceptionHandler(ApplicationException ex) {
@@ -49,7 +47,6 @@ public class GlobalExceptionHandler {
                 .body(ApiUtils.error(HttpStatus.BAD_REQUEST, ex.getBusinessError().getMessage()));
     }
 
-
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<ApiUtils.ApiResult<String>> illegalArgumentExceptionHandler(IllegalArgumentException ex) {
         log.error("잘못된 인자 값: {}", ex.getMessage());
@@ -66,7 +63,6 @@ public class GlobalExceptionHandler {
                 .body(ApiUtils.error(HttpStatus.INTERNAL_SERVER_ERROR, "참조된 객체가 null입니다."));
     }
 
-
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ApiUtils.ApiResult<String>> httpRequestMethodNotSupportedExceptionHandler(
             HttpRequestMethodNotSupportedException ex) {
@@ -76,7 +72,6 @@ public class GlobalExceptionHandler {
                 .body(ApiUtils.error(HttpStatus.METHOD_NOT_ALLOWED, "지원되지 않는 HTTP 메서드 입니다."));
     }
 
-
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ApiUtils.ApiResult<String>> generalExceptionHandler(Exception ex) {
         log.error("예상치 못한 오류 발생: {}", ex.getMessage(), ex);
@@ -85,4 +80,3 @@ public class GlobalExceptionHandler {
                 .body(ApiUtils.error(HttpStatus.INTERNAL_SERVER_ERROR, "예상치 못한 오류가 발생했습니다."));
     }
 }
-

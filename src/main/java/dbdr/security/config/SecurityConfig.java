@@ -1,7 +1,7 @@
 package dbdr.security.config;
 
+import dbdr.security.model.BaseAuthenticationProvider;
 import dbdr.security.model.JwtProvider;
-import dbdr.security.service.BaseAuthenticationProvider;
 import dbdr.security.service.BaseUserDetailsService;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

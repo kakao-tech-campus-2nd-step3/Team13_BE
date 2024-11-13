@@ -1,8 +1,8 @@
-package dbdr.security.service;
+package dbdr.security.model;
 
 import dbdr.global.exception.ApplicationError;
 import dbdr.global.exception.ApplicationException;
-import dbdr.security.model.BaseUserDetails;
+import dbdr.security.service.BaseUserDetailsService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationProvider;
