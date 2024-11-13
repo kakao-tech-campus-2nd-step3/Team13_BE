@@ -73,12 +73,8 @@ public class CareworkerService {
     public CareworkerResponse createCareworker(CareworkerRequest careworkerRequestDTO) {
         ensureUniqueEmail(careworkerRequestDTO.getEmail());
         ensureUniquePhone(careworkerRequestDTO.getPhone());
-
         Careworker careworker = careworkerMapper.toEntity(careworkerRequestDTO);
-
         careworkerRepository.save(careworker);
-        alarmService.createCareworkerAlarm(careworker);
-
         return careworkerMapper.toResponse(careworker);
     }
 

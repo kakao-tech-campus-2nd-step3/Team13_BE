@@ -92,7 +92,6 @@ public class ChartService {
                 summaryResponse.conditionDisease(), summaryResponse.nursingManagement(),
                 tagResponse.tag1(), tagResponse.tag2(), tagResponse.tag3()));
         ChartDetailResponse chartDetailResponse = chartMapper.toResponse(savedChart);
-        alarmService.updateGuardianAlarmMessage(chartDetailResponse);
         return chartDetailResponse;
     }
 

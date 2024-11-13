@@ -1,7 +1,10 @@
 package dbdr.domain.guardian.entity;
 
+import dbdr.domain.core.messaging.MessageChannel;
 import dbdr.domain.institution.entity.Institution;
 import dbdr.domain.recipient.entity.Recipient;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -41,6 +44,12 @@ public class Guardian extends BaseEntity {
 
     @Column(nullable = true)
     private LocalTime alertTime = LocalTime.of(9, 0); // 오전 9시로 초기화
+
+    @Column(nullable = false)
+    private boolean smsSubscription = false; // 기본값을 false로 설정
+
+    @Column(nullable = false)
+    private boolean lineSubscription = false; // 기본값을 false로 설정
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "institution_id")
