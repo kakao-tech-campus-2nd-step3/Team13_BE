@@ -1,8 +1,7 @@
 package dbdr.domain.guardian.service;
 
 import dbdr.domain.core.alarm.service.AlarmService;
-import dbdr.domain.core.alarm.service.AlarmService;
-import dbdr.domain.guardian.dto.request.GuardianAlertTimeRequest;
+import dbdr.domain.guardian.dto.request.GuardianMyPageRequest;
 import dbdr.domain.guardian.dto.request.GuardianUpdateRequest;
 import dbdr.domain.guardian.dto.response.GuardianMyPageResponse;
 import dbdr.domain.guardian.entity.Guardian;
@@ -42,20 +41,17 @@ public class GuardianService {
 
     public GuardianMyPageResponse getMyPageGuardianInfo(Long guardianId) {
         Guardian guardian = findGuardianById(guardianId);
-        return new GuardianMyPageResponse(guardian.getName(), guardian.getPhone(),
-            guardian.getAlertTime());
+        return new GuardianMyPageResponse(guardian.getName(), guardian.getPhone(), guardian.getAlertTime(), guardian.isSmsSubscription(), guardian.isLineSubscription());
     }
 
     @Transactional
-    public GuardianMyPageResponse updateAlertTime(Long guardianId,
-        GuardianAlertTimeRequest request) {
-        ensureUniquePhoneButNotId(request.phone(), guardianId);
+    public GuardianMyPageResponse updateMyPageInfo(Long guardianId, GuardianMyPageRequest request) {
         Guardian guardian = findGuardianById(guardianId);
-        guardian.updateAlertTime(request.name(), request.phone(), request.alertTime());
+        guardian.updateAlertTime(request.alertTime());
+        guardian.updateSubscriptions(request.smsSubscription(), request.lineSubscription());
         guardianRepository.save(guardian);
-        alarmService.updateAlarmByLocalTime(request.alertTime(), request.phone());
         return new GuardianMyPageResponse(guardian.getName(), guardian.getPhone(),
-            guardian.getAlertTime());
+            guardian.getAlertTime(), guardian.isSmsSubscription(), guardian.isLineSubscription());
     }
 
     @Transactional

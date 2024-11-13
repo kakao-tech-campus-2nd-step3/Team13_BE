@@ -6,17 +6,12 @@ import java.time.LocalTime;
 import dbdr.domain.core.base.entity.BaseEntity;
 import dbdr.domain.institution.entity.Institution;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Pattern;
-import java.time.DayOfWeek;
-import java.time.LocalTime;
 import java.util.EnumSet;
 import java.util.Set;
 import lombok.AccessLevel;
@@ -129,5 +124,10 @@ public class Careworker extends BaseEntity {
 
     public void updateInstitution(Institution institution) {
       this.institution = institution;
+    }
+
+    public void updateSubscriptions(boolean smsSubscription, boolean lineSubscription) {
+        this.smsSubscription = smsSubscription;
+        this.lineSubscription = lineSubscription;
     }
 }

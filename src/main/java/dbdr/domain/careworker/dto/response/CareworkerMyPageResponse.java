@@ -15,4 +15,6 @@ public class CareworkerMyPageResponse {
     private String institutionName;
     private LocalTime alertTime;
     private Set<DayOfWeek> workingDays;
+    private boolean smsSubscription;
+    private boolean lineSubscription;
 }

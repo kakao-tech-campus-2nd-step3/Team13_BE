@@ -161,13 +161,13 @@ public class CareworkerService {
     }
 
     @Transactional
-    public CareworkerMyPageResponse updateWorkingDaysAndAlertTime(Long careworkerId, CareworkerUpdateRequest request) {
+    public CareworkerMyPageResponse getMyPageCareworkerInfo(Long careworkerId, CareworkerUpdateRequest request) {
         Careworker careworker = careworkerRepository.findById(careworkerId)
-                .orElseThrow(() -> new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND));
+            .orElseThrow(() -> new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND));
 
-        careworker.updateWorkingDays(request.getWorkingDays());
-        careworker.updateAlertTime(request.getAlertTime());
-        alarmService.updateAlarmByLocalTime(request.getAlertTime(), careworker.getPhone());
+        careworker.updateWorkingDays(request.workingDays());
+        careworker.updateAlertTime(request.alertTime());
+        careworker.updateSubscriptions(request.smsSubscription(), request.lineSubscription());
 
         return toMyPageResponseDTO(careworker);
     }
@@ -217,11 +217,13 @@ public class CareworkerService {
 
     private CareworkerMyPageResponse toMyPageResponseDTO(Careworker careworker) {
         return new CareworkerMyPageResponse(
-                careworker.getName(),
-                careworker.getPhone(),
-                careworker.getInstitution().getInstitutionName(),
-                careworker.getAlertTime(),
-                careworker.getWorkingDays()
+            careworker.getName(),
+            careworker.getPhone(),
+            careworker.getInstitution().getInstitutionName(),
+            careworker.getAlertTime(),
+            careworker.getWorkingDays(),
+            careworker.isSmsSubscription(),
+            careworker.isLineSubscription()
         );
     }
 

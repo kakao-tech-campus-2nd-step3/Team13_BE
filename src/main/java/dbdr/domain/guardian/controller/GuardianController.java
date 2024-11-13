@@ -1,6 +1,6 @@
 package dbdr.domain.guardian.controller;
 
-import dbdr.domain.guardian.dto.request.GuardianAlertTimeRequest;
+import dbdr.domain.guardian.dto.request.GuardianMyPageRequest;
 import dbdr.domain.guardian.dto.response.GuardianMyPageResponse;
 import dbdr.domain.guardian.entity.Guardian;
 import dbdr.domain.guardian.service.GuardianService;
@@ -47,10 +47,10 @@ public class GuardianController {
     @PutMapping
     @DbdrAuth(targetRole = Role.GUARDIAN, authParam = AuthParam.LOGIN_GUARDIAN)
     public ResponseEntity<ApiUtils.ApiResult<GuardianMyPageResponse>> updateGuardianInfo(
-        @Valid @RequestBody GuardianAlertTimeRequest guardianAlertTimeRequest,
+        @Valid @RequestBody GuardianMyPageRequest guardianMyPageRequest,
         @Parameter(hidden = true) @LoginGuardian Guardian guardian) {
-        GuardianMyPageResponse guardianMyPageResponse = guardianService.updateAlertTime(guardian.getId(),
-            guardianAlertTimeRequest);
+        GuardianMyPageResponse guardianMyPageResponse =
+            guardianService.updateMyPageInfo(guardian.getId(), guardianMyPageRequest);
         return ResponseEntity.ok(ApiUtils.success(guardianMyPageResponse));
     }
 }

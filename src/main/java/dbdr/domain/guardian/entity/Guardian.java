@@ -69,9 +69,7 @@ public class Guardian extends BaseEntity {
         this.name = name;
     }
 
-    public void updateAlertTime(String name, String phone, LocalTime alertTime) {
-        this.phone = phone;
-        this.name = name;
+    public void updateAlertTime(LocalTime alertTime) {
         this.alertTime = alertTime;
     }
 
@@ -79,7 +77,8 @@ public class Guardian extends BaseEntity {
         this.lineUserId = lineUserId;
     }
 
-    public void updateAlertTime(LocalTime alertTime) {
-        this.alertTime = alertTime;
+    public void updateSubscriptions(boolean smsSubscription, boolean lineSubscription) {
+        this.smsSubscription = smsSubscription;
+        this.lineSubscription = lineSubscription;
     }
 }

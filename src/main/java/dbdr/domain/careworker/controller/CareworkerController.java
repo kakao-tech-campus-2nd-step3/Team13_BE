@@ -43,13 +43,13 @@ public class CareworkerController {
         return ResponseEntity.ok(ApiUtils.success(response));
     }
 
-    @Operation(summary = "요양보호사 본인의 근무일과 알림 시간 수정", security = @SecurityRequirement(name = "JWT"))
+    @Operation(summary = "요양보호사 본인의 정보 수정", security = @SecurityRequirement(name = "JWT"))
     @PutMapping
     @DbdrAuth(targetRole = Role.CAREWORKER,authParam = AuthParam.LOGIN_CAREWORKER)
     public ResponseEntity<ApiUtils.ApiResult<CareworkerMyPageResponse>> updateCareworkerInfo(
             @Parameter(hidden = true) @LoginCareworker Careworker careworker,
             @Valid @RequestBody CareworkerUpdateRequest careworkerRequest) {
-        CareworkerMyPageResponse updatedResponse = careworkerService.updateWorkingDaysAndAlertTime(careworker.getId(),
+        CareworkerMyPageResponse updatedResponse = careworkerService.getMyPageCareworkerInfo(careworker.getId(),
                 careworkerRequest);
         return ResponseEntity.ok(ApiUtils.success(updatedResponse));
     }
