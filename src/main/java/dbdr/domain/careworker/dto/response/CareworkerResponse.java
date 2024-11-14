@@ -10,7 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CareworkerResponse {
-
     private Long id;
     private Long institutionId;
     private String name;
