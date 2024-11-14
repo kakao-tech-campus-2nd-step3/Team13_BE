@@ -45,7 +45,9 @@ public class GuardianService {
     @Transactional
     public GuardianMyPageResponse updateMyPageInfo(Long guardianId, GuardianMyPageRequest request) {
         Guardian guardian = findGuardianById(guardianId);
-        guardian.updateAlertTime(request.alertTime());
+        if (request.alertTime() != null) {
+            guardian.updateAlertTime(request.alertTime());
+        }
         guardian.updateSubscriptions(request.smsSubscription(), request.lineSubscription());
         guardianRepository.save(guardian);
         return new GuardianMyPageResponse(guardian.getName(), guardian.getPhone(),

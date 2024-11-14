@@ -163,8 +163,12 @@ public class CareworkerService {
         Careworker careworker = careworkerRepository.findById(careworkerId)
             .orElseThrow(() -> new ApplicationException(ApplicationError.CAREWORKER_NOT_FOUND));
 
-        careworker.updateWorkingDays(request.workingDays());
-        careworker.updateAlertTime(request.alertTime());
+        if (request.workingDays() != null) {
+            careworker.updateWorkingDays(request.workingDays());
+        }
+        if (request.alertTime() != null) {
+            careworker.updateAlertTime(request.alertTime());
+        }
         careworker.updateSubscriptions(request.smsSubscription(), request.lineSubscription());
 
         return toMyPageResponseDTO(careworker);
