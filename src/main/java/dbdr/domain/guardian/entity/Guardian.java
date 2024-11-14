@@ -38,7 +38,7 @@ public class Guardian extends BaseEntity {
     @Column(nullable = true)
     private String lineUserId;
 
-    @Column(nullable = true)
+    @Column(nullable = false)
     private LocalTime alertTime = LocalTime.of(9, 0); // 오전 9시로 초기화
 
     @Column(nullable = false)
