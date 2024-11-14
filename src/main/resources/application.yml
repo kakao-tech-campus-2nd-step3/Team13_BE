@@ -4,6 +4,4 @@ spring :
       - optional:database.yml
       - optional:logging.yml
       - optional:application-secret.yml
-      - optional:springdoc.yml
-  app:
-    version: v1
+

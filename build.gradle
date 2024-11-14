@@ -31,11 +31,10 @@ dependencies {
     // 데이터베이스
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'mysql:mysql-connector-java:8.0.33' // MySQL 의존성 추가 (MySQL JDBC 드라이버)
-    runtimeOnly 'com.h2database:h2'
 
     // 보안
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
+    //implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+    //implementation 'org.springframework.boot:spring-boot-starter-security'
 
     // JWT 라이브러리 추가
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
@@ -46,49 +45,11 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    // SpringDoc OpenAPI (Swagger UI 포함)
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.1.0'
-
     // 테스트 라이브러리
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testRuntimeOnly 'com.h2database:h2' // H2는 테스트 환경에서 주로 사용
-
-    // Line-messaging-api 라이브러리
-    implementation 'com.linecorp.bot:line-bot-spring-boot:4.7.0'
-
-
-    // MapStruct
-    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.4.2.Final'
-
-    //POI
-    implementation 'org.apache.poi:poi-ooxml:5.3.0'
-    implementation 'org.apache.commons:commons-compress:1.27.1'
-
-    // Redis
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
-    // Amazon SQS
-    implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.1")
-    implementation 'io.awspring.cloud:spring-cloud-aws-starter-sqs'
-
-    // CoolSMS
-    implementation 'net.nurigo:sdk:4.3.0'
-
-    // AWS S3
-    implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
-
-    // Naver Clova OCR API
-    implementation 'org.springframework.boot:spring-boot-starter-webflux' // WebClient 사용을 위한 라이브러리
-
-    // Health check
-    implementation 'org.springframework.boot:spring-boot-starter-actuator'
 }
 
 tasks.named('test') {
     useJUnitPlatform()
-}
-
-tasks.withType(JavaCompile) {
-    options.compilerArgs += ['-parameters']
 }

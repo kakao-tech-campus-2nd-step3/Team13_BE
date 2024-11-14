@@ -1,15 +1,14 @@
-package dbdr.domain.careworker.dto.response;
+package dbdr.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class CareworkerResponse {
+public class CareworkerResponseDTO {
+
     private Long id;
     private Long institutionId;
     private String name;
