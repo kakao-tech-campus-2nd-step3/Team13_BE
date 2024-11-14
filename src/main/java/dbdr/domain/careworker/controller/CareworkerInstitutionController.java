@@ -31,7 +31,7 @@ public class CareworkerInstitutionController {
 
     @DbdrAuth(targetRole = Role.INSTITUTION)
     @Operation(summary = "특정 요양원아이디로 전체 요양보호사 정보 조회", security = @SecurityRequirement(name = "JWT"))
-    @GetMapping("/institution")
+    @GetMapping
     public ResponseEntity<ApiUtils.ApiResult<List<CareworkerResponse>>> getAllCareworkers(
             @Parameter(hidden = true) @LoginInstitution Institution institution) {
         List<CareworkerResponse> institutions = careworkerService.getCareworkersByInstitution(institution.getId());
