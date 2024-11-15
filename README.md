@@ -58,6 +58,8 @@
 <br/>
 <br/>
 
+---
+
 ## ⚙️ 개발 스택
 
 <div align="center">
@@ -97,6 +99,7 @@
 <br/>
 <br/>
 
+---
 
 # 🔗 프로젝트 관련 주소
 
@@ -382,6 +385,8 @@
 <br/>
 <br/>
 
+---
+
 ## 🌌 백엔드 전체 구상도
 <p align='center'>
     <img width="700" alt="caregiver_difficulty" src="docs/source/be_structure.png">
@@ -389,6 +394,8 @@
 
 <br/>
 <br/>
+
+---
 
 ## 📄 팀 그라운드 규칙 설명
 ### [📑 팀 그라운드 룰](https://www.notion.so/e4ce811fa70d4feb94f988eefef9c380)
@@ -400,49 +407,41 @@
 ```
 └───📂src
     ├───📂main
-    │   ├───📂generated
-    │   ├───📂java.com.kakao.sunsuwedding
-    │   │               ├───📁chat
-    │   │               ├───📁favorite
-    │   │               ├───📁match
-    │   │               ├───📁payment
-    │   │               ├───📁portfolio
-    │   │               │   ├───📁cursor
-    │   │               │   ├───📁image
-    │   │               │   └───📁price
-    │   │               ├───📁quotation
-    │   │               ├───📁review
-    │   │               │   └───📁image
-    │   │               ├───📁user
-    │   │               │   ├───📁base_user
-    │   │               │   ├───📁constant
-    │   │               │   ├───📁couple
-    │   │               │   ├───📁mail
-    │   │               │   ├───📁planner
-    │   │               │   └───📁token
-    │   │               └───📁_core
-    │   │                   ├───📁constants
-    │   │                   ├───📁errors
-    │   │                   │   └───📁exception
-    │   │                   ├───📁security
-    │   │                   └───📁utils
+    │   ├───📂java.dbdr
+    │   │               ├─── 📁domain 
+    │   │               │    ├───📁admin
+    │   │               │    ├───📁careworker
+    │   │               │    ├───📁chart
+    │   │               │    ├───📁core
+    │   │               │    │   ├───📁alarm
+    │   │               │    │   ├───📁base
+    │   │               │    │   ├───📁messaging
+    │   │               │    │   ├───📁ocr
+    │   │               │    │   └───📁s3
+    │   │               │    │
+    │   │               │    ├───📁excel
+    │   │               │    ├───📁guardian
+    │   │               │    ├───📁institution
+    │   │               │    └───📁recipient
+    │   │               ├───📁global
+    │   │               │   ├───📁configuration
+    │   │               │   ├───📁exception
+    │   │               │   └───📁util
+    │   │               ├───📁openai
+    │   │               └───📁security
     │   └───📂resources
-    │       ├───📁db
-    │       └───📁env
+    │       
     └───📂test
-        └───📂java.com.kakao.sunsuwedding
-            ├───📁chat
-            ├───📁favorite
-            ├───📁match
-            ├───📁payment
-            ├───📁portfolio
-            │   ├───📁image
-            │   └───📁price
-            ├───📁quotation
-            ├───📁review
-            ├───📁user
-            ├───📁util
-            └───📁_core
+        ├───📂java.dbdr
+        │     ├───📁careworker
+        │     ├───📁chart
+        │     ├───📁e2etest
+        │     ├───📁global
+        │     ├───📁messaging
+        │     ├───📁openAi
+        │     ├───📁security
+        │     └───📁testhelper
+        └───📂resources
 ```
 
 

@@ -76,10 +76,8 @@ class AlarmServiceTest {
 
 	@Test
 	void testGetGuardianAlarmMessage() {
-		// 모의 데이터 설정
 		when(recipientService.isChartWrittenYesterday(anyLong())).thenReturn(true);
 
-		// Guardian 객체 모킹
 		Guardian guardian = mock(Guardian.class);
 		when(guardian.getPhone()).thenReturn("01012345678");
 		when(guardianRepository.findById(anyLong())).thenReturn(Optional.of(guardian));
