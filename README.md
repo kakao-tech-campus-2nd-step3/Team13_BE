@@ -394,13 +394,62 @@
 ### [📑 팀 그라운드 룰](https://www.notion.so/e4ce811fa70d4feb94f988eefef9c380)
 ### [😀 PR 템플릿 & 이슈 템플릿](https://www.notion.so/PR-e7db382239564304b49614cb6681cf22) 
 ### [⛳️ 커밋 컨벤션](https://www.notion.so/43ef62a4a9b842bdba1d954f1601ef54)
+
 ### 🏛️ 프로젝트 구조
 
 
+### How to start
 
+1. 프로젝트를 클론합니다.
 
+   ```
+   $ git clone https://github.com/kakao-tech-campus-2nd-step3/Team13_BE.git
+   ```
 
+2. `Temp13_BE/src/resources` 파일에 `application-secret.yml`을 넣어줍니다.
 
+      ```
+      $ cd Team13_BE/src/resources                        # 디렉토리 이동
+      $ vi application-seceret.yml                       # application-secret.yml 파일 수정 및 저장 진행하기
+      ```
+   다음과 같은 구조에 키 값들을 꼭 넣어주기!! (단, port의 경우 local과 배포 서버에 설정되는 값이 다릅니다)
+      ```
+        data: 
+            redis:
+                port: # redis port
+                host: # redis host
+        datasoruce:
+            url: # mysql rds url
+            username: # mysql username
+            password: # mysql password 
+            driver-class-name: # mysql driver class name
+        secret:  # jwt secret key
+        line:
+          channelAccessToken: # line channel access token
+          channelSecret: # line channel secret
+        aws:
+            accessKey: # aws access key
+            secretKey: # aws secret key
+            region: # aws region
+        openai: 
+            apiKey: # openai api key
+        naver:
+            api-url: # naver clova api url
+            secret-key: # naver clova secret key
+        ```
 
+3. java파일을 빌드, 실행합니다.
+
+   ```sh
+   $ ./gradlew clean build
+   $ java -jar build/libs/server-0.0.1.jar
+   ```
+
+   - 실제 배포를 위한 `product` 환경일 시, `spring.profiles.active` 설정을 추가하여 실행합니다.
+
+     ```sh
+     $ ./gradlew clean build
+     $ java -jar -Dspring.profiles.active=product build/libs/server-0.0.1.jar
+        ```
 
 
