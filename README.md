@@ -262,7 +262,7 @@
 
 &nbsp; presigned URL을 통해 이미지 파일을 S3에 업로드하고, 백엔드 서버에는 objectKey 값만 전달하여 OCR을 수행하는 방식으로 서버 과부하를 방지하고 성능을 최적화했습니다. 이로써 서버 리소스를 절약하면서도 보안성을 유지한 상태에서 차트를 안전하게 OCR 처리할 수 있도록 구현했습니다.
 <p align="center">
-<img width="270" alt="care_bridge_logo" src="docs/source/ocr_example.png">
+<img width="500" alt="care_bridge_logo" src="docs/source/ocr_example.png">
 </p>
 
 
