@@ -396,9 +396,58 @@
 ### [⛳️ 커밋 컨벤션](https://www.notion.so/43ef62a4a9b842bdba1d954f1601ef54)
 
 ### 🏛️ 프로젝트 구조
+## 파일 구조
+```
+└───📂src
+    ├───📂main
+    │   ├───📂generated
+    │   ├───📂java.com.kakao.sunsuwedding
+    │   │               ├───📁chat
+    │   │               ├───📁favorite
+    │   │               ├───📁match
+    │   │               ├───📁payment
+    │   │               ├───📁portfolio
+    │   │               │   ├───📁cursor
+    │   │               │   ├───📁image
+    │   │               │   └───📁price
+    │   │               ├───📁quotation
+    │   │               ├───📁review
+    │   │               │   └───📁image
+    │   │               ├───📁user
+    │   │               │   ├───📁base_user
+    │   │               │   ├───📁constant
+    │   │               │   ├───📁couple
+    │   │               │   ├───📁mail
+    │   │               │   ├───📁planner
+    │   │               │   └───📁token
+    │   │               └───📁_core
+    │   │                   ├───📁constants
+    │   │                   ├───📁errors
+    │   │                   │   └───📁exception
+    │   │                   ├───📁security
+    │   │                   └───📁utils
+    │   └───📂resources
+    │       ├───📁db
+    │       └───📁env
+    └───📂test
+        └───📂java.com.kakao.sunsuwedding
+            ├───📁chat
+            ├───📁favorite
+            ├───📁match
+            ├───📁payment
+            ├───📁portfolio
+            │   ├───📁image
+            │   └───📁price
+            ├───📁quotation
+            ├───📁review
+            ├───📁user
+            ├───📁util
+            └───📁_core
+```
 
 
-### How to start
+
+### 🕹️ How to start
 
 1. 프로젝트를 클론합니다.
 
@@ -438,18 +487,8 @@
             secret-key: # naver clova secret key
         ```
 
-3. java파일을 빌드, 실행합니다.
+3. 2.의 방법과 동일하게 테스트 환경에 맞는 `application-test.yml`도 넣어줍니다.
 
-   ```sh
-   $ ./gradlew clean build
-   $ java -jar build/libs/server-0.0.1.jar
-   ```
-
-   - 실제 배포를 위한 `product` 환경일 시, `spring.profiles.active` 설정을 추가하여 실행합니다.
-
-     ```sh
-     $ ./gradlew clean build
-     $ java -jar -Dspring.profiles.active=product build/libs/server-0.0.1.jar
-        ```
+4. ci/cd 혹은 script를 통해 배포를 진행합니다.
 
 
