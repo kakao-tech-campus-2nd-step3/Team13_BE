@@ -216,7 +216,7 @@
 |                         📷 **OCR 차트 작성**                          |                                                           📑 **차트 요약 기능**                                                            |                              🔔 **알림 기능**                               |
 |:-----------------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------:|
 |         **차트 양식 프린트 후 사진 인식**<br/>  사진 한 장으로 **자동 기록 완성**         |                                             **환자 상태 요약 제공**<br/>  여러 환자의 **하루 상태 간편 확인**                                             |                 사용자가 예약한 시간마다<br/>  문자/라인 메시지로 차트 작성 알림                 |
-| <img width="200" alt="ocr_chart" src="docs/source/ocr_chart.png"> | <img width="200" alt="chart_summary_feature"  src="https://github.com/user-attachments/assets/945784e9-6d78-47df-9e4a-d150cbc8ca04"> | <img width="200" alt="care_message" src="docs/source/care_message.jpg"> |
+| <img width="220" alt="ocr_chart" src="docs/source/ocr_chart.png"> | <img width="220" alt="chart_summary_feature"  src="https://github.com/user-attachments/assets/945784e9-6d78-47df-9e4a-d150cbc8ca04"> | <img width="220" alt="care_message" src="docs/source/care_message.jpg"> |
 
 </div>
 
