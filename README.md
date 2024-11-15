@@ -5,7 +5,99 @@
 </p>
 <br/>
 
-# 🔗 관련 주소
+> 목차 
+> - [🔗 프로젝트 관련 주소](#-프로젝트-관련-주소)
+> - [🧐 서비스의 필요성](#-서비스의-필요성)
+> - [🌟 돌봄다리란?](#-돌봄다리란)
+> - [🧑‍💻 Collaborators](#-collaborators)
+> - [⚙️ 개발 스택](#-개발-스택)
+> - [🧩 주요 기능](#-주요-기능)
+> - [🧩 ERD](#-erd)
+> - [공통 핵심 개발 영역](#-공통-핵심-개발-영역)
+> - [FE 핵심 개발 영역](#-fe-핵심-개발-영역)
+> - [BE 핵심 개발 영역](#-be-핵심-개발-영역)
+
+
+# 🌟 돌봄다리란?
+
+> **요양보호사**는 간편하게 차트를 작성하고,  
+> **보호자**는 이를 실시간으로 확인할 수 있는 **디지털 차트 서비스**
+
+- 보호자는 **언제 어디서나 가족의 상태를 확인**
+- 요양보호사는 **복잡함 없이 기록을 관리**
+
+**➡️ 신뢰와 편리성을 제공하는 소통 플랫폼**
+
+<br/>
+
+# 🧑‍💻 Collaborators
+
+<h3 align="center">Backend</h3>
+
+<div align="center">
+
+| **테크 리더** | **기획 리더** | **리액셔너** | **리마인더** | **리마인더** |
+| ------------- | ------------- | ------------ | ------------ | ------------ |
+| <div align="center">[이영준](https://github.com/20jcode)</div> | <div align="center">[김태윤](https://github.com/pykido)</div> | <div align="center">[유경미](https://github.com/yooookm)</div> | <div align="center">[박혜연](https://github.com/hyyyh0x)</div> | <div align="center">[이진솔](https://github.com/mogld)</div> |
+| <div align="center"><img src="https://avatars.githubusercontent.com/u/109460399?v=4" width="100"></div> | <div align="center"><img src="https://github.com/user-attachments/assets/b6434e99-2e5d-4d46-92f0-55004d16ec3c" width="100"></div> | <div align="center"><img src="https://github.com/user-attachments/assets/9a2c803f-a49f-4343-8de3-ae8de72b7927" width="100"></div> | <div align="center"><img src="https://avatars.githubusercontent.com/u/141637975?v=4" width="100"></div> | <div align="center"><img src="https://avatars.githubusercontent.com/u/143364802?v=4" width="100"></div> |
+
+</div>
+
+<h3 align="center">Frontend</h3>
+
+<div align="center">
+
+| **조장**      | **타임 키퍼** |
+| ------------- | ------------- |
+|<div align="center">[문정윤](https://github.com/nnoonjy)</div>|<div align="center">[이지수](https://github.com/dlwltn0430)</div> |
+| <div align="center"><img src="https://avatars.githubusercontent.com/u/102630375?v=4" width="100"></div> | <div align="center"><img src="https://avatars.githubusercontent.com/u/101401447?v=4" width="100"></div> |
+
+</div>
+
+
+<br/>
+
+## ⚙️ 개발 스택
+
+<div align="center">
+
+![java 17](https://img.shields.io/badge/-Java%2017-ED8B00?style=flat-square&logo=java&logoColor=white)
+![spring boot 3.3](https://img.shields.io/badge/Spring%20boot%203.3-6DB33F?style=flat-square&logo=springboot&logoColor=white)
+![spring security](https://img.shields.io/badge/spring%20security-6DB33F?style=flat-square&logo=spring&logoColor=white)
+![mysql 8.0](https://img.shields.io/badge/MySQL%208.0-005C84?style=flat-square&logo=mysql&logoColor=white)
+
+![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=Redis&logoColor=white)
+![AWS S3](https://img.shields.io/badge/AWS%20S3-569A31?style=flat-square&logo=amazons3&logoColor=white)
+![AWS EC2](https://img.shields.io/badge/AWS%20EC2-FF9900?style=flat-square&logo=amazonec2&logoColor=white)
+![Amazon sqs](https://img.shields.io/badge/Amazon%20sqs-FF9900?style=flat-square&logo=amazon&logoColor=white)
+
+![Naver cloud](https://img.shields.io/badge/naver%20cloud-03C75A?style=flat-square&logo=naver&logoColor=white)
+![openAI](https://img.shields.io/badge/openAI-FF6C37?style=flat-square&logo=openai&logoColor=white)
+![poi](https://img.shields.io/badge/poi-3F6EB5?style=flat-square&logo=apache&logoColor=white)
+![line api](https://img.shields.io/badge/line%20api-00C300?style=flat-square&logo=line&logoColor=white)
+![coolSms](https://img.shields.io/badge/coolSms-FF6C37?style=flat-square&logo=coolSms&logoColor=white)
+
+![React](https://img.shields.io/badge/-React%2018-4894FE?style=flat-square&logo=react&logoColor=white)
+![Vite](https://img.shields.io/badge/-Vite%205-646CFF?style=flat-square&logo=vite&logoColor=white)
+![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
+
+![Chakra UI](https://img.shields.io/badge/-Chakra%20UI-319795?style=flat-square&logo=chakraui&logoColor=white)
+![Emotion](https://img.shields.io/badge/-Emotion-FF69B4?style=flat-square&logo=emotion&logoColor=white)
+![Styled Components](https://img.shields.io/badge/-Styled%20Components-DB7093?style=flat-square&logo=styledcomponents&logoColor=white)
+
+![React Query](https://img.shields.io/badge/-React%20Query-FF4154?style=flat-square&logo=reactquery&logoColor=white)
+![Axios](https://img.shields.io/badge/-Axios-5A29E4?style=flat-square&logo=axios&logoColor=white)
+
+![Tesseract.js](https://img.shields.io/badge/-Tesseract.js-3D348B?style=flat-square&logo=tesseract&logoColor=white)
+
+
+</div>
+
+<br/>
+
+
+# 🔗 프로젝트 관련 주소
+
 
 |                         문서                         |
 |:--------------------------------------------------:|
@@ -15,10 +107,11 @@
 |   [디자인 피그마](https://www.figma.com/design/RvPegHAoDLITbqAxexEok7/%EB%B6%80%EC%82%B0%EB%8C%80-13%EC%A1%B0-%EB%81%9D%EB%82%B4%EC%A3%BC%EC%A1%B0?node-id=19-3&node-type=canvas&t=IzVl1agbkGalr8SU-0)    |
 |      [프로젝트 노션](https://www.notion.so/example)      |
 
+
 <br/>
 
 ---
-# 🧐 왜 이 서비스가 필요할까?
+# 🧐 서비스의 필요성 
 
 ## 📝 문제 상황 1: 정보 공유의 단절
 - **보호자**는 가족의 상태를 자주 확인하고 싶지만, 요양원에 일일이 연락해야 하는 번거로움과 제한된 정보로 인해 불편을 겪고 있습니다.
@@ -58,18 +151,6 @@
 <br/>
 
 ---
-
-# 🌟 Care Bridge란?
-
-> **요양보호사**는 간편하게 차트를 작성하고,  
-> **보호자**는 이를 실시간으로 확인할 수 있는 **디지털 차트 서비스**
-
-- 보호자는 **언제 어디서나 가족의 상태를 확인**
-- 요양보호사는 **복잡함 없이 기록을 관리**
-
-**➡️ 신뢰와 편리성을 제공하는 소통 플랫폼**
-
-<br/>
 
 ## 🧩 주요 기능
 
@@ -181,7 +262,7 @@
 
 presigned URL을 통해 이미지 파일을 S3에 업로드하고, 백엔드 서버에는 objectKey 값만 전달하여 OCR을 수행하는 방식으로 서버 과부하를 방지하고 성능을 최적화했습니다. 이로써 서버 리소스를 절약하면서도 보안성을 유지한 상태에서 차트를 안전하게 OCR 처리할 수 있도록 구현했습니다.
 <p >
-<img width="270" alt="care_bridge_logo" src="docs/source/ocr_example.jpeg">
+<img width="270" alt="care_bridge_logo" src="docs/source/ocr_example.png">
 </p>
 
 <br/>
@@ -239,65 +320,5 @@ presigned URL을 통해 이미지 파일을 S3에 업로드하고, 백엔드 서
 
 <br/>
 
-## ⚙️ 개발 스택
-
-<div align="center">
-
-![java 17](https://img.shields.io/badge/-Java%2017-ED8B00?style=flat-square&logo=java&logoColor=white)
-![spring boot 3.3](https://img.shields.io/badge/Spring%20boot%203.3-6DB33F?style=flat-square&logo=springboot&logoColor=white)
-![spring security](https://img.shields.io/badge/spring%20security-6DB33F?style=flat-square&logo=spring&logoColor=white)
-![mysql 8.0](https://img.shields.io/badge/MySQL%208.0-005C84?style=flat-square&logo=mysql&logoColor=white)
-
-![Redis](https://img.shields.io/badge/Redis-DC382D?style=flat-square&logo=Redis&logoColor=white)
-![AWS S3](https://img.shields.io/badge/AWS%20S3-569A31?style=flat-square&logo=amazons3&logoColor=white)
-![AWS EC2](https://img.shields.io/badge/AWS%20EC2-FF9900?style=flat-square&logo=amazonec2&logoColor=white)
-![Amazon sqs](https://img.shields.io/badge/Amazon%20sqs-FF9900?style=flat-square&logo=amazon&logoColor=white)
-
-![Naver cloud](https://img.shields.io/badge/naver%20cloud-03C75A?style=flat-square&logo=naver&logoColor=white)
-![openAI](https://img.shields.io/badge/openAI-FF6C37?style=flat-square&logo=openai&logoColor=white)
-![poi](https://img.shields.io/badge/poi-3F6EB5?style=flat-square&logo=apache&logoColor=white)
-![line api](https://img.shields.io/badge/line%20api-00C300?style=flat-square&logo=line&logoColor=white)
-![coolSms](https://img.shields.io/badge/coolSms-FF6C37?style=flat-square&logo=coolSms&logoColor=white)
-
-![React](https://img.shields.io/badge/-React%2018-4894FE?style=flat-square&logo=react&logoColor=white)
-![Vite](https://img.shields.io/badge/-Vite%205-646CFF?style=flat-square&logo=vite&logoColor=white)
-![TypeScript](https://img.shields.io/badge/-TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white)
-
-![Chakra UI](https://img.shields.io/badge/-Chakra%20UI-319795?style=flat-square&logo=chakraui&logoColor=white)
-![Emotion](https://img.shields.io/badge/-Emotion-FF69B4?style=flat-square&logo=emotion&logoColor=white)
-![Styled Components](https://img.shields.io/badge/-Styled%20Components-DB7093?style=flat-square&logo=styledcomponents&logoColor=white)
-
-![React Query](https://img.shields.io/badge/-React%20Query-FF4154?style=flat-square&logo=reactquery&logoColor=white)
-![Axios](https://img.shields.io/badge/-Axios-5A29E4?style=flat-square&logo=axios&logoColor=white)
-
-![Tesseract.js](https://img.shields.io/badge/-Tesseract.js-3D348B?style=flat-square&logo=tesseract&logoColor=white)
 
 
-</div>
-
-<br/>
-
-# 🧑‍💻 Collaborators
-
-<h3 align="center">Backend</h3>
-
-<div align="center">
-
-| **테크 리더** | **기획 리더** | **리액셔너** | **리마인더** | **리마인더** |
-| ------------- | ------------- | ------------ | ------------ | ------------ |
-| <div align="center">[이영준](https://github.com/20jcode)</div> | <div align="center">[김태윤](https://github.com/pykido)</div> | <div align="center">[유경미](https://github.com/yooookm)</div> | <div align="center">[박혜연](https://github.com/hyyyh0x)</div> | <div align="center">[이진솔](https://github.com/mogld)</div> |
-| <div align="center"><img src="https://avatars.githubusercontent.com/u/109460399?v=4" width="100"></div> | <div align="center"><img src="https://github.com/user-attachments/assets/b6434e99-2e5d-4d46-92f0-55004d16ec3c" width="100"></div> | <div align="center"><img src="https://github.com/user-attachments/assets/9a2c803f-a49f-4343-8de3-ae8de72b7927" width="100"></div> | <div align="center"><img src="https://avatars.githubusercontent.com/u/141637975?v=4" width="100"></div> | <div align="center"><img src="https://avatars.githubusercontent.com/u/143364802?v=4" width="100"></div> |
-
-</div>
-
-<h3 align="center">Frontend</h3>
-
-
-<div align="center">
-
-| **조장**      | **타임 키퍼** |
-| ------------- | ------------- |
-|<div align="center">[문정윤](https://github.com/nnoonjy)</div>|<div align="center">[이지수](https://github.com/dlwltn0430)</div> |
-| <div align="center"><img src="https://avatars.githubusercontent.com/u/102630375?v=4" width="100"></div> | <div align="center"><img src="https://avatars.githubusercontent.com/u/101401447?v=4" width="100"></div> |
-
-</div>
