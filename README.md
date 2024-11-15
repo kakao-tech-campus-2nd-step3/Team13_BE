@@ -171,7 +171,7 @@
 - 이러한 어려움은 기록의 정확성과 신속성을 저해하고, 요양보호사의 업무 효율성에도 부정적인 영향을 미칩니다.
 
 <p align='center'>
-    <img width="400" alt="caregiver_difficulty" src="docs/source/caregiver_difficulty.png">
+    <img width="600" alt="caregiver_difficulty" src="docs/source/caregiver_difficulty.png">
 </p>
 
 ```
