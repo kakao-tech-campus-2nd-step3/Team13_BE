@@ -1,4 +1,4 @@
-# 🤝 Care Bridge - 요양 일지  서비스
+# 🤝 돌봄다리 - 요양원 관리 서비스
 
 <p align='center'>
 <img width="600" alt="care_bridge_logo" src="docs/source/care_bridge.png">
@@ -98,6 +98,7 @@
 
 # 🔗 프로젝트 관련 주소
 
+<div align="center">
 
 |                         문서                         |
 |:--------------------------------------------------:|
@@ -107,6 +108,7 @@
 |   [디자인 피그마](https://www.figma.com/design/RvPegHAoDLITbqAxexEok7/%EB%B6%80%EC%82%B0%EB%8C%80-13%EC%A1%B0-%EB%81%9D%EB%82%B4%EC%A3%BC%EC%A1%B0?node-id=19-3&node-type=canvas&t=IzVl1agbkGalr8SU-0)    |
 |      [프로젝트 노션](https://www.notion.so/example)      |
 
+</div>
 
 <br/>
 
