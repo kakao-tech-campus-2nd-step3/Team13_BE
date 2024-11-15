@@ -15,9 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.MockitoAnnotations;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
-@SpringBootTest
 public class CareworkerMapperTest {
 
     @InjectMocks
@@ -26,36 +26,42 @@ public class CareworkerMapperTest {
     @Mock
     private InstitutionService institutionService;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     private Institution institution;
 
     @BeforeEach
     void setUp() throws NoSuchFieldException, IllegalAccessException {
-        institution = Institution.builder()
-                .institutionNumber(100L)
-                .institutionName("Test Institution")
-                .build();
 
-        // 리플렉션을 사용하여 ID 값을 설정
+        MockitoAnnotations.openMocks(this);
+
+        Field passwordEncoderField = CareworkerMapper.class.getDeclaredField("passwordEncoder");
+        passwordEncoderField.setAccessible(true);
+        passwordEncoderField.set(mapper, passwordEncoder);
+
+        institution = Institution.builder()
+            .institutionNumber(100L)
+            .institutionName("Test Institution")
+            .build();
+
         setId(institution, 1L);
     }
 
     @Test
     void testToResponse() throws NoSuchFieldException, IllegalAccessException {
-        // Given
-        Careworker careworker = Careworker.builder()
-                .institution(institution)
-                .name("John Doe")
-                .email("johndoe@example.com")
-                .phone("01012345678")
-                .build();
 
-        // 리플렉션을 사용하여 Careworker ID 설정
+        Careworker careworker = Careworker.builder()
+            .institution(institution)
+            .name("John Doe")
+            .email("johndoe@example.com")
+            .phone("01012345678")
+            .build();
+
         setId(careworker, 1L);
 
-        // When
         CareworkerResponse responseDTO = mapper.toResponse(careworker);
 
-        // Then
         assertEquals(careworker.getId(), responseDTO.getId());
         assertEquals(careworker.getInstitution().getId(), responseDTO.getInstitutionId());
         assertEquals(careworker.getName(), responseDTO.getName());
@@ -65,29 +71,27 @@ public class CareworkerMapperTest {
 
     @Test
     void testToEntity() {
-        // Given
+
         CareworkerRequest requestDTO = new CareworkerRequest(
-                1L,
-                "John Doe",
-                "johndoe@example.com",
-                "01012345678",
-                "password"
+            1L,
+            "John Doe",
+            "johndoe@example.com",
+            "01012345678",
+            "password"
         );
 
-        // Mock InstitutionService response
         when(institutionService.getInstitutionById(requestDTO.getInstitutionId())).thenReturn(institution);
+        when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
 
-        // When
         Careworker careworker = mapper.toEntity(requestDTO);
 
-        // Then
         assertEquals(requestDTO.getName(), careworker.getName());
         assertEquals(requestDTO.getEmail(), careworker.getEmail());
         assertEquals(requestDTO.getPhone(), careworker.getPhone());
+        assertEquals("encodedPassword", careworker.getLoginPassword());
         assertEquals(institution, careworker.getInstitution());
     }
 
-    // 리플렉션을 사용하여 엔티티 ID 값을 설정
     private void setId(Object entity, Long idValue) throws NoSuchFieldException, IllegalAccessException {
         Field idField = entity.getClass().getSuperclass().getDeclaredField("id");
         idField.setAccessible(true);

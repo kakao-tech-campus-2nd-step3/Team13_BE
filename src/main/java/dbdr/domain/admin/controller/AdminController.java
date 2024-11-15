@@ -44,6 +44,7 @@ public class AdminController {
 
     @Operation(summary = "서버관리자 추가")
     @PostMapping("/add")
+    @DbdrAuth(targetRole = Role.ADMIN)
     public ResponseEntity<Void> addAdmin(@RequestBody AdminCreateRequest adminCreateRequest){
 
         log.info("어드민 생성 시작, {} {}", adminCreateRequest.loginId(), adminCreateRequest.loginPassword());

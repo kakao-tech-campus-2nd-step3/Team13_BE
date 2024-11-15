@@ -100,10 +100,6 @@ public class CareworkerService {
         ensureUniqueEmailButNotId(request.getEmail(), careworkerId);
         Careworker careworker = findCareworkerById(careworkerId);
 
-        /*if (!careworker.getInstitution().equals(institution)) {
-            throw new ApplicationException(ApplicationError.ACCESS_NOT_ALLOWED);
-        }*/
-
         careworker.updateCareworker(careworkerMapper.toEntity(request));
         return careworkerMapper.toResponse(careworker);
     }
@@ -129,7 +125,6 @@ public class CareworkerService {
         ensureUniquePhoneButNotId(request.getPhone(), careworkerId);
         ensureUniqueEmailButNotId(request.getEmail(), careworkerId);
         Careworker careworker = findCareworkerById(careworkerId);
-
 
         careworker.updateCareworker(toEntity(request, careworker));
         return careworkerMapper.toResponse(careworker);
@@ -191,11 +186,6 @@ public class CareworkerService {
             throw new ApplicationException(ApplicationError.DUPLICATE_PHONE);
         }
     }
-
-    /*private CareworkerResponseDTO toResponseDTO(Careworker careworker) {
-        return new CareworkerResponseDTO(careworker.getId(), careworker.getInstitution().getId(),
-                careworker.getName(), careworker.getEmail(), careworker.getPhone());
-    }*/
 
     private void ensureUniquePhoneButNotId(String phone, Long id) {
         if(careworkerRepository.existsByPhoneAndIdNot(phone, id)) {

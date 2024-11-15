@@ -151,14 +151,9 @@ public class GuardianService {
         }
     }
 
-    public Guardian findByLineUserId(String userId) {
-        return guardianRepository.findByLineUserId(userId)
-            .orElse(null);
-    }
-
     public Guardian findByPhone(String phone) {
         return guardianRepository.findByPhone(phone)
-            .orElse(null);
+            .orElseThrow(() -> new ApplicationException(ApplicationError.GUARDIAN_NOT_FOUND));
     }
 
     @Transactional

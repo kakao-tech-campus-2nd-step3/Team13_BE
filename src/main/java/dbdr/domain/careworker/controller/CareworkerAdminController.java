@@ -26,7 +26,6 @@ import java.util.List;
 public class CareworkerAdminController {
 
     private final CareworkerService careworkerService;
-    private final InstitutionService institutionService;
 
     @DbdrAuth(targetRole = Role.ADMIN)
     @Operation(summary = "전체 요양보호사 정보 조회", security = @SecurityRequirement(name = "JWT"))

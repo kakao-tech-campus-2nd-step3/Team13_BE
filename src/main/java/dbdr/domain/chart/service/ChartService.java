@@ -132,7 +132,7 @@ public class ChartService {
             ResponseEntity<OpenAiSummaryResponse> response = summarizationConfig.restTemplate()
                 .exchange(chatUrl, HttpMethod.POST, new HttpEntity<>(request, headers),
                     OpenAiSummaryResponse.class);
-            if (response.getStatusCode().is2xxSuccessful()|| response.getBody() == null)
+            if (response!=null && response.getBody() != null && response.getStatusCode().is2xxSuccessful())
                 return response.getBody();
             else cnt++;
         }
