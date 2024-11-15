@@ -1,4 +1,4 @@
-# 🤝 [Team 13] `돌봄다리`  - 요양원 관리 서비스
+# 🤝 [Team 13] 돌봄다리  - 요양원 관리 서비스
 
 <p align='center'>
 <img width="600" alt="care_bridge_logo" src="docs/source/care_bridge.png">
@@ -13,16 +13,15 @@
 > - [🌟 돌봄다리란?](#-돌봄다리란)
 > - [🧐 서비스의 필요성](#-서비스의-필요성)
 > - [🧩 서비스 핵심 기능](#-서비스-핵심-기능)
-> - [🧩 ERD](#-erd)
 > - [공통 핵심 개발 영역](#-공통-핵심-개발-영역)
 > - [FE 핵심 개발 영역](#-fe-핵심-개발-영역)
 > - [BE 핵심 개발 영역](#-be-핵심-개발-영역)
-
+> - [🧩 ERD](#-erd)
 
 # 🧑‍💻 Collaborators
 <div align="center">
 
-### 개발 기간
+### 🗓️ 개발 기간
 2024.09 ~ 2024.11 (카카오 테크 캠퍼스 2기 - Step3)
 
 </div>
@@ -97,13 +96,14 @@
 
 <div align="center">
 
-|                         문서                         |
-|:--------------------------------------------------:|
-|  [백엔드 배포 주소](https://dbdr-servcie.com)  |
-| [프론트엔드 배포 주소](https://dbdari.vercel.app/) |
-|     [API 문서](https://dbdr-servcie.com/swagger-ui/index.html)     |
-|   [디자인 피그마](https://www.figma.com/design/RvPegHAoDLITbqAxexEok7/%EB%B6%80%EC%82%B0%EB%8C%80-13%EC%A1%B0-%EB%81%9D%EB%82%B4%EC%A3%BC%EC%A1%B0?node-id=19-3&node-type=canvas&t=IzVl1agbkGalr8SU-0)    |
-|      [프로젝트 노션](https://www.notion.so/example)      |
+|                                                                                               문서                                                                                               |
+|:----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+|                                                                             [백엔드 배포 주소](https://dbdr-servcie.com)                                                                              |
+|                                                                           [프론트엔드 배포 주소](https://dbdari.vercel.app/)                                                                            |
+|                                                                    [API 문서](https://dbdr-servcie.com/swagger-ui/index.html)                                                                    |
+| [디자인 피그마](https://www.figma.com/design/RvPegHAoDLITbqAxexEok7/%EB%B6%80%EC%82%B0%EB%8C%80-13%EC%A1%B0-%EB%81%9D%EB%82%B4%EC%A3%BC%EC%A1%B0?node-id=19-3&node-type=canvas&t=IzVl1agbkGalr8SU-0) |
+|                                                                            [프로젝트 노션](https://www.notion.so/example)                                                                            |
+|                                                                          [돌봄다리 라인 채널](https://lin.ee/F4hbz9m)                                                                           |
 
 </div>
 
@@ -363,6 +363,22 @@ presigned URL을 통해 이미지 파일을 S3에 업로드하고, 백엔드 서
 </p>
 
 <br/>
+
+## 🌌 BE 전체 구상도
+dd
+
+
+## 📄 팀 그라운드 규칙 설명
+- 팀 그라운드 룰 
+- 이슈 관리
+- PR 템플릿 & 이슈 템플릿 
+- 브랜치 전략
+- 커밋 컨벤션 
+- 프로젝트 구조 
+
+
+
+
 
 
 
